@@ -11,7 +11,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $stmtEmail->execute($arrParamEmail);
     //若有該帳號，在檢查email與password是否對得上
     if($stmtEmail->rowCount()>0){
-        $sql = "SELECT `a`.`aId`, `a`.`aName`, `a`.`aPassword`, `a`.`aActive`, `a`.`aVerify`,         
+        $sql = "SELECT `a`.`aId`, `a`.`aName`, `a`.`aPassword`, `a`.`aActive`, `a`.`aVerify`,  `a`.`aLoginTime`,     
                             `rel_platform_permissions`.`aPermissionId`
                 FROM `platformAdmins` AS `a`
                 INNER JOIN `rel_platform_permissions`
@@ -39,6 +39,16 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             // session_destroy();
 
 
+            //成功登入，紀錄登入時間
+            $sqlTime = "UPDATE `platformAdmins`
+                        SET `aLoginTime` = current_timestamp()
+                        WHERE `aId` = ?";
+            
+            $stmtTime = $pdo->prepare($sqlTime);
+            $arrParamTime = [ $arr[0]['aId'] ];
+            $stmtTime->execute($arrParamTime);
+            
+            //將資訊放入session
             $_SESSION['userId'] = $arr[0]['aId'];
             $_SESSION['userName'] = $arr[0]['aName'];
             for($i = 0 ; $i< count($arr) ; $i++){
@@ -46,6 +56,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             }
             $_SESSION['active'] = $arr[0]['aActive'];
             $_SESSION['verify'] = $arr[0]['aVerify'];
+            $_SESSION['lastLogin'] = $arr[0]['aLoginTime'];
 
             echo "<pre>";
             print_r($_SESSION);
