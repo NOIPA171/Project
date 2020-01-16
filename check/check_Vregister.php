@@ -21,7 +21,6 @@ $stmtAdmin = $pdo->prepare($sqlAdmin);
 $stmtAdmin->execute($arrParamAdmin);
 
 if($stmtAdmin->rowCount() > 0){
-    $arrAdmin = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
     //取得剛剛輸入的ID
     $currentAdmin = $pdo->lastInsertId();
     //------再輸入廠商資訊------
@@ -30,8 +29,8 @@ if($stmtAdmin->rowCount() > 0){
     $stmtVendor = $pdo->prepare($sqlVendor);
     $arrParamVendor = [ $_POST['name'] ];
     $stmtVendor->execute($arrParamVendor);
+
     if($stmtVendor->rowCount()>0){
-        $arrVendor = $stmtVendor->fetchAll(PDO::FETCH_ASSOC);
         //取得剛剛輸入的ID
         $currentVendor = $pdo->lastInsertId();
         //------再將廠商與admin連起來，輸入 REL 資料表------
@@ -42,12 +41,14 @@ if($stmtAdmin->rowCount() > 0){
             $currentAdmin
         ];
         $stmtRel->execute($arrParamRel);
+
         if($stmtRel->rowCount()>0){
-            //------再將所有的 Permissions 賦予該Admin (Owner)------
+            //------再將所有的 Permissions 賦予該 Admin (Owner)------
             $sqlPermission = "INSERT INTO `rel_vendor_permissions`(`vaId`, `vaPermissionId`)
                                 VALUES (?,?)";
             $stmtPermission = $pdo->prepare($sqlPermission);
             $allPermissions = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions`")->fetchAll(PDO::FETCH_ASSOC);
+            
             //每一個permission都要輸入一次
             for($i=0 ; $i<count($allPermissions) ; $i++){
                 $arrParamAllPrm = [
@@ -56,11 +57,25 @@ if($stmtAdmin->rowCount() > 0){
                 ];
                 $stmtPermission->execute($arrParamAllPrm);
             }
+
             if($stmtPermission->rowCount()>0){
-                //加入 session               
+                //加入 session
+
+                $_SESSION['userId'] = $currentAdmin;
+                $_SESSION['userName'] = $_POST['name'];
+                $_SESSION['vendor'] = $_POST['name'];
+                $_SESSION['vendorActive'] = 'active';
+                $_SESSION['adminActive'] = 'active';
+                $_SESSION['vendorVerify'] = date("Y-m-d H:i:s");
+                $_SESSION['adminVerify'] = date("Y-m-d H:i:s");                
+
+                echo "<pre>";
+                print_r($_SESSION);
+                echo "</pre>";
+                // exit();
 
                 echo "all complete! will refresh in 5 seconds";
-                header("Refresh: 5 ; url = ../vAdmin.php");
+                // header("Refresh: 5 ; url = ../vAdmin.php");
             }
         }
     }

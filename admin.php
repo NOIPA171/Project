@@ -1,5 +1,5 @@
 <?php
-    require_once('./check/checkSession.php');
+    require_once('./check/checkPSession.php');
     require_once('./template/tpl-html-head.php');
 
     require_once('./template/sidenav.php');
