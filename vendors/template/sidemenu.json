@@ -1,50 +1,42 @@
 [
     {
         "name" : "首頁",
-        "status" : "",
         "link" : "./admin.php",
         "permission" : "all",
         "icon" : "fa-diamond"
     },{
         "name" : "產品",
-        "status" : "",
         "link" : "./products.php",
         "permission" : "prmV01",
         "icon" : "fa-pie-chart"
     },{
         "name" : "報表",
-        "status" : "",
         "link" : "./charts.php",
         "permission" : "prmV02",
         "icon" : ""
     },{
         "name" : "行銷",
-        "status" : "",
         "link" : "./marketing.php",
         "permission" : "prmV03",
         "icon" : ""
     },{
         "name" : "訂單",
-        "status" : "",
         "link" : "./orders.php",
         "permission" : "prmV04",
         "icon" : ""
     },{
         "name" : "工作人員",
-        "status" : "",
         "link" : "#",
         "permission" : "prmV00",
         "icon" : "",
         "submenu" : [
             {
                 "name" : "工作人員一覽",
-                "status" : "",
                 "link" : "./staff.php",
                 "permission" : "prmV00",
                 "icon" : ""
             },{
                 "name" : "新增",
-                "status" : "",
                 "link" : "./staff_add.php",
                 "permission" : "prmV00",
                 "icon" : ""
