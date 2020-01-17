@@ -13,7 +13,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     if($stmtEmail->rowCount()>0){
         $sql = "SELECT `a`.`vaId`, `a`.`vaFName`, `a`.`vaPassword`, `a`.`vaActive`, `a`.`vaVerify`,  `a`.`vaLoginTime`,     
         `rel_vendor_permissions`.`vaPermissionId`,
-        `vendors`.`vActive`
+        `vendors`.`vActive`, `vendors`.`vId`
                 FROM `vendorAdmins` AS `a`
                 INNER JOIN `rel_vendor_permissions`
                 ON `a`.`vaId` = `rel_vendor_permissions`.`vaId`
@@ -49,6 +49,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             //將資訊放入session
             $_SESSION['userId'] = $arr[0]['vaId'];
             $_SESSION['userName'] = $arr[0]['vaFName'];
+            $_SESSION['vendorId'] = $arr[0]['vId'];
             for($i = 0 ; $i< count($arr) ; $i++){
                 $_SESSION['permission'][$i] = $arr[$i]['vaPermissionId'];
             }

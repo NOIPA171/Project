@@ -1,5 +1,7 @@
 <?php
     require_once('./check/checkSession.php');
+    require_once('../db.inc.php');
+    require_once('./check/getInfo.php');
 ?>
 <!DOCTYPE html>
 <html>

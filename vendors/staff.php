@@ -1,5 +1,7 @@
 <?php
     require_once('./check/checkSession.php');
+    require_once('../db.inc.php');
+    require_once('./check/getInfo.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,7 +60,7 @@
                         <div class="ibox-title">
                             <h5>FooTable with row toggler, sorting and pagination</h5>
 
-                            <div class="ibox-tools">
+                            <!-- <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
                                 </a>
@@ -74,7 +76,7 @@
                                 <a class="close-link">
                                     <i class="fa fa-times"></i>
                                 </a>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="ibox-content">
 

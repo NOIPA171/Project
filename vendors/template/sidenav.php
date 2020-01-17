@@ -37,7 +37,15 @@
                 <a data-nav-link="prmV04" href="./orders.php"><i class="fa fa-flask"></i> <span class="nav-label">訂單</span></a>
             </li>
             <li>
-                <a data-nav-link="prmV00" href="./staff.php"><i class="fa fa-flask"></i> <span class="nav-label">管理網站</span></a>
+                <a data-nav-link="prmV00" href="#">
+                    <i class="fa fa-flask"></i> 
+                    <span class="nav-label">工作人員</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                        <li><a href="./staff.php">工作人員一覽</a></li>
+                        <li><a href="./staff_add.php">新增</a></li>
+                    </ul>
             </li>
 
         </ul>

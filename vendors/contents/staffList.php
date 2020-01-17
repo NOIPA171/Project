@@ -4,7 +4,7 @@
 <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
     <thead>
         <tr>
-            <th>姓名</th>
+            <th>名稱</th>
             <th>Email</th>
             <th>身份</th>
             <th data-hide="phone,tablet">帳號狀態</th>
@@ -14,107 +14,64 @@
     </thead>
     <tbody>
     <?php
-        require_once('../db.inc.php');
-        $sql = "";
-    ?>
-        <tr class="gradeX">
-            <td>Trident</td>
-            <td>Internet
-                Explorer 4.0
-            </td>
-            <td>Win 95+</td>
-            <td class="center">4</td>
-            <td class="center">X</td>
-        </tr>
-        <tr class="gradeC">
-            <td>Trident</td>
-            <td>Internet
-                Explorer 5.0
-            </td>
-            <td>Win 95+</td>
-            <td class="center">5</td>
-            <td class="center">C</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Trident</td>
-            <td>Internet
-                Explorer 5.5
-            </td>
-            <td>Win 95+</td>
-            <td class="center">5.5</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Gecko</td>
-            <td>Netscape Navigator 9</td>
-            <td>Win 98+ / OSX.2+</td>
-            <td class="center">1.8</td>
-            <td class="center">A</td>
-        </tr>
+        $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`,
+        `vId`
+                FROM `vendorAdmins`
+                INNER JOIN `rel_vendor_admins`
+                ON `vendorAdmins`.`vaId` = `rel_vendor_admins`.`vaId`
+                WHERE `vId` = ?";
 
-        <tr class="gradeA">
-            <td>Webkit</td>
-            <td>Safari 1.3</td>
-            <td>OSX.3</td>
-            <td class="center">312.8</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Webkit</td>
-            <td>Safari 2.0</td>
-            <td>OSX.4+</td>
-            <td class="center">419.3</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Webkit</td>
-            <td>Safari 3.0</td>
-            <td>OSX.4+</td>
-            <td class="center">522.1</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Webkit</td>
-            <td>OmniWeb 5.5</td>
-            <td>OSX.4+</td>
-            <td class="center">420</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Webkit</td>
-            <td>iPod Touch / iPhone</td>
-            <td>iPod</td>
-            <td class="center">420.1</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Webkit</td>
-            <td>S60</td>
-            <td>S60</td>
-            <td class="center">413</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Presto</td>
-            <td>Opera 7.0</td>
-            <td>Win 95+ / OSX.1+</td>
-            <td class="center">-</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Presto</td>
-            <td>Opera 7.5</td>
-            <td>Win 95+ / OSX.2+</td>
-            <td class="center">-</td>
-            <td class="center">A</td>
-        </tr>
-        <tr class="gradeA">
-            <td>Presto</td>
-            <td>Opera 8.0</td>
-            <td>Win 95+ / OSX.2+</td>
-            <td class="center">-</td>
-            <td class="center">A</td>
-        </tr>
+        $stmt = $pdo->prepare($sql);
+        $arrParam = [ $_SESSION['vendorId'] ];
+        $stmt->execute($arrParam);
+        if($stmt->rowCount()>0){
+            $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $sqlPermissions = "SELECT `vendorPermissions`.`vendorPrmName`
+                                FROM `rel_vendor_permissions`
+                                INNER JOIN `vendorPermissions`
+                                ON `rel_vendor_permissions`.`vaPermissionId` = `vendorPermissions`.`vendorPrmId`
+                                WHERE `vaId` = ?";
+            $stmtPermissions = $pdo->prepare($sqlPermissions);
+            $arrParamPermissions = [ $arr[0]['vaId'] ];
+            //先初始化permissions
+            $prmList = [];
+            //每一個人執行一次尋找其permission
+            for($i = 0 ; $i<count($arr); $i++){
+                $stmtPermissions->execute($arrParamPermissions);
+                if($stmtPermissions->rowCount()>0){
+                    //撈出所有permission，並用兩層foreach去除多餘的上一層
+                    $arrPermissions = $stmtPermissions->fetchAll(PDO::FETCH_ASSOC);
+                    foreach($arrPermissions as $key => $value){
+                        foreach($value as $k => $v){
+                            $prmList[] = $v;
+                        }
+                    }
+                    //把permission輸入到admin裡
+                    $arr[$i]['permissions'] = $prmList;
+                    if(in_array('admin', $prmList)){
+                        $identity = "Owner";
+                    }else{
+                        $identity = "Staff";
+                    }
+                }
+            }
+
+            for($i = 0 ; $i<count($arr); $i++){
+                ?>
+                <tr class="gradeX">
+                    <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
+                    <td><?php echo $arr[$i]['vaEmail'] ?></td>
+                    <td><?php echo $identity ?></td>
+                    <td class="center"><?php echo $arr[$i]['vaActive'] ?></td>
+                    <td class="center"><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
+                    <td class="center"><?php echo $arr[$i]['vaNotes'] ?></td>
+                </tr>
+                <?php
+            }
+        }
+
+    ?>
     </tbody>
     <tfoot>
         <tr>
