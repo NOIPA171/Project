@@ -25,19 +25,19 @@
                 <a href="./admin.php"><i class="fa fa-diamond"></i> <span class="nav-label">首頁</span></a>
             </li>
             <li>
-                <a data-nav-link="prmA01" href="./vendors.php"><i class="fa fa-pie-chart"></i> <span class="nav-label">廠商</span></a>
+                <a data-nav-link="prmV01" href="./products.php"><i class="fa fa-pie-chart"></i> <span class="nav-label">產品</span></a>
             </li>
             <li>
-                <a data-nav-link="prmA02" href="./charts.php"><i class="fa fa-flask"></i> <span class="nav-label">報表</span></a>
+                <a data-nav-link="prmV02" href="./charts.php"><i class="fa fa-flask"></i> <span class="nav-label">報表</span></a>
             </li>
             <li>
-                <a data-nav-link="prmA03" href="./users.php"><i class="fa fa-flask"></i> <span class="nav-label">會員</span></a>
+                <a data-nav-link="prmV03" href="./marketing.php"><i class="fa fa-flask"></i> <span class="nav-label">行銷</span></a>
             </li>
             <li>
-                <a data-nav-link="prmA04" href="./comments.php"><i class="fa fa-flask"></i> <span class="nav-label">評論</span></a>
+                <a data-nav-link="prmV04" href="./orders.php"><i class="fa fa-flask"></i> <span class="nav-label">訂單</span></a>
             </li>
             <li>
-                <a data-nav-link="prmA00" href="./platform.php"><i class="fa fa-flask"></i> <span class="nav-label">平台</span></a>
+                <a data-nav-link="prmV00" href="./staff.php"><i class="fa fa-flask"></i> <span class="nav-label">管理網站</span></a>
             </li>
 
         </ul>
