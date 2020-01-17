@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('./db.inc.php');
+require_once('../db.inc.php');
 
 //若沒有輸入欄位，exit()
 if($_POST['name']==='' || $_POST['email']==='' || $_POST['password']===''){
@@ -75,7 +75,7 @@ if($stmtAdmin->rowCount() > 0){
                 // exit();
 
                 echo "all complete! will refresh in 5 seconds";
-                header("Refresh: 5 ; url = ../vAdmin.php");
+                header("Refresh: 5 ; url = ../admin.php");
             }
         }
     }
