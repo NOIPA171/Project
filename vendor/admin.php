@@ -3,9 +3,7 @@
 ?>
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,11 +14,9 @@
 
     <link href="../css/animate.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
-
 </head>
 
 <body>
-
     <div id="wrapper">
         <!-- 左側選單 -->
         <?php require_once('./template/sidenav.php') ?>
@@ -52,10 +48,7 @@
                         <div class="ibox ">
                             <div class="ibox-content">
                                 <?php
-                                echo "<pre>";
-                                print_r($_SESSION);
-                                echo "</pre>";
-                                
+                                    require_once('./contents/sessionInfo.php');
                                 ?>
                             </div>
                         </div>
@@ -64,14 +57,7 @@
             </div>
         </div>
         <!-- Footer -->
-        <div class="footer">
-            <div class="float-right">
-                10GB of <strong>250GB</strong> Free.
-            </div>
-            <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2018
-            </div>
-        </div>
+        <?php require_once('./template/footer.php') ?>
 
     </div>
     </div>
@@ -90,5 +76,4 @@
 
 
 </body>
-
 </html>
