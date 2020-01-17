@@ -11,8 +11,8 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $stmtEmail->execute($arrParamEmail);
     //若有該帳號，在檢查email與password是否對得上
     if($stmtEmail->rowCount()>0){
-        $sql = "SELECT `a`.`aId`, `a`.`aName`, `a`.`aPassword`, `a`.`aActive`, `a`.`aVerify`,  `a`.`aLoginTime`,     
-                            `rel_platform_permissions`.`aPermissionId`
+        $sql = "SELECT `a`.`aId`, `a`.`aEmail`, `a`.`aActive`,     
+                        `rel_platform_permissions`.`aPermissionId`
                 FROM `platformAdmins` AS `a`
                 INNER JOIN `rel_platform_permissions`
                 ON `a`.`aId` = `rel_platform_permissions`.`aId`
@@ -50,13 +50,8 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             
             //將資訊放入session
             $_SESSION['userId'] = $arr[0]['aId'];
-            $_SESSION['userName'] = $arr[0]['aName'];
-            for($i = 0 ; $i< count($arr) ; $i++){
-                $_SESSION['permission'][$i] = $arr[$i]['aPermissionId'];
-            }
+            $_SESSION['email'] = $arr[0]['aEmail'];
             $_SESSION['active'] = $arr[0]['aActive'];
-            $_SESSION['verify'] = $arr[0]['aVerify'];
-            $_SESSION['lastLogin'] = $arr[0]['aLoginTime'];
 
             echo "<pre>";
             print_r($_SESSION);

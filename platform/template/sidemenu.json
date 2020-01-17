@@ -1,0 +1,46 @@
+[
+    {
+        "name" : "首頁",
+        "link" : "./admin.php",
+        "permission" : "all",
+        "icon" : "fa-diamond"
+    },{
+        "name" : "廠商",
+        "link" : "./vendors.php",
+        "permission" : "prmA01",
+        "icon" : "fa-pie-chart"
+    },{
+        "name" : "報表",
+        "link" : "./charts.php",
+        "permission" : "prmA02",
+        "icon" : ""
+    },{
+        "name" : "會員",
+        "link" : "./members.php",
+        "permission" : "prmA03",
+        "icon" : ""
+    },{
+        "name" : "評論",
+        "link" : "./comments.php",
+        "permission" : "prmA04",
+        "icon" : ""
+    },{
+        "name" : "工作人員",
+        "link" : "#",
+        "permission" : "prmA00",
+        "icon" : "",
+        "submenu" : [
+            {
+                "name" : "工作人員一覽",
+                "link" : "./staff.php",
+                "permission" : "prmA00",
+                "icon" : ""
+            },{
+                "name" : "新增",
+                "link" : "./staff_add.php",
+                "permission" : "prmA00",
+                "icon" : ""
+            }
+        ]
+    }
+]

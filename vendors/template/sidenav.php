@@ -5,7 +5,7 @@
                 <div class="dropdown profile-element">
                     <img alt="image" class="rounded-circle" src="img/profile_small.jpg"/>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="block m-t-xs font-bold"><?php echo $_SESSION['userName'] ?></span>
+                        <span class="block m-t-xs font-bold"><?php echo $arrGetInfo['vaFName'].' '.$arrGetInfo['vaLName'] ?></span>
                         <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -75,37 +75,38 @@
                         //加入子選單
                         if(isset($submenu)){
                             echo "<ul class='nav nav-second-level";
-                            $flag = false;
-                            for($j = 0 ; $j < count($submenu) ; $j++){
-                                if($submenu[$j]['link'] === $currentLink || in_array($currentLink, $submenu[$j])){
-                                    $flag = true;
-                                }
-                            }
-                            if($flag){
-                                echo " collapse in' aria-expaned='true'";
-                            }
+                            //好像會自動處理這段
+                            // $flag = false;
+                            // for($j = 0 ; $j < count($submenu) ; $j++){
+                            //     if($submenu[$j]['link'] === $currentLink || in_array($currentLink, $submenu[$j])){
+                            //         $flag = true;
+                            //     }
+                            // }
+                            // if($flag){
+                            //     echo " collapse in' aria-expaned='true";
+                            // }
                             echo "'>";
-                                for($j = 0 ; $j < count($submenu) ; $j++){
-                                    echo "<li";
-                                    //若目前頁面為該li的連結，加上active
-                                    if($submenu[$j]['link'] === $currentLink){
-                                        echo " class='active'";
-                                    }
-                                    echo ">";
-                                    echo "<a";
-                                    if(in_array($submenu[$j]['permission'], $arrGetInfo['permissions'])){
-                                        echo " href='".$submenu[$j]['link']."'";
-                                    }else if($submenu[$j]['permission'] === "all"){
-                                        echo " href='#'";
-                                    }
-                                    echo ">";
-                                    echo "<i class='fa ".$submenu[$j]['icon']."'></i>";
-                                    echo "<span class='nav-label'>";
-                                    echo $submenu[$j]['name'];
-                                    echo "</span>";
-                                    echo "</a>";
-                                    echo "</li>";
+                            for($j = 0 ; $j < count($submenu) ; $j++){
+                                echo "<li";
+                                //若目前頁面為該li的連結，加上active
+                                if($submenu[$j]['link'] === $currentLink){
+                                    echo " class='active'";
                                 }
+                                echo ">";
+                                echo "<a";
+                                if(in_array($submenu[$j]['permission'], $arrGetInfo['permissions'])){
+                                    echo " href='".$submenu[$j]['link']."'";
+                                }else if($submenu[$j]['permission'] === "all"){
+                                    echo " href='#'";
+                                }
+                                echo ">";
+                                echo "<i class='fa ".$submenu[$j]['icon']."'></i>";
+                                echo "<span class='nav-label'>";
+                                echo $submenu[$j]['name'];
+                                echo "</span>";
+                                echo "</a>";
+                                echo "</li>";
+                            }
                             echo "</ul>";
                             echo "</li>";
                         }

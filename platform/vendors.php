@@ -2,20 +2,8 @@
 
 require_once('./check/checkSession.php');
 require_once('../db.inc.php');
+require_once('./check/getInfo.php');
 
-
-$flag = false;
-for($i = 0 ; $i < count($_SESSION['permission']) ; $i++){
-    if($_SESSION['permission'][$i] === 'prmA01'){
-        $flag = true;
-    }
-}
-if($flag){
-    echo "you are free to pass";
-}else{
-    echo "you may not pass";
-    exit();
-}
 ?>
 
 <!DOCTYPE html>

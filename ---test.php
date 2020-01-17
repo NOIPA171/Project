@@ -14,17 +14,17 @@ $mail = new PHPMailer(true);
 try {
     //Server settings
     $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-    // $mail->isSMTP();                                            // Send using SMTP
+    $mail->isSMTP();                                            // Send using SMTP
     $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = '信箱';                     // SMTP username
-    $mail->Password   = '密碼';                               // SMTP password
+    $mail->Username   = 'radu000rider@gmail.com';                     // SMTP username
+    $mail->Password   = 'ey3ty27e2/4';                               // SMTP password
     $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
     $mail->Port       = 587;                                    // TCP port to connect to
 
     //Recipients
-    $mail->setFrom('寄件者', 'Mailer', 0);
-    $mail->addAddress('寄給誰', 'Joe User', 0);     // Add a recipient
+    $mail->setFrom('radu000rider@gmail.com', 'No reply', 0);
+    $mail->addAddress('radu000rider@gmail.com', 'Joe User', 0);     // Add a recipient
     // $mail->addAddress('ellen@example.com');               // Name is optional
     // $mail->addReplyTo('info@example.com', 'Information');
     // $mail->addCC('cc@example.com');

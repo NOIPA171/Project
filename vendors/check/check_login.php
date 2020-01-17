@@ -11,12 +11,9 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $stmtEmail->execute($arrParamEmail);
     //若有該帳號，在檢查email與password是否對得上
     if($stmtEmail->rowCount()>0){
-        $sql = "SELECT `a`.`vaId`, `a`.`vaFName`, `a`.`vaPassword`, `a`.`vaActive`, `a`.`vaVerify`,  `a`.`vaLoginTime`,     
-        `rel_vendor_permissions`.`vaPermissionId`,
+        $sql = "SELECT `a`.`vaId`, `a`.`vaEmail`, `a`.`vaPassword`, `a`.`vaActive`, `a`.`vaVerify`,  `a`.`vaLoginTime`,     
         `vendors`.`vActive`, `vendors`.`vId`
                 FROM `vendorAdmins` AS `a`
-                INNER JOIN `rel_vendor_permissions`
-                ON `a`.`vaId` = `rel_vendor_permissions`.`vaId`
                 INNER JOIN `rel_vendor_admins`
                 ON `a`.`vaId` = `rel_vendor_admins`.`vaId`
                 INNER JOIN `vendors`
@@ -48,15 +45,9 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             
             //將資訊放入session
             $_SESSION['userId'] = $arr[0]['vaId'];
-            $_SESSION['userName'] = $arr[0]['vaFName'];
-            $_SESSION['vendorId'] = $arr[0]['vId'];
-            for($i = 0 ; $i< count($arr) ; $i++){
-                $_SESSION['permission'][$i] = $arr[$i]['vaPermissionId'];
-            }
+            $_SESSION['email'] = $arr[0]['vaEmail'];
             $_SESSION['adminActive'] = $arr[0]['vActive'];
             $_SESSION['vendorActive'] = $arr[0]['vaActive'];
-            $_SESSION['verify'] = $arr[0]['vaVerify'];
-            $_SESSION['lastLogin'] = $arr[0]['vaLoginTime'];
 
             echo "<pre>";
             print_r($_SESSION);
