@@ -17,14 +17,14 @@ try {
     // $mail->isSMTP();                                            // Send using SMTP
     $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = 'nightfallvs0923@gmail.com';                     // SMTP username
-    $mail->Password   = 'asdf';                               // SMTP password
+    $mail->Username   = '信箱';                     // SMTP username
+    $mail->Password   = '密碼';                               // SMTP password
     $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
     $mail->Port       = 587;                                    // TCP port to connect to
 
     //Recipients
-    $mail->setFrom('nightfallvs0923@gmail.com', 'Mailer', 0);
-    $mail->addAddress('nightfallvs0923@gmail.com', 'Joe User', 0);     // Add a recipient
+    $mail->setFrom('寄件者', 'Mailer', 0);
+    $mail->addAddress('寄給誰', 'Joe User', 0);     // Add a recipient
     // $mail->addAddress('ellen@example.com');               // Name is optional
     // $mail->addReplyTo('info@example.com', 'Information');
     // $mail->addCC('cc@example.com');
