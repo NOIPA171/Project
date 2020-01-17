@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../db.inc.php');
+require_once('../../db.inc.php');
 if(isset($_POST['email']) && isset($_POST['password'])){
     //先檢查是否有這個帳號
     $sqlEmail = "SELECT `vaEmail`
@@ -67,9 +67,9 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             header('Refresh: 5 ;url = ../admin.php');
         }else{
             //登入失敗
-            // header('Refresh: 5 ; url = ../platform_login.php');
+            // header('Refresh: 5 ; url = ../login.php');
             echo "wrong account/ password";
-            // session_unset();
+            session_destroy();
         }
     }else{
         //沒有該帳號

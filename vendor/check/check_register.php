@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../db.inc.php');
+require_once('../../db.inc.php');
 
 //若沒有輸入欄位，exit()
 if($_POST['name']==='' || $_POST['email']==='' || $_POST['password']===''){
@@ -64,8 +64,8 @@ if($stmtAdmin->rowCount() > 0){
                 $_SESSION['userId'] = $currentAdmin;
                 $_SESSION['userName'] = $_POST['name'];
                 $_SESSION['vendor'] = $_POST['name'];
-                // $_SESSION['vendorActive'] = 'active';
-                // $_SESSION['adminActive'] = 'active';
+                $_SESSION['vendorActive'] = 'active';
+                $_SESSION['adminActive'] = 'active';
                 $_SESSION['vendorVerify'] = date("Y-m-d H:i:s");
                 $_SESSION['adminVerify'] = date("Y-m-d H:i:s");                
 

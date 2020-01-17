@@ -1,3 +1,6 @@
+<?php
+    require_once('./check/checkSession.php');
+?>
 <!DOCTYPE html>
 <html>
 
@@ -48,7 +51,12 @@
                     <div class="col-lg-12">
                         <div class="ibox ">
                             <div class="ibox-content">
-
+                                <?php
+                                echo "<pre>";
+                                print_r($_SESSION);
+                                echo "</pre>";
+                                
+                                ?>
                             </div>
                         </div>
                     </div>

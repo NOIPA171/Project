@@ -29,7 +29,7 @@
         <!-- Body -->
         <div id="page-wrapper" class="gray-bg">
             <!-- 上側選單 -->
-            <?php require_once('../template/topnav.php') ?>
+            <?php require_once('./template/topnav.php') ?>
             <!-- 標題 -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-9">
