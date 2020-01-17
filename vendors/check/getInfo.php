@@ -14,7 +14,7 @@ $stmtGetInfo = $pdo->prepare($sqlGetInfo);
 $arrParamGetInfo = [ $_SESSION['userId'] ];
 $stmtGetInfo->execute($arrParamGetInfo);
 if($stmtGetInfo->rowCount()>0){
-    $arrGetInfo = $stmtGetInfo->fetchAll(PDO::FETCH_ASSOC);
+    $arrGetInfo = $stmtGetInfo->fetchAll(PDO::FETCH_ASSOC)[0];
 
     //尋找其permission
     $sqlGetPermissions = "SELECT `vaPermissionId`
@@ -36,6 +36,6 @@ if($stmtGetInfo->rowCount()>0){
             }
         }
         //把permission輸入到info裡
-        $arrGetInfo[0]['permissions'] = $getPrmList;
+        $arrGetInfo['permissions'] = $getPrmList;
     }
 }
