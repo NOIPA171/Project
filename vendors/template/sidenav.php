@@ -22,21 +22,17 @@
             </li>
             <!-- --------menu starts here-------- -->
             <?php
-            // echo "<pre>";
-            // print_r($arrGetInfo);
-            // echo "</pre>";
+
                 function buildMenu($arrGetInfo){
+                    //取得menu資訊
                     $url = "./template/sidemenu.json";
                     $data = file_get_contents($url);
                     $dataObj = json_decode($data);
                     $menuArr = json_decode(json_encode($dataObj), True);
-
-                    // echo "<pre>";
-                    // print_r($menuArr);
-                    // print_r($menuArr[5]['submenu'][0]);                    
-                    // echo "</pre>";
-
+                    
+                    //目前頁面的名稱
                     $currentLink = str_replace("/Project/vendors", ".", $_SERVER['SCRIPT_NAME']);
+
                     for($i = 0 ; $i < count($menuArr); $i++){
                         //若有子選單，定義 $submenu
                         if(isset($menuArr[$i]['submenu'])){
@@ -48,10 +44,14 @@
                         if($menuArr[$i]['link'] === $currentLink){
                             echo " class='active'";
                         }else if(isset($submenu)){
+                            $flag = false;
                             for($j = 0 ; $j < count($submenu) ; $j++){
                                 if(in_array($currentLink, $submenu[$j])){
-                                    echo " class='active'";
+                                    $flag = true;
                                 }
+                            }
+                            if($flag){
+                                echo " class='active'";
                             }
                         }
                         echo ">";
@@ -62,17 +62,6 @@
                         }else if(isset($submenu)){
                             echo " href='#'";
                         }
-                        // if(isset($submenu)){
-                        //     $flag = false;
-                        //     for($j = 0 ; $j < count($submenu) ; $j++){
-                        //         if($submenu[$j]['link'] === $currentLink || in_array($currentLink, $submenu[$j])){
-                        //             $flag = true;
-                        //         }
-                        //     }
-                        //     if($flag){
-                        //         echo " aria-expanded='true'";
-                        //     }
-                        // }
                         echo ">";
                         echo "<i class='fa ".$menuArr[$i]['icon']."'></i>";
                         echo "<span class='nav-label'>";
@@ -124,33 +113,6 @@
                 }
                 buildMenu($arrGetInfo);
             ?>
-            <!-- <li>
-                <a href="./admin.php"><i class="fa fa-diamond"></i> <span class="nav-label">首頁</span></a>
-            </li>
-            <li>
-                <a data-nav-link="prmV01" href="./products.php"><i class="fa fa-pie-chart"></i> <span class="nav-label">產品</span></a>
-            </li>
-            <li>
-                <a data-nav-link="prmV02" href="./charts.php"><i class="fa fa-flask"></i> <span class="nav-label">報表</span></a>
-            </li>
-            <li>
-                <a data-nav-link="prmV03" href="./marketing.php"><i class="fa fa-flask"></i> <span class="nav-label">行銷</span></a>
-            </li>
-            <li>
-                <a data-nav-link="prmV04" href="./orders.php"><i class="fa fa-flask"></i> <span class="nav-label">訂單</span></a>
-            </li>
-            <li>
-                <a data-nav-link="prmV00" href="#">
-                    <i class="fa fa-flask"></i> 
-                    <span class="nav-label">工作人員</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level collapse">
-                        <li><a href="./staff.php">工作人員一覽</a></li>
-                        <li><a href="./staff_add.php">新增</a></li>
-                    </ul>
-            </li> -->
-
         </ul>
 
     </div>
