@@ -114,7 +114,7 @@
 
 
             <li>
-                <a href="./check/check_logout.php?logout=1">
+                <a href="../logout.php?logout=1">
                     <i class="fa fa-sign-out"></i> Log out
                 </a>
             </li>

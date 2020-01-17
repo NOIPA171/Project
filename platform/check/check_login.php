@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('./db.inc.php');
+require_once('../../db.inc.php');
 if(isset($_POST['email']) && isset($_POST['password'])){
     //先檢查是否有這個帳號
     $sqlEmail = "SELECT `aEmail`

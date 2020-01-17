@@ -2,7 +2,7 @@
 
 session_start();
 
-if(!isset($_SESSION['userName'])){
+if(!isset($_SESSION['userName']) || $_SESSION['active']!=='active'){
     session_unset();
     session_destroy();
     header('Refresh: 3 ; url = platform_login.php');

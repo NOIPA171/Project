@@ -52,7 +52,7 @@ if($stmtAdmin->rowCount() > 0){
             //每一個permission都要輸入一次
             for($i=0 ; $i<count($allPermissions) ; $i++){
                 $arrParamAllPrm = [
-                    $currentVendor,
+                    $currentAdmin,
                     $allPermissions[$i]['vendorPrmId']
                 ];
                 $stmtPermission->execute($arrParamAllPrm);
@@ -64,8 +64,8 @@ if($stmtAdmin->rowCount() > 0){
                 $_SESSION['userId'] = $currentAdmin;
                 $_SESSION['userName'] = $_POST['name'];
                 $_SESSION['vendor'] = $_POST['name'];
-                $_SESSION['vendorActive'] = 'active';
-                $_SESSION['adminActive'] = 'active';
+                // $_SESSION['vendorActive'] = 'active';
+                // $_SESSION['adminActive'] = 'active';
                 $_SESSION['vendorVerify'] = date("Y-m-d H:i:s");
                 $_SESSION['adminVerify'] = date("Y-m-d H:i:s");                
 
@@ -75,7 +75,7 @@ if($stmtAdmin->rowCount() > 0){
                 // exit();
 
                 echo "all complete! will refresh in 5 seconds";
-                // header("Refresh: 5 ; url = ../vAdmin.php");
+                header("Refresh: 5 ; url = ../vAdmin.php");
             }
         }
     }
