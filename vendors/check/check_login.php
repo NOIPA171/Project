@@ -12,13 +12,11 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $stmtEmail->execute($arrParamEmail);
     //若有該帳號，在檢查email與password是否對得上
     if($stmtEmail->rowCount()>0){
-        $sql = "SELECT `a`.`vaId`, `a`.`vaEmail`, `a`.`vaPassword`, `a`.`vaActive`, `a`.`vaVerify`,  `a`.`vaLoginTime`,     
+        $sql = "SELECT `a`.`vaId`, `a`.`vaEmail`, `a`.`vaPassword`, `a`.`vaActive`, `a`.`vaVerify`, `a`.`vId`, `a`.`vaLoginTime`,     
         `vendors`.`vActive`, `vendors`.`vId`
                 FROM `vendorAdmins` AS `a`
-                INNER JOIN `rel_vendor_admins`
-                ON `a`.`vaId` = `rel_vendor_admins`.`vaId`
                 INNER JOIN `vendors`
-                ON `rel_vendor_admins`.`vId` = `vendors`.`vId`
+                ON `vendorAdmins`.`vId` = `vendors`.`vId`
                 WHERE `a`.`vaEmail` = ?
                 AND `a`.`vaPassword` = ?";
 

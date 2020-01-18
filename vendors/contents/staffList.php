@@ -18,8 +18,6 @@
         $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`,
         `vId`
                 FROM `vendorAdmins`
-                INNER JOIN `rel_vendor_admins`
-                ON `vendorAdmins`.`vaId` = `rel_vendor_admins`.`vaId`
                 WHERE `vId` = ?";
 
         $stmt = $pdo->prepare($sql);

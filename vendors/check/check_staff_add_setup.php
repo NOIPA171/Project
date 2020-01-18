@@ -11,7 +11,7 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
             $pdo->beginTransaction();
 
             //看看是否對得上這個人
-            $sql = "SELECT `vaId`,`vaEmail`
+            $sql = "SELECT `vaId`,`vaEmail`, `vId`
             FROM `vendorAdmins`
             WHERE `vaPassword`=?
             AND `vaHash`=?
@@ -40,16 +40,12 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                     $pdo->commit();
 
                     //建立session
-                    //先destroy
+                    //先unset之前的資料just in case
                     session_unset();
-                    session_destroy();
-                    
-                    session_start();
-                    $arrV = $pdo->query("SELECT `vId` FROM `rel_vendor_admins` WHERE `vaId` = {$arr['vaId']}")->fetchAll(PDO::FETCH_ASSOC)[0];
 
                     $_SESSION['userId'] = $arr['vaId'];
                     $_SESSION['email'] = $arr['vaEmail'];
-                    $_SESSION['vendor'] = $arrV['vId'];
+                    $_SESSION['vendor'] = $arr['vId'];
 
                     //再轉頁
                     header("Refresh: 3 ; url = ../admin.php");

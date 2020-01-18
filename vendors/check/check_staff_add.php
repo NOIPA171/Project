@@ -14,14 +14,14 @@ require_once('../../tpl/generatePwd.php');
 try{
     $pdo->beginTransaction();
 
-    // $mail = $_SESSION['email'];
-    $email = 'radu000rider@gmail.com';
+    $email = $_SESSION['email'];
+    // $email = 'radu000rider@gmail.com';
     $hash = md5( rand(0,1000) );
     $pwd = generatePwd(8);
 
     //先加入vendor admins -> vendor -> permissions
-    $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`)
-    VALUES(?,?,?,?,?,'inactive')";
+    $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`, `vaVerify`, `vId`)
+    VALUES(?,?,?,?,?,'inactive',?,?)";
 
 
     $stmt = $pdo->prepare($sql);
@@ -31,59 +31,48 @@ try{
         $_POST['email'],
         sha1($pwd),
         $hash,
+        date("Y-m-d H:i:s"),
+        $arrGetInfo['vId']
     ];
     $stmt->execute($arrParam);
     if($stmt->rowCount()>0){
 
         //vendor
         $newStaff = $pdo->lastInsertId();
-        $sql2 = "INSERT INTO `rel_vendor_admins`(`vId`,`vaId`)
-                VALUES(?,?)";
-        $stmt2 = $pdo->prepare($sql2);
-        $arrParam2 = [ $arrGetInfo['vId'], $newStaff ];
+           
+        //若身份為owner
+        if($_POST['title'] === 'owner'){
+            $allPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions`")->fetchAll(PDO::FETCH_ASSOC);
+            //每一個permission都要輸入一次
+            for($i=0 ; $i<count($allPrms) ; $i++){
+                $arrParam3 = [
+                    $newStaff,
+                    $allPrms[$i]['vendorPrmId']
+                ];
+                $stmt3->execute($arrParam3);
+            }
+        }else{
+            //若身份為staff
+            for($i = 0 ; $i < count($_POST['staffPrm']) ; $i++){
+                
+                $arrPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
 
-        $stmt2->execute($arrParam2);
+                $arrParam3 = [
+                    $newStaff,
+                    $arrPrms['vendorPrmId']
+                ];
 
-        if($stmt2->rowCount()>0){
-            $sql3 = "INSERT INTO `rel_vendor_permissions`(`vaId`, `vaPermissionId`)
-            VALUES(?,?)";
-            $stmt3 = $pdo->prepare($sql3);
-
-            
-            //若身份為owner
-            if($_POST['title'] === 'owner'){
-                $allPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions`")->fetchAll(PDO::FETCH_ASSOC);
-                //每一個permission都要輸入一次
-                for($i=0 ; $i<count($allPrms) ; $i++){
-                    $arrParam3 = [
-                        $newStaff,
-                        $allPrms[$i]['vendorPrmId']
-                    ];
-                    $stmt3->execute($arrParam3);
-                }
-            }else{
-                //若身份為staff
-                for($i = 0 ; $i < count($_POST['staffPrm']) ; $i++){
-                    
-                    $arrPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
-
-                    $arrParam3 = [
-                        $newStaff,
-                        $arrPrms['vendorPrmId']
-                    ];
-
-                    $stmt3->execute($arrParam3);
-
-                }
+                $stmt3->execute($arrParam3);
 
             }
-            if($stmt3->rowCount()>0){
-                sendMail($email, $arrGetInfo['vaFName'], $arrGetInfo['vName'], $hash, $pwd);
-                echo "success!";
-                $pdo->commit();
-            }else{
-                echo "fail";
-            }
+
+        }
+        if($stmt3->rowCount()>0){
+            sendMail($email, $arrGetInfo['vaFName'], $arrGetInfo['vName'], $hash, $pwd);
+            echo "success!";
+            $pdo->commit();
+        }else{
+            echo "fail";
         }
     }
 }catch(Exception $err){
@@ -128,13 +117,16 @@ function sendMail($email, $vaName, $vName, $hash, $pwd){
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = '您被邀請加入'.$vName.'的網站，請前往設定您的帳號';
         $mail->Body    = "
-            {$_POST['Fname']}您好， <br>
-            $vName 邀請您一起管理他們的商店。<br>
+            $vaName 您好， <br>
+            $vName 邀請您一起管理商店。<br>
             請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>點擊這裡</a> <br>
             您的驗證碼：$pwd <br>
             $vName <br>
             此信為自動發出，請勿回覆";
-        $mail->AltBody = "$vaName 您好，$vName 邀請您一起管理他們的商店，請點擊連結設定您的帳號密碼：http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}";
+        $mail->AltBody = "$vaName 您好，
+            $vName 邀請您一起管理商店，請點擊連結設定您的帳號密碼：http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}。
+            您的驗證碼：$pwd 。
+            此信為自動發出，請勿回覆";
 
         $mail->send();
         echo 'Message has been sent';

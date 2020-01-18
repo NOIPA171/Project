@@ -11,13 +11,20 @@ if($_POST['name']==='' || $_POST['email']==='' || $_POST['password']===''){
 
 try{
     $pdo->beginTransaction();
+
+    $hash = md5( rand(0,1000) );
+    $email = $_POST['email'];
+    // $email = 'radu000rider@gmail.com';
+
+
     //------先輸入admin帳號------
-    $sqlAdmin = "INSERT INTO `vendorAdmins`(`vaFName`,`vaEmail`,`vaPassword`,`vaActive`,`vaLoginTime`)
-                VALUES (?,?,?,'active',current_timestamp())";
+    $sqlAdmin = "INSERT INTO `vendorAdmins`(`vaFName`,`vaEmail`,`vaPassword`,`vaActive`,`vaLoginTime`, `vaHash`)
+                VALUES (?,?,?,'active',current_timestamp(), ?)";
     $arrParamAdmin = [
         $_POST['name'],
         $_POST['email'],
-        sha1($_POST['password'])
+        sha1($_POST['password']),
+        $hash
     ];
     $stmtAdmin = $pdo->prepare($sqlAdmin);
     $stmtAdmin->execute($arrParamAdmin);
@@ -26,23 +33,18 @@ try{
         //取得剛剛輸入的ID
         $currentAdmin = $pdo->lastInsertId();
         //------再輸入廠商資訊------
-        $sqlVendor = "INSERT INTO `vendors`(`vName`,`vActive`)
-                        VALUES(?,'active')";
+        $sqlVendor = "INSERT INTO `vendors`(`vName`,`vActive`, `vVerify`)
+                        VALUES(?,'active', ?)";
         $stmtVendor = $pdo->prepare($sqlVendor);
-        $arrParamVendor = [ $_POST['name'] ];
+        $arrParamVendor = [ $_POST['name'], date('Y-m-d H:i:s')];
         $stmtVendor->execute($arrParamVendor);
 
         if($stmtVendor->rowCount()>0){
             //取得剛剛輸入的ID
             $currentVendor = $pdo->lastInsertId();
-            //------再將廠商與admin連起來，輸入 REL 資料表------
-            $sqlRel = "INSERT INTO `rel_vendor_admins`(`vId`, `vaId`) VALUES(?,?)";
-            $stmtRel = $pdo->prepare($sqlRel);
-            $arrParamRel = [
-                $currentVendor,
-                $currentAdmin
-            ];
-            $stmtRel->execute($arrParamRel);
+            //------再將廠商輸入admin資料中------
+            $sqlRel = "UPDATE `vendorAdmins` SET`vId` = $currentVendor";
+            $stmtRel = $pdo->query($sqlRel);
 
             if($stmtRel->rowCount()>0){
                 //------再將所有的 Permissions 賦予該 Admin (Owner)------
@@ -62,6 +64,7 @@ try{
 
                 if($stmtPermission->rowCount()>0){
                     //加入 session
+                    $pdo->commit();
 
                     $_SESSION['userId'] = $currentAdmin;
                     $_SESSION['email'] = $_POST['email'];
@@ -71,7 +74,8 @@ try{
                     print_r($_SESSION);
                     echo "</pre>";
                     // exit();
-                    $pdo->commit();
+
+                    sendMail($email, $_POST['name'], $hash);
                     echo "all complete! will refresh in 5 seconds";
                     header("Refresh: 5 ; url = ../admin.php");
                 }
@@ -85,13 +89,14 @@ try{
     echo "failed: ".$err->getMessage();
 }
 
+
+//send mail
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-
-
-function sendMail($email, $vaName, $vName, $hash, $pwd){
+function sendMail($email, $vName, $hash){
 
     // Load Composer's autoloader
     require '../../vendor/autoload.php';
@@ -114,19 +119,18 @@ function sendMail($email, $vaName, $vName, $hash, $pwd){
         
         //Recipients
         $mail->setFrom($email, $vName, 0);
-        $mail->addAddress($_POST['email'], $_POST['Fname'].' '.$_POST['Lname'], 0);     // Add a recipient
+        $mail->addAddress($_POST['email'], $_POST['name'], 0);     // Add a recipient
 
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = '您被邀請加入'.$vName.'的網站，請前往設定您的帳號';
         $mail->Body    = "
-            {$_POST['Fname']}您好， <br>
-            $vName 邀請您一起管理他們的商店。<br>
-            請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>點擊這裡</a> <br>
-            您的驗證碼：$pwd <br>
+            $vName 您好， <br>
+            您於 onepeace 申請了 $vName 廠商帳號 <br>
+            請點擊連結設以驗證您的帳號： <a href='http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}'>點擊這裡</a> <br>
             $vName <br>
             此信為自動發出，請勿回覆";
-        $mail->AltBody = "$vaName 您好，$vName 邀請您一起管理他們的商店，請點擊連結設定您的帳號密碼：http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}";
+        $mail->AltBody = "$vName 您好，您於 onepeace 申請了 $vName 廠商帳號，請點擊連結以驗證您的帳號：http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}";
 
         $mail->send();
         echo 'Message has been sent';
