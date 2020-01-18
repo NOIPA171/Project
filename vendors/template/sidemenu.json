@@ -25,18 +25,18 @@
         "permission" : "prmV04",
         "icon" : ""
     },{
-        "name" : "工作人員",
+        "name" : "帳號",
         "link" : "#",
         "permission" : "prmV00",
         "icon" : "",
         "submenu" : [
             {
-                "name" : "工作人員一覽",
+                "name" : "你的團隊",
                 "link" : "./staff.php",
                 "permission" : "prmV00",
                 "icon" : ""
             },{
-                "name" : "新增",
+                "name" : "新增人員",
                 "link" : "./staff_add.php",
                 "permission" : "prmV00",
                 "icon" : ""

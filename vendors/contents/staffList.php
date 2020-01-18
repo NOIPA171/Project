@@ -22,7 +22,7 @@
                 WHERE `vId` = ?";
 
         $stmt = $pdo->prepare($sql);
-        $arrParam = [ $_SESSION['vendorId'] ];
+        $arrParam = [ $arrGetInfo['vId'] ];
         $stmt->execute($arrParam);
         if($stmt->rowCount()>0){
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);

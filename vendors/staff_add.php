@@ -2,6 +2,8 @@
     require_once('./check/checkSession.php');
     require_once('../db.inc.php');
     require_once('./check/getInfo.php');
+    require_once('./check/checkActive.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -57,65 +59,68 @@
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h5>All form elements <small>With custom checbox and radion elements.</small></h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <form method="get">
-                                <div class="form-group  row"><label class="col-sm-2 col-form-label">Normal</label>
-
-                                    <div class="col-sm-10"><input type="text" class="form-control"></div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Help text</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control"> <span class="form-text m-b-none">A block of help text that breaks onto a new line and may extend beyond one line.</span>
-                                    </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Checkboxes &amp; radios <br/><small class="text-navy">Custom elements</small></label>
-
-                                    <div class="col-sm-10">
-                                        <div class="i-checks"><label> <input type="checkbox" value=""> <i></i> Option one </label></div>
-                                        <div class="i-checks"><label> <input type="checkbox" value="" checked=""> <i></i> Option two checked </label></div>
-                                        <div class="i-checks"><label> <input type="checkbox" value="" disabled="" checked=""> <i></i> Option three checked and disabled </label></div>
-                                        <div class="i-checks"><label> <input type="checkbox" value="" disabled=""> <i></i> Option four disabled </label></div>
-                                        <div class="i-checks"><label> <input type="radio" value="option1" name="a"> <i></i> Option one </label></div>
-                                        <div class="i-checks"><label> <input type="radio" checked="" value="option2" name="a"> <i></i> Option two checked </label></div>
-                                        <div class="i-checks"><label> <input type="radio" disabled="" checked="" value="option2"> <i></i> Option three checked and disabled </label></div>
-                                        <div class="i-checks"><label> <input type="radio" disabled="" name="a"> <i></i> Option four disabled </label></div>
-                                    </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">Column sizing</label>
-
-                                    <div class="col-sm-10">
-                                        <div class="row">
-                                            <div class="col-md-2"><input type="text" placeholder=".col-md-2" class="form-control"></div>
-                                            <div class="col-md-3"><input type="text" placeholder=".col-md-3" class="form-control"></div>
-                                            <div class="col-md-4"><input type="text" placeholder=".col-md-4" class="form-control"></div>
+                    </div>
+                    <div class="ibox-content">
+                        <form method="post" action="./check/check_staff_add.php">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    基本資訊 <br>
+                                    <small class="text-muted">寄信邀請新人員一起管理您的後台。</small>
+                                </label>
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-sm-6 m-b"><input type="text" name="Lname" placeholder="姓" class="form-control" required></div>
+                                        <div class="col-sm-6 m-b"><input type="text" name="Fname" placeholder="名" class="form-control" required></div>
+                                        <div class="col-md-12 m-b"><input type="email" name ="email" placeholder="Email" class="form-control" required></div>                                         
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="i-checks mt-2">
+                                                        <label id="staff"> 
+                                                            <input type="radio" value="staff" name="title" checked> 
+                                                            <i></i> 賦予工作人員權限 
+                                                            <small class="text-muted"></small>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="i-checks mt-2">
+                                                        <label id="owner"> 
+                                                            <input type="radio" value="owner" name="title"> 
+                                                            <i></i> 賦予管理員權限 <br>
+                                                            <small class="text-muted" style="margin-left: 1.6rem;">管理所有頁面（包含帳號管理）</small>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <hr>
+                                            <div class="edit_permissions">
+                                                <label class="col-form-label mb-2">編輯權限</label>
+                                                <div class="i-checks">
+                                                    <label> <input type="checkbox" value="products" checked="" name="staffPrm[]"> 
+                                                    <i></i> 產品 </label>
+                                                </div>
+                                                <div class="i-checks">
+                                                    <label> <input type="checkbox" value="charts" checked="" name="staffPrm[]"> 
+                                                    <i></i> 報表 </label>
+                                                </div>
+                                                <div class="i-checks">
+                                                    <label> <input type="checkbox" value="marketing" checked="" name="staffPrm[]"> 
+                                                    <i></i> 行銷 </label>
+                                                </div>
+                                                <div class="i-checks">
+                                                    <label> <input type="checkbox" value="orders" checked="" name="staffPrm[]"> 
+                                                    <i></i> 訂單 </label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="hr-line-dashed"></div>
+                            </div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-white btn-sm" type="submit">Cancel</button>
-                                        <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                                        <button class="btn btn-primary btn-sm" type="submit">寄送邀請</button>
                                     </div>
                                 </div>
                             </form>
@@ -149,8 +154,46 @@
                     checkboxClass: 'icheckbox_square-green',
                     radioClass: 'iradio_square-green',
                 });
+
+                //自己加的
+                $('.edit_permissions').hide();
+
+                if($(".iradio_square-green:last-child").hasClass('checked')){
+                    $('.edit_permissions').hide();
+                }else{
+                    $('.edit_permissions').show();
+                }
+            
+                $("#staff, #staff ins").click(function(){
+                    $('.edit_permissions').show(300);
+                });
+                $("#owner, #owner ins").click(function(){
+                    $('.edit_permissions').hide(300);
+                })
+
+
+                // $('.edit_permissions .i-checks input').change(function(){
+                //     var requiredCheckboxes = $('.edit_permissions :checkbox[required]');
+                //     if(requiredCheckboxes.is(':checked')) {
+                //             requiredCheckboxes.removeAttr('required');
+                //     } else {
+                //         requiredCheckboxes.attr('required', 'required');
+                //     }
+                //     console.log('1');
+                // })
+                // $(function(){
+                //     var requiredCheckboxes = $('.edit_permissions :checkbox[required]');
+                //     requiredCheckboxes.change(function(){
+                //         if(requiredCheckboxes.is(':checked')) {
+                //             requiredCheckboxes.removeAttr('required');
+                //         } else {
+                //             requiredCheckboxes.attr('required', 'required');
+                //         }
+                //     });
+                // });
+                
             });
-        </script>
+    </script>
 </body>
 
 </html>

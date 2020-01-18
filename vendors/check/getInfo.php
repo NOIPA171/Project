@@ -2,7 +2,7 @@
 
 //get basic info
 $sqlGetInfo = "SELECT `va`.`vaFName`,`va`.`vaLName`,`va`.`vaEmail`,`va`.`vaActive`,`va`.`vaVerify`,
-`vendors`.`vId`, `vendors`.`vActive`, `vendors`.`vVerify`
+`vendors`.`vId`, `vendors`.`vActive`, `vendors`.`vVerify`, `vendors`.`vName`
                 FROM `vendorAdmins` AS `va`
                 INNER JOIN `rel_vendor_admins`
                 ON `va`.`vaId` = `rel_vendor_admins`.`vaId`

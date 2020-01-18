@@ -46,8 +46,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             //將資訊放入session
             $_SESSION['userId'] = $arr[0]['vaId'];
             $_SESSION['email'] = $arr[0]['vaEmail'];
-            $_SESSION['adminActive'] = $arr[0]['vActive'];
-            $_SESSION['vendorActive'] = $arr[0]['vaActive'];
+            $_SESSION['vendor'] = $arr[0]['vId'];
 
             echo "<pre>";
             print_r($_SESSION);
