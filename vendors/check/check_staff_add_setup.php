@@ -43,7 +43,8 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                     //先destroy
                     session_unset();
                     session_destroy();
-
+                    
+                    session_start();
                     $arrV = $pdo->query("SELECT `vId` FROM `rel_vendor_admins` WHERE `vaId` = {$arr['vaId']}")->fetchAll(PDO::FETCH_ASSOC)[0];
 
                     $_SESSION['userId'] = $arr['vaId'];

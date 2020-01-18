@@ -14,6 +14,7 @@
     </thead>
     <tbody>
     <?php
+        // get admin count for vendor
         $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`,
         `vId`
                 FROM `vendorAdmins`
@@ -26,19 +27,21 @@
         $stmt->execute($arrParam);
         if($stmt->rowCount()>0){
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
+
+            //取得個別人的資訊
             $sqlPermissions = "SELECT `vendorPermissions`.`vendorPrmName`
                                 FROM `rel_vendor_permissions`
                                 INNER JOIN `vendorPermissions`
                                 ON `rel_vendor_permissions`.`vaPermissionId` = `vendorPermissions`.`vendorPrmId`
                                 WHERE `vaId` = ?";
             $stmtPermissions = $pdo->prepare($sqlPermissions);
-            $arrParamPermissions = [ $arr[0]['vaId'] ];
-            //先初始化permissions
-            $prmList = [];
             //每一個人執行一次尋找其permission
             for($i = 0 ; $i<count($arr); $i++){
+                //先初始化permissions
+                $prmList = [];
+                $arrParamPermissions = [ $arr[$i]['vaId'] ];
                 $stmtPermissions->execute($arrParamPermissions);
+                
                 if($stmtPermissions->rowCount()>0){
                     //撈出所有permission，並用兩層foreach去除多餘的上一層
                     $arrPermissions = $stmtPermissions->fetchAll(PDO::FETCH_ASSOC);
@@ -56,7 +59,6 @@
                     }
                 }
             }
-
             for($i = 0 ; $i<count($arr); $i++){
                 ?>
                 <tr class="gradeX">

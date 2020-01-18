@@ -8,3 +8,4 @@ if(!isset($_SESSION['email'])){
     echo "access denied";
     exit();
 };
+

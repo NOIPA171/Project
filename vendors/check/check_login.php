@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once('../../db.inc.php');
+
 if(isset($_POST['email']) && isset($_POST['password'])){
     //先檢查是否有這個帳號
     $sqlEmail = "SELECT `vaEmail`
@@ -54,17 +55,18 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             echo "will refresh in 5 seconds";
             // exit();
 
-
             header('Refresh: 5 ;url = ../admin.php');
         }else{
             //登入失敗
             // header('Refresh: 5 ; url = ../login.php');
-            echo "wrong account/ password";
+            echo "帳號/密碼錯誤，請重新登入";
             session_destroy();
         }
     }else{
         //沒有該帳號
-        echo "no such user email, please check again";
+        echo "該信箱尚未註冊，請重新登入";
     }
    
+}else{
+    echo "請輸入帳號密碼";
 }

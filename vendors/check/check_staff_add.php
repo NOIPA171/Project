@@ -34,7 +34,6 @@ try{
     ];
     $stmt->execute($arrParam);
     if($stmt->rowCount()>0){
-        echo "yes";
 
         //vendor
         $newStaff = $pdo->lastInsertId();
@@ -63,13 +62,20 @@ try{
                     $stmt3->execute($arrParam3);
                 }
             }else{
+                //若身份為staff
                 for($i = 0 ; $i < count($_POST['staffPrm']) ; $i++){
+                    
+                    $arrPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
+
                     $arrParam3 = [
                         $newStaff,
-                        $_POST['staffPrm'][$i]
+                        $arrPrms['vendorPrmId']
                     ];
+
                     $stmt3->execute($arrParam3);
+
                 }
+
             }
             if($stmt3->rowCount()>0){
                 sendMail($email, $arrGetInfo['vaFName'], $arrGetInfo['vName'], $hash, $pwd);
@@ -126,7 +132,7 @@ function sendMail($email, $vaName, $vName, $hash, $pwd){
             $vName 邀請您一起管理他們的商店。<br>
             請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>點擊這裡</a> <br>
             您的驗證碼：$pwd <br>
-            $vaName <br>
+            $vName <br>
             此信為自動發出，請勿回覆";
         $mail->AltBody = "$vaName 您好，$vName 邀請您一起管理他們的商店，請點擊連結設定您的帳號密碼：http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}";
 
