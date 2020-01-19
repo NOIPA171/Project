@@ -128,6 +128,9 @@
             $('.footable2').footable();
         });
 
+        $("a[data-func='delete']").click(function(){
+            return confirm("確定要刪除該使用者？");
+        })
 
         //自己加的
         //modal for edit
@@ -143,12 +146,13 @@
             var active = $tds.eq(3).text();
             var permissions = $tds.eq(5).text();
             var notes = $tds.eq(6).text();
+            var id = $tds.eq(7).text();
 
             // var Fname = name.split(' ')[0];
             // var Lname = name.split(' ')[1];
             // modal.find('#firstName').val(Fname);
             // modal.find('#lastName').val(Lname);
-
+            
             //先移除再加上去
             modal.find("#active option").removeAttr('selected');
             modal.find("#active option[value="+active+"]").attr('selected','selected');
@@ -173,7 +177,8 @@
                     modal.find("#permissions").find('input').eq(i).removeAttr("checked");
                 }
             }
-
+            modal.find("#noteText").text(notes);
+            modal.find("#id").val(id);
         })
 
     </script>

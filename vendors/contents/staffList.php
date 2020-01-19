@@ -14,6 +14,7 @@
             <th data-sortable="false"></th>
             <th data-hide="all">擁有權限</th>
             <th data-hide="all">備註</th>
+            <th data-hide="all">ID</th>
         </tr>
     </thead>
     <tbody>
@@ -54,7 +55,7 @@
                     }
                     //把permission輸入到admin裡
                     $arr[$i]['permissions'] = $prmList;
-
+                    
                     if(in_array('admin', $prmList)){
                         $arr[$i]['identity'] = "Owner";
                     }else{
@@ -62,7 +63,12 @@
                     }
                 }
             }
+            
             for($i = 0 ; $i<count($arr); $i++){
+                //不顯示自己的資料
+                if($arr[$i]['vaId']===$_SESSION['userId']){
+                    continue;
+                }else{
                 ?>
                 <tr>
                     <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
@@ -102,13 +108,15 @@
                     <td>
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
-                            <a data-func="delete"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
+                            <a data-func="delete" href="./check/check_staff_delete.php?deleteId=<?php echo $arr[$i]['vaId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
                         </div>
                     </td>
                     <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
                     <td><?php echo $arr[$i]['vaNotes'] ?></td>
+                    <td><?php echo $arr[$i]['vaId'] ?></td>
                 </tr>
                 <?php
+                }
             }
         }
 
@@ -126,7 +134,7 @@
 
 <div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
 	<div class="modal-dialog" role="document">
-		<form class="modal-content form-horizontal" id="editor">
+		<form class="modal-content form-horizontal" id="editor" action="./check/check_staff_edit.php" method="post">
 			<div class="modal-header">
                 <h4 class="modal-title" id="editor-title">編輯</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -152,7 +160,7 @@
 					</div>
 				</div>
                 <div class="form-group">
-                    <div class="col-sm-6" id="permissions">
+                    <div class="col-sm-12" id="permissions">
                         <label class="col-form-label mb-2">編輯權限</label>
                         <div class="i-checks">
                             <label> <input type="checkbox" value="products" name="staffPrm[]" id="products"> 
@@ -176,7 +184,14 @@
                         </div>
                     </div>
 				</div>
-			</div>
+            </div>
+            <div class="form-group">
+                <label for="startedOn" class="col-sm-3 control-label">備註</label>
+                <div class="col-sm-12">
+                    <textarea name="notes" cols="30" rows="10" id="noteText"></textarea>
+                </div>
+            </div>
+            <input type="hidden" value="" name="vaId" id="id">
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">Save changes</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
