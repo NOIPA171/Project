@@ -1,72 +1,19 @@
-<div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
-	<style scoped>
-		/* provides a red astrix to denote required fields - this should be included in common stylesheet */
-		.form-group.required .control-label:after {
-			content:"*";
-			color:red;
-			margin-left: 4px;
-		}
-	</style>
-	<div class="modal-dialog" role="document">
-		<form class="modal-content form-horizontal" id="editor">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<h4 class="modal-title" id="editor-title">Add Row</h4>
-			</div>
-			<div class="modal-body">
-				<input type="number" id="id" name="id" class="hidden"/>
-				<div class="form-group required">
-					<label for="firstName" class="col-sm-3 control-label">First Name</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" required>
-					</div>
-				</div>
-				<div class="form-group required">
-					<label for="lastName" class="col-sm-3 control-label">Last Name</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" required>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="jobTitle" class="col-sm-3 control-label">Job Title</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control" id="jobTitle" name="jobTitle" placeholder="Job Title">
-					</div>
-				</div>
-				<div class="form-group required">
-					<label for="startedOn" class="col-sm-3 control-label">Started On</label>
-					<div class="col-sm-9">
-						<input type="date" class="form-control" id="startedOn" name="startedOn" placeholder="Started On" required>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="dob" class="col-sm-3 control-label">Date of Birth</label>
-					<div class="col-sm-9">
-						<input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth">
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary">Save changes</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			</div>
-		</form>
-	</div>
-</div>
+
 
 <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
     placeholder="Search in table">
 
-<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-filter=#filter data-editing-allow-edit="true">
+<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-filter=#filter id="edit-table">
     <thead>
         <tr>
             <th>名稱</th>
             <th>Email</th>
-            <th>身份</th>
-            <th>帳號</th>
-            <th>狀態</th>
-            <th data-hide="phone,tablet">擁有權限</th>
-            <th data-hide="phone,tablet">備註</th>
+            <th data-hide="phone">身份</th>
+            <th data-hide="phone, tablet">帳號</th>
+            <th data-hide="phone">狀態</th>
+            <th data-sortable="false"></th>
+            <th data-hide="all">擁有權限</th>
+            <th data-hide="all">備註</th>
         </tr>
     </thead>
     <tbody>
@@ -117,7 +64,7 @@
             }
             for($i = 0 ; $i<count($arr); $i++){
                 ?>
-                <tr class="gradeX">
+                <tr>
                     <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
                     <td><?php echo $arr[$i]['vaEmail'] ?></td>
                     <td><?php echo $arr[$i]['identity'] ?></td>
@@ -128,19 +75,20 @@
                             $login = new DateTime($arr[$i]['vaLoginTime']);
                             $logout = new DateTime($arr[$i]['vaLogoutTime']);
                             
-                            $timeDiff = $logout->diff($login);
-                            
-                            if($timeDiff->invert === 0){
+                            $ifOnline = $logout->diff($login);
+
+                            if($ifOnline->invert === 0){
                                 echo "線上";
                             }else{
-                                if($timeDiff->d > 0){
-                                    echo "上次登入 ".$timeDiff->d." 天前";
+                                $timeDiff = $logout->diff(new DateTime());
+                                if($ifOnline->d > 0){
+                                    echo $timeDiff->d." 天前";
                                 }else if($timeDiff->h >0){
-                                    echo "上次登入 ".$timeDiff->h." 小時前";
+                                    echo $timeDiff->h." 小時前";
                                 }else if($timeDiff->m > 0){
-                                    echo "上次登入 ".$timeDiff->h." 分鐘前";
+                                    echo $timeDiff->h." 分鐘前";
                                 }else{
-                                    echo "上次登入 ".$timeDiff->s." 秒前";
+                                    echo $timeDiff->s." 秒前";
                                 }
                             }
                         }else if($arr[$i]['vaLogoutTime'] === null && $arr[$i]['vaLoginTime'] === null){
@@ -150,6 +98,12 @@
                         }
                         
                         ?>
+                    </td>
+                    <td>
+                        <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
+                            <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
+                            <a data-func="delete"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
+                        </div>
                     </td>
                     <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
                     <td><?php echo $arr[$i]['vaNotes'] ?></td>
@@ -162,9 +116,79 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="5">
+            <td colspan="6">
                 <ul class="pagination float-right"></ul>
             </td>
         </tr>
     </tfoot>
 </table>
+
+
+<div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
+	<style scoped>
+		/* provides a red astrix to denote required fields - this should be included in common stylesheet */
+		.form-group.required .control-label:after {
+			content:"*";
+			color:red;
+			margin-left: 4px;
+		}
+	</style>
+	<div class="modal-dialog" role="document">
+		<form class="modal-content form-horizontal" id="editor">
+			<div class="modal-header">
+                <h4 class="modal-title" id="editor-title">編輯</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+			</div>
+			<div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group required col-sm-6">
+                        <label for="lastName" class="control-label">姓</label>
+                        <input type="text" class="form-control" id="firstName" name="FName" placeholder="First Name" required>
+                    </div>
+                    <div class="form-group required col-sm-6">
+                        <label for="firstName" class="control-label">名</label>
+                        <input type="text" class="form-control" id="lastName" name="LName" placeholder="Last Name" required>
+                    </div>
+                </div>
+                <div class="form-group required">
+					<label for="startedOn" class="col-sm-3 control-label">帳號狀態</label>
+					<div class="col-sm-12">
+						<select name="active" id="active" class="form-control">
+                            <option value="active">啟用</option>
+                            <option value="inactive">停用</option>
+                        </select>
+					</div>
+				</div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-form-label mb-2">編輯權限</label>
+                        <div class="i-checks">
+                            <label> <input type="checkbox" value="products" checked="" name="staffPrm[]" id="products"> 
+                            <i></i> 產品 </label>
+                        </div>
+                        <div class="i-checks">
+                            <label> <input type="checkbox" value="charts" checked="" name="staffPrm[]" id="charts"> 
+                            <i></i> 報表 </label>
+                        </div>
+                        <div class="i-checks">
+                            <label> <input type="checkbox" value="marketing" checked="" name="staffPrm[]" id="marketing"> 
+                            <i></i> 行銷 </label>
+                        </div>
+                        <div class="i-checks">
+                            <label> <input type="checkbox" value="orders" checked="" name="staffPrm[]" id="orders"> 
+                            <i></i> 訂單 </label>
+                        </div>
+                        <div class="i-checks">
+                            <label> <input type="checkbox" value="orders" checked="" name="staffPrm[]" id="staff"> 
+                            <i></i> 帳號  <small class="text-warning">此為後台管理員權限</small> </label>
+                        </div>
+                    </div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
