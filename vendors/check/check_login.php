@@ -36,8 +36,8 @@ if(isset($_POST['email']) && isset($_POST['password'])){
                         WHERE `vaId` = ?";
             $stmtTime = $pdo->prepare($sqlTime);
             $arrParamTime = [ 
-                $arr[0]['vaId'],
-                date("Y-m-d H:i:s")
+                date("Y-m-d H:i:s"),
+                $arr[0]['vaId']
             ];
             $stmtTime->execute($arrParamTime);
             
