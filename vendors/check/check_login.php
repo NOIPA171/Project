@@ -12,7 +12,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $stmtEmail->execute($arrParamEmail);
     //若有該帳號，在檢查email與password是否對得上
     if($stmtEmail->rowCount()>0){
-        $sql = "SELECT `vaId`, `vaEmail`, `vId`
+        $sql = "SELECT `vaId`, `vaEmail`, `vId`, `vaActive`
                 FROM `vendorAdmins`
                 WHERE `vaEmail` = ?
                 AND `vaPassword` = ?";
@@ -24,9 +24,16 @@ if(isset($_POST['email']) && isset($_POST['password'])){
         ];
         $stmt->execute($arrParam);
 
-        //成功登入，則建立session
         if($stmt->rowCount()>0){
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            //若帳號非active，則禁止進入
+            if($arr[0]['vaActive']!=='active'){
+                echo "帳號未啟用，請設置您的帳號，或者聯絡您網站的管理員";
+                header("Refresh: 3 ; url = ../login.php");
+                exit();
+            }
+
+             //成功登入，則建立session
 
             session_unset();
 

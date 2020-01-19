@@ -19,7 +19,7 @@ try{
     $hash = md5( rand(0,1000) );
     $pwd = generatePwd(8);
 
-    //先加入vendor admins -> vendor -> permissions
+    //先加入vendor admins -> permissions
     $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`, `vaVerify`, `vId`)
     VALUES(?,?,?,?,?,'inactive',?,?)";
 
@@ -36,8 +36,10 @@ try{
     ];
     $stmt->execute($arrParam);
     if($stmt->rowCount()>0){
-
-        //vendor
+        $sql2 = "INSERT INTO `rel_vendor_permissions`(`vaId`, `vaPermissionId`)
+                VALUES(?,?)";
+        $stmt2 = $pdo->prepare($sql2);
+        //新工作人員
         $newStaff = $pdo->lastInsertId();
            
         //若身份為owner
@@ -45,11 +47,11 @@ try{
             $allPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions`")->fetchAll(PDO::FETCH_ASSOC);
             //每一個permission都要輸入一次
             for($i=0 ; $i<count($allPrms) ; $i++){
-                $arrParam3 = [
+                $arrParam2 = [
                     $newStaff,
                     $allPrms[$i]['vendorPrmId']
                 ];
-                $stmt3->execute($arrParam3);
+                $stmt2->execute($arrParam2);
             }
         }else{
             //若身份為staff
@@ -57,17 +59,17 @@ try{
                 
                 $arrPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
 
-                $arrParam3 = [
+                $arrParam2 = [
                     $newStaff,
                     $arrPrms['vendorPrmId']
                 ];
 
-                $stmt3->execute($arrParam3);
+                $stmt2->execute($arrParam2);
 
             }
 
         }
-        if($stmt3->rowCount()>0){
+        if($stmt2->rowCount()>0){
             sendMail($email, $arrGetInfo['vaFName'], $arrGetInfo['vName'], $hash, $pwd);
             echo "success!";
             $pdo->commit();
