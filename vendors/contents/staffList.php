@@ -7,7 +7,8 @@
             <th>名稱</th>
             <th>Email</th>
             <th>身份</th>
-            <th data-hide="phone,tablet">帳號狀態</th>
+            <th>帳號</th>
+            <th>狀態</th>
             <th data-hide="phone,tablet">擁有權限</th>
             <th data-hide="phone,tablet">備註</th>
         </tr>
@@ -64,6 +65,35 @@
                     <td><?php echo $arr[$i]['vaEmail'] ?></td>
                     <td><?php echo $identity ?></td>
                     <td class="center"><?php echo $arr[$i]['vaActive'] ?></td>
+                    <td class="center">
+                        <?php 
+                        if($arr[$i]['vaLogoutTime'] !== null){
+                            $login = new DateTime($arr[$i]['vaLoginTime']);
+                            $logout = new DateTime($arr[$i]['vaLogoutTime']);
+                            
+                            $timeDiff = $logout->diff($login);
+
+                            if($timeDiff->invert === 1){
+                                echo "線上";
+                            }else{
+                                if($timeDiff->d > 0){
+                                    echo "上次登入 ".$timeDiff->d." 天前";
+                                }else if($timeDiff->h >0){
+                                    echo "上次登入 ".$timeDiff->h." 小時前";
+                                }else if($timeDiff->m > 0){
+                                    echo "上次登入 ".$timeDiff->h." 分鐘前";
+                                }else{
+                                    echo "上次登入 ".$timeDiff->s." 秒前";
+                                }
+                            }
+                        }else if($arr[$i]['vaLogoutTime'] === null && $arr[$i]['vaLoginTime'] === null){
+                            echo "帳號尚未啟用";
+                        }else{
+                            echo "線上";
+                        }
+                        
+                        ?>
+                    </td>
                     <td class="center"><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
                     <td class="center"><?php echo $arr[$i]['vaNotes'] ?></td>
                 </tr>

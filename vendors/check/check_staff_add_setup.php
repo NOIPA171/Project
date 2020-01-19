@@ -26,13 +26,14 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
 
             if($stmt->rowCount()>0){
                 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
-                //確認是此人，則更新他的密碼
+                //確認是此人，則更新他的密碼，更新狀態，以及加入上線時間
                 $sqlUpdate = "UPDATE `vendorAdmins`
-                            SET `vaPassword` =? , `vaActive` = 'active'
+                            SET `vaPassword` =? , `vaActive` = 'active', `vaLoginTime`=?
                             WHERE `vaEmail`=?";
                 $stmtUpdate = $pdo->prepare($sqlUpdate);
                 $arrParamUpdate = [
                     sha1($_POST['password1']),
+                    date("Y-m-d H:i:s"),
                     $arr['vaEmail']
                 ];
                 $stmtUpdate->execute($arrParamUpdate);
