@@ -16,7 +16,7 @@
     <?php
         // get admin count for vendor
         $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`,
-        `vId`
+        `vId`, `vaLoginTime`, `vaLogoutTime`
                 FROM `vendorAdmins`
                 WHERE `vId` = ?";
 

@@ -19,11 +19,12 @@ try{
 
     //------先輸入admin帳號------
     $sqlAdmin = "INSERT INTO `vendorAdmins`(`vaFName`,`vaEmail`,`vaPassword`,`vaActive`,`vaLoginTime`, `vaHash`)
-                VALUES (?,?,?,'active',current_timestamp(), ?)";
+                VALUES (?,?,?,'active',?, ?)";
     $arrParamAdmin = [
         $_POST['name'],
         $_POST['email'],
         sha1($_POST['password']),
+        date("Y-m-d H:i:s"),
         $hash
     ];
     $stmtAdmin = $pdo->prepare($sqlAdmin);
@@ -43,7 +44,7 @@ try{
             //取得剛剛輸入的ID
             $currentVendor = $pdo->lastInsertId();
             //------再將廠商輸入admin資料中------
-            $sqlRel = "UPDATE `vendorAdmins` SET`vId` = $currentVendor";
+            $sqlRel = "UPDATE `vendorAdmins` SET `vId` = $currentVendor WHERE `vaId` = $currentAdmin";
             $stmtRel = $pdo->query($sqlRel);
 
             if($stmtRel->rowCount()>0){
