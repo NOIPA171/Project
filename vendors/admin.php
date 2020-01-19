@@ -51,6 +51,10 @@
                         <div class="ibox ">
                             <div class="ibox-content">
                                 <?php
+                                    if($arrGetInfo['vaVerify']!=='active' || $arrGetInfo['vVerify']!=='active'){
+                                        echo "請驗證您的信箱";
+                                    }
+                                    require_once('./check/checkVerify.php');
                                     require_once('./contents/sessionInfo.php');
                                 ?>
                             </div>

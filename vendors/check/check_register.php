@@ -29,19 +29,23 @@ try{
     ];
     $stmtAdmin = $pdo->prepare($sqlAdmin);
     $stmtAdmin->execute($arrParamAdmin);
-
     if($stmtAdmin->rowCount() > 0){
         //取得剛剛輸入的ID
         $currentAdmin = $pdo->lastInsertId();
         //------再輸入廠商資訊------
-        $sqlVendor = "INSERT INTO `vendors`(`vName`,`vActive`, `vVerify`)
-                        VALUES(?,'active', ?)";
+        $sqlVendor = "INSERT INTO `vendors`(`vName`,`vActive`, `vVerify`, `vEmail`)
+                        VALUES(?,'active', ?,?)";
         $stmtVendor = $pdo->prepare($sqlVendor);
-        $arrParamVendor = [ $_POST['name'], date('Y-m-d H:i:s')];
+        $arrParamVendor = [ 
+            $_POST['name'], 
+            date('Y-m-d H:i:s'),
+            $_POST['email']
+        ];
         $stmtVendor->execute($arrParamVendor);
 
         if($stmtVendor->rowCount()>0){
             //取得剛剛輸入的ID
+
             $currentVendor = $pdo->lastInsertId();
             //------再將廠商輸入admin資料中------
             $sqlRel = "UPDATE `vendorAdmins` SET `vId` = $currentVendor WHERE `vaId` = $currentAdmin";
