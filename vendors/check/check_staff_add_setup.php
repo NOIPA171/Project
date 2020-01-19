@@ -28,7 +28,7 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 $arr = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
                 //確認是此人，則更新他的密碼，更新狀態，以及加入上線時間
                 $sqlUpdate = "UPDATE `vendorAdmins`
-                            SET `vaPassword` =? , `vaActive` = 'active', `vaLoginTime`=?
+                            SET `vaPassword` =? , `vaActive` = 'active', `vaLoginTime`=?, `vaVerify` = 'verified'
                             WHERE `vaEmail`=?
                             AND `vaId` = ?";
                 $stmtUpdate = $pdo->prepare($sqlUpdate);
@@ -40,19 +40,38 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 ];
                 $stmtUpdate->execute($arrParamUpdate);
                 if($stmt->rowCount()>0){
+
+                    //若有session（之前已登入某帳號），則幫前一個帳號加入登出時間，然後幫此用戶登入（加入session）
+                    if(isset($_SESSION['email']) && isset($_SESSION['userId']) && isset($_SESSION['vendor'])){
+                        $s = "UPDATE `vendorAdmins` 
+                            SET `vaLogoutTime` = ? 
+                            WHERE `vaId` = ?
+                            AND `vaEmail` = ?";
+                        $st = $pdo->prepare($s);
+                        $ap = [
+                            date("Y-m-d H:i:s"),
+                            $arr['vaId'],
+                            $arr['vaEmail']
+                        ];
+                        $st->execute($ap);
+                        if($st->rowCount()>0){
+                            echo "已幫前一位用戶登出";
+                        }
+                    }
+
+                    //submit changes
                     $pdo->commit();
 
-                    //建立session
-                    //先unset之前的資料just in case
+                    //以防萬一總之歸零 
                     session_unset();
-
-                    $_SESSION['userId'] = $arr['vaId'];
+                    // 加入session登入
                     $_SESSION['email'] = $arr['vaEmail'];
+                    $_SESSION['userId'] = $arr['vaId'];
                     $_SESSION['vendor'] = $arr['vId'];
 
-                    //再轉頁
+                    //轉頁重新登入
                     header("Refresh: 3 ; url = ../admin.php");
-                    echo "Validated!";
+                    echo "Validated! 3秒後轉頁";
                 }
             }else{
                 //非本人

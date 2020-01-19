@@ -122,6 +122,74 @@
 
         });
 
+        var $modal = $('#editor-modal'),
+	$editor = $('#editor'),
+	$editorTitle = $('#editor-title'),
+	// the below initializes FooTable and returns the created instance for later use
+	ft = FooTable.init('#editing-example', {
+		editing: {
+			enabled: true,
+			addRow: ...,
+			editRow: ...,
+			deleteRow: ...
+		}
+	}),
+	// this example does not send data to the server so this variable holds the integer to use as an id for newly
+	// generated rows. In production this value would be returned from the server upon a successful ajax call.
+    uid = 10;
+    
+
+    editRow: function(row){
+	var values = row.val();
+	// we need to find and set the initial value for the editor inputs
+	$editor.find('#id').val(values.id);
+	$editor.find('#firstName').val(values.firstName);
+	$editor.find('#lastName').val(values.lastName);
+	$editor.find('#jobTitle').val(values.jobTitle);
+	$editor.find('#startedOn').val(values.startedOn.format('YYYY-MM-DD'));
+	$editor.find('#dob').val(values.dob.format('YYYY-MM-DD'));
+
+	$modal.data('row', row); // set the row data value for use later
+	$editorTitle.text('Edit row #' + values.id); // set the modal title
+	$modal.modal('show'); // display the modal
+}
+
+// the deleteRow callback is supplied the FooTable.Row object for deleting as the first argument.
+deleteRow: function(row){
+	// This example displays a confirm popup and then simply removes the row but you could just
+	// as easily make an ajax call and then only remove the row once you retrieve a response.
+	if (confirm('Are you sure you want to delete the row?')){
+		row.delete();
+	}
+}
+
+$editor.on('submit', function(e){
+	if (this.checkValidity && !this.checkValidity()) return; // if validation fails exit early and do nothing.
+	e.preventDefault(); // stop the default post back from a form submit
+	var row = $modal.data('row'), // get any previously stored row object
+		values = { // create a hash of the editor row values
+			id: $editor.find('#id').val(),
+			firstName: $editor.find('#firstName').val(),
+			lastName: $editor.find('#lastName').val(),
+			jobTitle: $editor.find('#jobTitle').val(),
+			startedOn: moment($editor.find('#startedOn').val(), 'YYYY-MM-DD'),
+			dob: moment($editor.find('#dob').val(), 'YYYY-MM-DD')
+		};
+
+	if (row instanceof FooTable.Row){ // if we have a row object then this is an edit operation
+		// here you can execute an ajax call to the server and then only update the row once the result is
+		// retrieved. This example simply updates the row straight away.
+		row.val(values);
+	} else { // otherwise this is an add operation
+		// here you can execute an ajax call to the server to save the values and get the new row id and then
+		// only add the row once the result is retrieved. This example simply adds the row straight away using
+		// a basic integer id.
+		values.id = uid++;
+		ft.rows.add(values);
+	}
+	$modal.modal('hide');
+});
+
     </script>
 
 </body>

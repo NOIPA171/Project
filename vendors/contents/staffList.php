@@ -1,7 +1,63 @@
+<div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
+	<style scoped>
+		/* provides a red astrix to denote required fields - this should be included in common stylesheet */
+		.form-group.required .control-label:after {
+			content:"*";
+			color:red;
+			margin-left: 4px;
+		}
+	</style>
+	<div class="modal-dialog" role="document">
+		<form class="modal-content form-horizontal" id="editor">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title" id="editor-title">Add Row</h4>
+			</div>
+			<div class="modal-body">
+				<input type="number" id="id" name="id" class="hidden"/>
+				<div class="form-group required">
+					<label for="firstName" class="col-sm-3 control-label">First Name</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" required>
+					</div>
+				</div>
+				<div class="form-group required">
+					<label for="lastName" class="col-sm-3 control-label">Last Name</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="jobTitle" class="col-sm-3 control-label">Job Title</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" id="jobTitle" name="jobTitle" placeholder="Job Title">
+					</div>
+				</div>
+				<div class="form-group required">
+					<label for="startedOn" class="col-sm-3 control-label">Started On</label>
+					<div class="col-sm-9">
+						<input type="date" class="form-control" id="startedOn" name="startedOn" placeholder="Started On" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="dob" class="col-sm-3 control-label">Date of Birth</label>
+					<div class="col-sm-9">
+						<input type="date" class="form-control" id="dob" name="dob" placeholder="Date of Birth">
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary">Save changes</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
+
 <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
     placeholder="Search in table">
 
-<table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-filter=#filter data-editing-allow-edit="true">
     <thead>
         <tr>
             <th>名稱</th>
@@ -65,8 +121,8 @@
                     <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
                     <td><?php echo $arr[$i]['vaEmail'] ?></td>
                     <td><?php echo $arr[$i]['identity'] ?></td>
-                    <td class="center"><?php echo $arr[$i]['vaActive'] ?></td>
-                    <td class="center">
+                    <td><?php echo $arr[$i]['vaActive'] ?></td>
+                    <td>
                         <?php 
                         if($arr[$i]['vaLogoutTime'] !== null){
                             $login = new DateTime($arr[$i]['vaLoginTime']);
@@ -95,8 +151,8 @@
                         
                         ?>
                     </td>
-                    <td class="center"><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
-                    <td class="center"><?php echo $arr[$i]['vaNotes'] ?></td>
+                    <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
+                    <td><?php echo $arr[$i]['vaNotes'] ?></td>
                 </tr>
                 <?php
             }

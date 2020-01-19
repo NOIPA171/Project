@@ -51,7 +51,8 @@
                         <div class="ibox ">
                             <div class="ibox-content">
                                 <?php
-                                    if($arrGetInfo['vaVerify']!=='active' || $arrGetInfo['vVerify']!=='active'){
+                                    //是否有驗證過，沒有則加上提醒
+                                    if($arrGetInfo['vaVerify']!=='verified'){
                                         echo "請驗證您的信箱";
                                     }
                                     require_once('./check/checkVerify.php');

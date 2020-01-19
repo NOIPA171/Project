@@ -70,11 +70,13 @@ try{
 
         }
         if($stmt2->rowCount()>0){
-            sendMail($email, $arrGetInfo['vaFName'], $arrGetInfo['vName'], $hash, $pwd);
+            sendMail($email, $_POST['Fname'], $arrGetInfo['vName'], $hash, $pwd);
             echo "success!";
+            header("Refresh: 3 ; url = ../staff.php");
             $pdo->commit();
         }else{
             echo "fail";
+            $pdo->rollback();
         }
     }
 }catch(Exception $err){
@@ -90,7 +92,7 @@ use PHPMailer\PHPMailer\Exception;
 
 
 
-function sendMail($email, $vaName, $vName, $hash, $pwd){
+function sendMail($email, $recepient, $vName, $hash, $pwd){
 
     // Load Composer's autoloader
     require '../../vendor/autoload.php';
@@ -119,13 +121,13 @@ function sendMail($email, $vaName, $vName, $hash, $pwd){
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = '您被邀請加入'.$vName.'的網站，請前往設定您的帳號';
         $mail->Body    = "
-            $vaName 您好， <br>
+            $recepient 您好， <br>
             $vName 邀請您一起管理商店。<br>
             請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>點擊這裡</a> <br>
             您的驗證碼：$pwd <br>
             $vName <br>
             此信為自動發出，請勿回覆";
-        $mail->AltBody = "$vaName 您好，
+        $mail->AltBody = "$recepient 您好，
             $vName 邀請您一起管理商店，請點擊連結設定您的帳號密碼：http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}。
             您的驗證碼：$pwd 。
             此信為自動發出，請勿回覆";

@@ -1,3 +1,13 @@
+<?php
+    session_start();
+
+    if(isset($_SESSION['email']) && isset($_SESSION['userId']) && isset($_SESSION['vendor'])){
+        echo "You've already logged in";
+        header("Refresh: 3 ; url = ./admin.php");
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 
