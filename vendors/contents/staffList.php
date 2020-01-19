@@ -51,10 +51,11 @@
                     }
                     //把permission輸入到admin裡
                     $arr[$i]['permissions'] = $prmList;
+
                     if(in_array('admin', $prmList)){
-                        $identity = "Owner";
+                        $arr[$i]['identity'] = "Owner";
                     }else{
-                        $identity = "Staff";
+                        $arr[$i]['identity'] = "Staff";
                     }
                 }
             }
@@ -63,7 +64,7 @@
                 <tr class="gradeX">
                     <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
                     <td><?php echo $arr[$i]['vaEmail'] ?></td>
-                    <td><?php echo $identity ?></td>
+                    <td><?php echo $arr[$i]['identity'] ?></td>
                     <td class="center"><?php echo $arr[$i]['vaActive'] ?></td>
                     <td class="center">
                         <?php 
