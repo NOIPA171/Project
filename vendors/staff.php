@@ -128,30 +128,52 @@
             $('.footable2').footable();
         });
 
+
+        //自己加的
         //modal for edit
         var modal = $('#editor-modal');
         var table = $('#edit-table');
         
         // var edit = $("a[data-func='edit']");
         $("a[data-func='edit']").click(function(){
-            var tds = $(this).closest('td').siblings();
-            var name = tds.first();
-            var email = name.next();
-            var title = email.next();
-            var active = title.next();
-            var permissions = active.next().next().next();
-            var notes = permissions.next();
+            var $tds = $(this).closest('td').siblings();
+            // var name = $tds.eq(0).text();
+            // var email = $tds.eq(1).text();
+            var title = $tds.eq(2).text();
+            var active = $tds.eq(3).text();
+            var permissions = $tds.eq(5).text();
+            var notes = $tds.eq(6).text();
 
-            var Fname = name.text().split(' ')[0];
-            var Lname = name.text().split(' ')[1];
-            modal.find('#firstName').val(Fname);
-            modal.find('#lastName').val(Lname);
+            // var Fname = name.split(' ')[0];
+            // var Lname = name.split(' ')[1];
+            // modal.find('#firstName').val(Fname);
+            // modal.find('#lastName').val(Lname);
 
             //先移除再加上去
             modal.find("#active option").removeAttr('selected');
-            modal.find("#active option[value="+active.text()+"]").attr('selected','selected');
+            modal.find("#active option[value="+active+"]").attr('selected','selected');
 
-            // modal.find("#products").attr()
+            var permissionsArr = permissions.split(', ');
+            var allPrmInputs = modal.find('#permissions').find('input');
+            var allPrms = [];
+            for(let i = 0 ; i < allPrmInputs.length ; i++){
+                allPrms.push(modal.find('#permissions').find('input')[i]['value']);
+            }
+            
+            for(let i = 0 ; i < allPrms.length ; i++){
+                var flag = false;
+                for(let j = 0 ; j < permissionsArr.length ; j++){
+                    if(allPrms[i].indexOf(permissionsArr[j])>=0){
+                        flag = true;
+                    }
+                }
+                if(flag){
+                    modal.find("#permissions").find('input').eq(i).attr("checked","");
+                }else{
+                    modal.find("#permissions").find('input').eq(i).removeAttr("checked");
+                }
+            }
+
         })
 
     </script>

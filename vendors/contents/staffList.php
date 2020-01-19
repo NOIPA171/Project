@@ -125,14 +125,6 @@
 
 
 <div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
-	<style scoped>
-		/* provides a red astrix to denote required fields - this should be included in common stylesheet */
-		.form-group.required .control-label:after {
-			content:"*";
-			color:red;
-			margin-left: 4px;
-		}
-	</style>
 	<div class="modal-dialog" role="document">
 		<form class="modal-content form-horizontal" id="editor">
 			<div class="modal-header">
@@ -140,7 +132,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
-                <div class="form-row">
+                <!-- <div class="form-row">
                     <div class="form-group required col-sm-6">
                         <label for="lastName" class="control-label">姓</label>
                         <input type="text" class="form-control" id="firstName" name="FName" placeholder="First Name" required>
@@ -149,8 +141,8 @@
                         <label for="firstName" class="control-label">名</label>
                         <input type="text" class="form-control" id="lastName" name="LName" placeholder="Last Name" required>
                     </div>
-                </div>
-                <div class="form-group required">
+                </div> -->
+                <div class="form-group">
 					<label for="startedOn" class="col-sm-3 control-label">帳號狀態</label>
 					<div class="col-sm-12">
 						<select name="active" id="active" class="form-control">
@@ -160,26 +152,26 @@
 					</div>
 				</div>
                 <div class="form-group">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" id="permissions">
                         <label class="col-form-label mb-2">編輯權限</label>
                         <div class="i-checks">
-                            <label> <input type="checkbox" value="products" checked="" name="staffPrm[]" id="products"> 
+                            <label> <input type="checkbox" value="products" name="staffPrm[]" id="products"> 
                             <i></i> 產品 </label>
                         </div>
                         <div class="i-checks">
-                            <label> <input type="checkbox" value="charts" checked="" name="staffPrm[]" id="charts"> 
+                            <label> <input type="checkbox" value="charts" name="staffPrm[]" id="charts"> 
                             <i></i> 報表 </label>
                         </div>
                         <div class="i-checks">
-                            <label> <input type="checkbox" value="marketing" checked="" name="staffPrm[]" id="marketing"> 
+                            <label> <input type="checkbox" value="marketing" name="staffPrm[]" id="marketing"> 
                             <i></i> 行銷 </label>
                         </div>
                         <div class="i-checks">
-                            <label> <input type="checkbox" value="orders" checked="" name="staffPrm[]" id="orders"> 
+                            <label> <input type="checkbox" value="orders" name="staffPrm[]" id="orders"> 
                             <i></i> 訂單 </label>
                         </div>
                         <div class="i-checks">
-                            <label> <input type="checkbox" value="orders" checked="" name="staffPrm[]" id="staff"> 
+                            <label> <input type="checkbox" value="admin" name="staffPrm[]" id="admin"> 
                             <i></i> 帳號  <small class="text-warning">此為後台管理員權限</small> </label>
                         </div>
                     </div>
