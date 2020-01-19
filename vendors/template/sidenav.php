@@ -68,8 +68,10 @@
                         //若有權限，則加上href
                         if(in_array($menuArr[$i]['permission'], $arrGetInfo['permissions']) || $menuArr[$i]['permission'] === "all"){
                             echo " href='".$menuArr[$i]['link']."'";
-                        }else if(isset($submenu)){
+                        }else if(isset($submenu) && in_array($menuArr[$i]['permission'], $arrGetInfo['permissions'])){
                             echo " href='#'";
+                        }else{
+                            echo " style='pointer-events:none;'";
                         }
                         echo ">";
                         echo "<i class='fa ".$menuArr[$i]['icon']."'></i>";
@@ -83,18 +85,7 @@
                         echo "</a>";
                         //加入子選單
                         if(isset($submenu)){
-                            echo "<ul class='nav nav-second-level";
-                            //好像會自動處理這段
-                            // $flag = false;
-                            // for($j = 0 ; $j < count($submenu) ; $j++){
-                            //     if($submenu[$j]['link'] === $currentLink || in_array($currentLink, $submenu[$j])){
-                            //         $flag = true;
-                            //     }
-                            // }
-                            // if($flag){
-                            //     echo " collapse in' aria-expaned='true";
-                            // }
-                            echo "'>";
+                            echo "<ul class='nav nav-second-level'>";
                             for($j = 0 ; $j < count($submenu) ; $j++){
                                 echo "<li";
                                 //若目前頁面為該li的連結，加上active
@@ -103,10 +94,10 @@
                                 }
                                 echo ">";
                                 echo "<a";
-                                if(in_array($submenu[$j]['permission'], $arrGetInfo['permissions'])){
+                                if(in_array($submenu[$j]['permission'], $arrGetInfo['permissions']) || $submenu[$j]['permission'] === "all"){
                                     echo " href='".$submenu[$j]['link']."'";
-                                }else if($submenu[$j]['permission'] === "all"){
-                                    echo " href='#'";
+                                }else{
+                                    echo " style='pointer-events:none;'";
                                 }
                                 echo ">";
                                 echo "<i class='fa ".$submenu[$j]['icon']."'></i>";

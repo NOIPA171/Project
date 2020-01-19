@@ -12,13 +12,10 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $stmtEmail->execute($arrParamEmail);
     //若有該帳號，在檢查email與password是否對得上
     if($stmtEmail->rowCount()>0){
-        $sql = "SELECT `a`.`vaId`, `a`.`vaEmail`, `a`.`vaPassword`, `a`.`vaActive`, `a`.`vaVerify`, `a`.`vId`, `a`.`vaLoginTime`,     
-        `vendors`.`vActive`, `vendors`.`vId`
-                FROM `vendorAdmins` AS `a`
-                INNER JOIN `vendors`
-                ON `vendorAdmins`.`vId` = `vendors`.`vId`
-                WHERE `a`.`vaEmail` = ?
-                AND `a`.`vaPassword` = ?";
+        $sql = "SELECT `vaId`, `vaEmail`, `vId`
+                FROM `vendorAdmins`
+                WHERE `vaEmail` = ?
+                AND `vaPassword` = ?";
 
         $stmt = $pdo->prepare($sql);
         $arrParam = [
@@ -35,11 +32,13 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 
             //成功登入，紀錄登入時間
             $sqlTime = "UPDATE `vendorAdmins`
-                        SET `vaLoginTime` = current_timestamp()
+                        SET `vaLoginTime` = ?
                         WHERE `vaId` = ?";
-            
             $stmtTime = $pdo->prepare($sqlTime);
-            $arrParamTime = [ $arr[0]['vaId'] ];
+            $arrParamTime = [ 
+                $arr[0]['vaId'],
+                date("Y-m-d H:i:s")
+            ];
             $stmtTime->execute($arrParamTime);
             
             //將資訊放入session

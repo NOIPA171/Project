@@ -3,7 +3,7 @@
     require_once('../db.inc.php');
     require_once('./check/getInfo.php');
     require_once('./check/checkActive.php');
-
+    $pagePrm = 'prmV00';
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,7 +82,10 @@
                         </div>
                         <div class="ibox-content">
 
-                            <?php require_once('./contents/staffList.php') ?>
+                            <?php 
+                            require_once('./check/checkPrm.php');
+                            require_once('./contents/staffList.php'); 
+                            ?>
 
                         </div>
                     </div>

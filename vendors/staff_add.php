@@ -3,7 +3,7 @@
     require_once('../db.inc.php');
     require_once('./check/getInfo.php');
     require_once('./check/checkActive.php');
-
+    $pagePrm = 'prmV00';
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +61,7 @@
                             <h5>All form elements <small>With custom checbox and radion elements.</small></h5>
                     </div>
                     <div class="ibox-content">
+                        <?php require_once('./check/checkPrm.php'); ?>
                         <form method="post" action="./check/check_staff_add.php">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">

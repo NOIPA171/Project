@@ -4,7 +4,8 @@ session_start();
 require_once('../db.inc.php');
 
 if(isset($_GET['logout']) && $_GET['logout'] === '1'){
-    $sql = "UPDATE `vendors` SET `vaLogoutTime` = ? WHERE `vaId` = ?";
+    //加入登出時間
+    $sql = "UPDATE `vendorAdmins` SET `vaLogoutTime` = ? WHERE `vaId` = ?";
     $stmt = $pdo->prepare($sql);
     $arrParam = [
         date("Y-m-d H:i:s"),

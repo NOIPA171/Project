@@ -73,7 +73,10 @@
                             $logout = new DateTime($arr[$i]['vaLogoutTime']);
                             
                             $timeDiff = $logout->diff($login);
-
+                            echo "<pre>";
+print_r($timeDiff);
+echo "</pre>";
+// exit();
                             if($timeDiff->invert === 1){
                                 echo "線上";
                             }else{
