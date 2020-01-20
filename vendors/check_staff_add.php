@@ -159,8 +159,8 @@ function sendMail($email, $recepient, $vName, $hash, $pwd, $staffId){
 
         $mail->send();
         echo 'Message has been sent';
-        header("Refresh: 3 ; url = ./staff_add.php");
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        exit();
     }
 }

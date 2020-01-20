@@ -80,6 +80,8 @@ try{
                 }
 
                 if($stmtPermission->rowCount()>0){
+                    sendMail($email, $_POST['name'], $hash);
+
                     //加入 session
                     $pdo->commit();
 
@@ -92,7 +94,6 @@ try{
                     echo "</pre>";
                     // exit();
 
-                    sendMail($email, $_POST['name'], $hash);
                     echo "all complete! will refresh in 5 seconds";
                     header("Refresh: 5 ; url = ./admin.php");
                 }
@@ -151,8 +152,8 @@ function sendMail($email, $vName, $hash){
 
         $mail->send();
         echo 'Message has been sent';
-        header("Refresh: 3 ; url = ./staff_add.php");
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        exit();
     }
 }

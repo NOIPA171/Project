@@ -87,11 +87,13 @@ try{
         }else{
             echo "fail";
             $pdo->rollback();
+            exit();
         }
     }
 }catch(Exception $err){
     $pdo->rollback();
     echo "failure: ".$err->getMessage();
+    exit();
 }
 
 
@@ -144,8 +146,8 @@ function sendMail($email, $recepient, $vName, $hash, $pwd){
 
         $mail->send();
         echo 'Message has been sent';
-        header("Refresh: 3 ; url = ./staff_add.php");
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        exit();
     }
 }
