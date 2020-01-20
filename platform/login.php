@@ -44,7 +44,9 @@
                     <input type="password" class="form-control" placeholder="Password" required="" name="password">
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-
+                <div class="mt-2">
+                    <small id="message" class="text-warning"></small>
+                </div>
                 <a href="#"><small>Forgot password?</small></a>
             </form>
             <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
@@ -55,7 +57,52 @@
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.js"></script>
+<script>
+$(document).ready(function(){
+    var request;
+    $('form').submit(function(event){
+        event.preventDefault();
 
+        if (request) {
+            request.abort();
+        }
+        var $form = $(this);
+
+        var $inputs = $form.find("input, button");
+
+        var serializedData = $form.serialize();
+
+        $inputs.prop("disabled", true);
+
+        request = $.ajax({
+            url: "./check_login.php",
+            type: "post",
+            data: serializedData
+        });
+
+        request.done(function (response, textStatus, jqXHR){
+            if(response == 'success'){
+                window.location = "./admin.php";
+            }else{
+                $("#message").text(response);
+            };
+        });
+
+        request.fail(function (jqXHR, textStatus, errorThrown){
+            console.error(
+                "The following error occurred: "+
+                textStatus, errorThrown
+            );
+        });
+
+        request.always(function () {
+            $inputs.prop("disabled", false);
+        });
+
+        
+    })
+});
+</script>
 </body>
 
 </html>

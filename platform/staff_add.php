@@ -61,7 +61,10 @@
                             <h5>All form elements <small>With custom checbox and radion elements.</small></h5>
                     </div>
                     <div class="ibox-content">
-                        <?php require_once('./checkPrm.php'); ?>
+                        <?php 
+                        require_once('./checkVerify.php');
+                        require_once('./checkPrm.php'); 
+                        ?>
                         <form method="post" action="./check_staff_add.php">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">

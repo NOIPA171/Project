@@ -23,7 +23,6 @@ try{
     $check = $pdo->query($checksql);
     if($check->rowCount()>0){
         echo "該帳號已經註冊過";
-        header("Refresh: 3 ; url = ./register.php");
         exit();
     }
 
@@ -89,13 +88,7 @@ try{
                     $_SESSION['email'] = $_POST['email'];
                     $_SESSION['vendor'] = $currentVendor;            
 
-                    echo "<pre>";
-                    print_r($_SESSION);
-                    echo "</pre>";
-                    // exit();
-
-                    echo "all complete! will refresh in 5 seconds";
-                    header("Refresh: 5 ; url = ./admin.php");
+                    echo "success";
                 }
             }
         }
@@ -104,7 +97,7 @@ try{
 
 }catch(Exception $err){
     $pdo->rollback();
-    echo "failed: ".$err->getMessage();
+    echo "失敗： ".$err->getMessage();
 }
 
 
@@ -151,7 +144,7 @@ function sendMail($email, $vName, $hash){
         $mail->AltBody = "$vName 您好，您於 onepeace 申請了 $vName 廠商帳號，請點擊連結以驗證您的帳號：http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}";
 
         $mail->send();
-        echo 'Message has been sent';
+        // echo 'Message has been sent';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         exit();

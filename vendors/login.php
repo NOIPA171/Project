@@ -46,8 +46,11 @@
                 <div class="form-group">
                     <input type="password" class="form-control" placeholder="Password" required="" name="password">
                 </div>
+                
                 <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-
+                <div class="mt-2">
+                    <small id="message" class="text-warning"></small>
+                </div>
                 <a href="./forget_password.php"><small>Forgot password?</small></a>
                 <p class="text-muted text-center"><small>Do not have an account?</small></p>
                 <a class="btn btn-sm btn-white btn-block" href="./register.php">Create an account</a>
@@ -60,7 +63,67 @@
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.js"></script>
+<script>
+$(document).ready(function(){
+    var request;
+    $('form').submit(function(event){
+        // Prevent default posting of form - put here to work in case of errors
+        event.preventDefault();
 
+        // Abort any pending request
+        if (request) {
+            request.abort();
+        }
+        // setup some local variables
+        var $form = $(this);
+
+        // Let's select and cache all the fields
+        var $inputs = $form.find("input, button");
+
+        // Serialize the data in the form
+        var serializedData = $form.serialize();
+
+        // Let's disable the inputs for the duration of the Ajax request.
+        // Note: we disable elements AFTER the form data has been serialized.
+        // Disabled form elements will not be serialized.
+        $inputs.prop("disabled", true);
+
+        // Fire off the request to /form.php
+        request = $.ajax({
+            url: "./check_login.php",
+            type: "post",
+            data: serializedData
+        });
+
+        // Callback handler that will be called on success
+        request.done(function (response, textStatus, jqXHR){
+            if(response == 'success'){
+                window.location = "./admin.php";
+            }else{
+                $("#message").text(response);
+            };
+        });
+
+        // Callback handler that will be called on failure
+        request.fail(function (jqXHR, textStatus, errorThrown){
+            // Log the error to the console
+            console.error(
+                "The following error occurred: "+
+                textStatus, errorThrown
+            );
+        });
+
+        // Callback handler that will be called regardless
+        // if the request failed or succeeded
+        request.always(function () {
+            // Reenable the inputs
+            $inputs.prop("disabled", false);
+        });
+
+        
+    })
+});
+</script>
 </body>
 
 </html>

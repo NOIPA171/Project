@@ -55,7 +55,10 @@
                     <div class="col-lg-12">
                         <div class="ibox ">
                             <div class="ibox-content">
-                                <?php require_once('./contents/sessionInfo.php') ?>
+                                <?php 
+                                require_once('./checkVerify.php');
+                                require_once('./contents/sessionInfo.php');
+                                ?>
                             </div>
                         </div>
                     </div>

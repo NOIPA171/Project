@@ -37,11 +37,13 @@
                 <div class="form-group">
                     <input type="password" name="password" class="form-control" placeholder="Password" required="">
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                         <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> Agree the terms and policy </label></div>
-                </div>
+                </div> -->
                 <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
-
+                <div class="mt-2">
+                    <small id="message" class="text-warning"></small>
+                </div>
                 <p class="text-muted text-center"><small>Already have an account?</small></p>
                 <a class="btn btn-sm btn-white btn-block" href="./login.php">Login</a>
             </form>
@@ -61,6 +63,51 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
+
+            var request;
+            $('form').submit(function(event){
+                event.preventDefault();
+
+                if(request){
+                    request.abort();
+                }
+
+                var $form = $(this);
+
+                var $inputs = $form.find('input, button');
+
+                var serializedData = $form.serialize();
+                $inputs.prop("disabled", true);
+
+                request = $.ajax({
+                    url : "./check_register.php",
+                    type: "post",
+                    data: serializedData
+                });
+
+                request.done(function(response, textStatus, jqXHR){
+                    if(response == 'success'){
+                        window.location = "./admin.php";
+                    }else{
+                        $("#message").html(response);
+                    };
+                });
+
+                request.fail(function (jqXHR, textStatus, errorThrown){
+                    // Log the error to the console
+                    console.error(
+                        "The following error occurred: "+
+                        textStatus, errorThrown
+                    );
+                });
+
+                // Callback handler that will be called regardless
+                // if the request failed or succeeded
+                request.always(function () {
+                    // Reenable the inputs
+                    $inputs.prop("disabled", false);
+                });
+            })
         });
     </script>
 </body>

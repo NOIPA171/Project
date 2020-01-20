@@ -1,6 +1,8 @@
 <?php
 
 if($arrGetInfo['aVerify']!=='verified'){
+    echo "請驗證您的信箱";
+    
     $vaVerifyTime = new DateTime($arrGetInfo['aVerify']);
     $vaVerifyLeft = $vaVerifyTime->diff(new DateTime());
     

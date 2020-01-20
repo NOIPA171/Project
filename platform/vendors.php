@@ -97,6 +97,7 @@
                         <div class="ibox-content">
 
                             <?php 
+                            require_once('./checkVerify.php');
                             require_once('./checkPrm.php');
                             require_once('./contents/vendorList.php'); 
                             ?>

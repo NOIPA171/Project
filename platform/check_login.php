@@ -53,26 +53,22 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             $_SESSION['userId'] = $arr[0]['aId'];
             $_SESSION['email'] = $arr[0]['aEmail'];
 
-            echo "<pre>";
-            print_r($_SESSION);
-            echo "</pre>";
-            echo "will refresh in 3 seconds";
-            // exit();
+            echo "success";
 
-
-            header('Refresh: 3 ;url = ./admin.php');
         }else{
             //登入失敗
-            header('Refresh: 3 ; url = ./login.php');
-            echo "wrong account/ password";
+            echo "帳號/密碼錯誤";
             session_unset();
             session_destroy();
+            exit();
         }
     }else{
         //沒有該帳號
         echo "沒有該使用者，請重新登入";
+        exit();
     }
    
 }else{
     echo "請輸入帳號密碼";
+    exit();
 }

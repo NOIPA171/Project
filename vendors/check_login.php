@@ -53,23 +53,20 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             $_SESSION['email'] = $arr[0]['vaEmail'];
             $_SESSION['vendor'] = $arr[0]['vId'];
 
-            echo "<pre>";
-            print_r($_SESSION);
-            echo "</pre>";
-            echo "will refresh in 5 seconds";
+            echo "success";
             // exit();
 
-            header('Refresh: 5 ;url = ./admin.php');
+            // header('Refresh: 5 ;url = ./admin.php');
         }else{
             //登入失敗
             header('Refresh: 5 ; url = ./login.php');
-            echo "帳號/密碼錯誤，請重新登入";
+            echo "帳號/密碼錯誤";
             session_unset();
             session_destroy();
         }
     }else{
         //沒有該帳號
-        echo "沒有該使用者，請重新登入";
+        echo "沒有該使用者";
     }
    
 }else{
