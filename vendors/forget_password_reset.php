@@ -73,11 +73,15 @@
             if(pwd1.val() !== pwd2.val()){
                 $("#message").attr('class','text-warning');
                 $("#message").text("密碼不一致");
+                $('button[type="submit"]').attr("disabled",'');
             }else{
                 $("#message").attr('class','text-navy');
                 $("#message").text("ok!");
                 $('button[type="submit"]').removeAttr("disabled");
             }
+        }else{
+            $("#message").text("");
+            $('button[type="submit"]').attr("disabled",'');
         }
     })
 </script>

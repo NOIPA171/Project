@@ -11,6 +11,8 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
         $token = $_POST['token'];
         $pwd = $_POST['password1'];
 
+        $pdo->beginTransaction();
+
         //確認驗證跟hash有在reset password的表單裡
         $sql = "SELECT `vaId`, `vaEmail` 
         FROM `vendorResetPass`
@@ -25,8 +27,12 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             //刪除這個id所有重新設定密碼的資料
-            $delete = $pdo->query("DELETE FROM `vendorResetPass` WHERE `vaId`= '$arr[0]['vaId']'");
-            if($delete->rowCount()>0){
+            $del = "DELETE FROM `vendorResetPass` WHERE `vaId`= ?";
+            $stmtd = $pdo->prepare($del);
+            $delParam = [ $arr[0]['vaId'] ];
+            $stmtd->execute($delParam);
+            if($stmtd->rowCount()>0){
+                echo "yes";
                 //再更改這個人的密碼
                 $update = "UPDATE `vendorAdmins` SET `vaPassword` = ? WHERE `vaId` = ?";
                 $stmtu = $pdo->prepare($update);
@@ -36,7 +42,9 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 ];
                 $stmtu->execute($updateParam);
                 if($stmtu->rowCount()>0){
+                    $pdo->commit();
                     echo "成功更改密碼，請重新登入";
+                    header("Refresh: 3 ; url = ./login.php");
                     exit();
                 }
             }
