@@ -63,7 +63,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             header('Refresh: 5 ;url = ../admin.php');
         }else{
             //登入失敗
-            header('Refresh: 5 ; url = ../platform_login.php');
+            header('Refresh: 5 ; url = ../login.php');
             echo "wrong account/ password";
             session_unset();
             session_destroy();

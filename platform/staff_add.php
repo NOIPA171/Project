@@ -90,7 +90,7 @@
                                                         <label id="owner"> 
                                                             <input type="radio" value="owner" name="title"> 
                                                             <i></i> 賦予管理員權限 <br>
-                                                            <small class="text-muted" style="margin-left: 1.6rem;">管理所有頁面（包含帳號管理）</small>
+                                                            <small class="text-muted" style="margin-left: 1.6rem;">管理所有頁面（包含工作人員管理）</small>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -100,20 +100,20 @@
                                             <div class="edit_permissions">
                                                 <label class="col-form-label mb-2">編輯權限</label>
                                                 <div class="i-checks">
-                                                    <label> <input type="checkbox" value="products" checked="" name="staffPrm[]"> 
-                                                    <i></i> 產品 </label>
+                                                    <label> <input type="checkbox" value="vendors" checked="" name="staffPrm[]"> 
+                                                    <i></i> 廠商 </label>
                                                 </div>
                                                 <div class="i-checks">
                                                     <label> <input type="checkbox" value="charts" checked="" name="staffPrm[]"> 
                                                     <i></i> 報表 </label>
                                                 </div>
                                                 <div class="i-checks">
-                                                    <label> <input type="checkbox" value="marketing" checked="" name="staffPrm[]"> 
-                                                    <i></i> 行銷 </label>
+                                                    <label> <input type="checkbox" value="users" checked="" name="staffPrm[]"> 
+                                                    <i></i> 會員 </label>
                                                 </div>
                                                 <div class="i-checks">
-                                                    <label> <input type="checkbox" value="orders" checked="" name="staffPrm[]"> 
-                                                    <i></i> 訂單 </label>
+                                                    <label> <input type="checkbox" value="comments" checked="" name="staffPrm[]"> 
+                                                    <i></i> 評論 </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -173,27 +173,6 @@
                 $("#owner, #owner ins").click(function(){
                     $('.edit_permissions').hide(300);
                 })
-
-
-                // $('.edit_permissions .i-checks input').change(function(){
-                //     var requiredCheckboxes = $('.edit_permissions :checkbox[required]');
-                //     if(requiredCheckboxes.is(':checked')) {
-                //             requiredCheckboxes.removeAttr('required');
-                //     } else {
-                //         requiredCheckboxes.attr('required', 'required');
-                //     }
-                //     console.log('1');
-                // })
-                // $(function(){
-                //     var requiredCheckboxes = $('.edit_permissions :checkbox[required]');
-                //     requiredCheckboxes.change(function(){
-                //         if(requiredCheckboxes.is(':checked')) {
-                //             requiredCheckboxes.removeAttr('required');
-                //         } else {
-                //             requiredCheckboxes.attr('required', 'required');
-                //         }
-                //     });
-                // });
                 
             });
     </script>
