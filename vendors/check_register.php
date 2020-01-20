@@ -144,7 +144,7 @@ function sendMail($email, $vName, $hash){
         $mail->Body    = "
             $vName 您好， <br>
             您於 onepeace 申請了 $vName 廠商帳號 <br>
-            請點擊連結設以驗證您的帳號： <a href='http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}'>點擊這裡</a> <br>
+            請點擊連結設以驗證您的帳號： <a href='http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}'>http://localhost:8080/Project/vendors/register_verify.php</a> <br>
             $vName <br>
             此信為自動發出，請勿回覆";
         $mail->AltBody = "$vName 您好，您於 onepeace 申請了 $vName 廠商帳號，請點擊連結以驗證您的帳號：http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}";

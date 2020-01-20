@@ -7,10 +7,7 @@ require_once('./checkActive.php');
 require_once('./checkVerify.php');
 $pagePrm = 'prmV00';
 require_once('./checkPrm.php');
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-exit();
+
 try{
     $pdo->beginTransaction();
     $sql = "UPDATE `vendorAdmins` SET `vaActive` = ?, `vaNotes` = ? WHERE `vaId` = ?";

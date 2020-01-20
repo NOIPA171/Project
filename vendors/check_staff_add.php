@@ -147,7 +147,7 @@ function sendMail($email, $recepient, $vName, $hash, $pwd){
         $mail->Body    = "
             $recepient 您好， <br>
             $vName 邀請您一起管理商店。<br>
-            請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>點擊這裡</a> <br>
+            請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>http://localhost:8080/Project/vendors/staff_add_setup.php</a> <br>
             您的驗證碼：$pwd <br>
             $vName <br>
             此信為自動發出，請勿回覆";

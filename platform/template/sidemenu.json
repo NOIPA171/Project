@@ -25,9 +25,9 @@
         "permission" : "prmA04",
         "icon" : ""
     },{
-        "name" : "工作人員",
+        "name" : "設定",
         "link" : "#",
-        "permission" : "prmA00",
+        "permission" : "all",
         "icon" : "",
         "submenu" : [
             {
