@@ -39,7 +39,7 @@
                 <!--Continually expanded and constantly improved Inspinia Admin Them (IN+)-->
             </p>
             <p>Login in. To see it in action.</p>
-            <form class="m-t" role="form" action="check/check_login.php" method="post">
+            <form class="m-t" role="form" action="./check_login.php" method="post">
                 <div class="form-group">
                     <input type="email" class="form-control" placeholder="Email" required="" name="email">
                 </div>

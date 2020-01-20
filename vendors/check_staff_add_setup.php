@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../../db.inc.php');
+require_once('../db.inc.php');
 
 
 if(isset($_POST['password1']) && isset($_POST['password2'])){
@@ -70,7 +70,7 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                     $_SESSION['vendor'] = $arr['vId'];
 
                     //轉頁重新登入
-                    header("Refresh: 3 ; url = ../admin.php");
+                    header("Refresh: 3 ; url = ./admin.php");
                     echo "Validated! 3秒後轉頁";
                 }
             }else{

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../../db.inc.php');
+require_once('../db.inc.php');
 
 if(isset($_POST['email']) && isset($_POST['password'])){
     //先檢查是否有這個帳號
@@ -29,7 +29,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             //若帳號非active，則禁止進入
             if($arr[0]['vaActive']!=='active'){
                 echo "帳號未啟用，請設置您的帳號，或者聯絡您網站的管理員";
-                header("Refresh: 3 ; url = ../login.php");
+                header("Refresh: 3 ; url = ./login.php");
                 exit();
             }
 
@@ -59,10 +59,10 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             echo "will refresh in 5 seconds";
             // exit();
 
-            header('Refresh: 5 ;url = ../admin.php');
+            header('Refresh: 5 ;url = ./admin.php');
         }else{
             //登入失敗
-            header('Refresh: 5 ; url = ../login.php');
+            header('Refresh: 5 ; url = ./login.php');
             echo "帳號/密碼錯誤，請重新登入";
             session_unset();
             session_destroy();

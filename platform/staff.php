@@ -157,9 +157,12 @@
             modal.find("#active option").removeAttr('selected');
             modal.find("#active option[value="+active+"]").attr('selected','selected');
 
+            //此人擁有的permissions
             var permissionsArr = permissions.split(', ');
+            //需要改動的modal欄位
             var allPrmInputs = modal.find('#permissions').find('input');
-            var allPrms = [];
+            
+            var allPrms = [];  //所有的permission
             for(let i = 0 ; i < allPrmInputs.length ; i++){
                 allPrms.push(modal.find('#permissions').find('input')[i]['value']);
             }

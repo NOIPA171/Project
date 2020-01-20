@@ -1,7 +1,7 @@
 <?php
 
 require_once('./checkSession.php');
-require_once('../../db.inc.php');
+require_once('../db.inc.php');
 require_once('./getInfo.php');
 require_once('./checkActive.php');
 require_once('./checkVerify.php');
@@ -47,7 +47,7 @@ try{
         $pdo->commit();
         
         echo "Success!";
-        header("Refresh: 3 ; url = ../staff.php");
+        header("Refresh: 3 ; url = ./staff.php");
         exit();
     }
         

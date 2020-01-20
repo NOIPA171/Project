@@ -1,8 +1,8 @@
 <?php
-    require_once('./check/checkSession.php');
+    require_once('./checkSession.php');
     require_once('../db.inc.php');
-    require_once('./check/getInfo.php');
-    require_once('./check/checkActive.php');
+    require_once('./getInfo.php');
+    require_once('./checkActive.php');
     $pagePrm = 'prmV00';
 ?>
 <!DOCTYPE html>
@@ -90,7 +90,7 @@
                         <div class="ibox-content">
 
                             <?php 
-                            require_once('./check/checkPrm.php');
+                            require_once('./checkPrm.php');
                             require_once('./contents/staffList.php'); 
                             ?>
 

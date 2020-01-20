@@ -27,7 +27,7 @@
             </div>
             <h3>Register to IN+</h3>
             <p>Create account to see it in action.</p>
-            <form class="m-t" role="form" action="./check/check_register.php" method="post">
+            <form class="m-t" role="form" action="./check_register.php" method="post">
                 <div class="form-group">
                     <input type="text" name="name" class="form-control" placeholder="公司名稱" required="">
                 </div>

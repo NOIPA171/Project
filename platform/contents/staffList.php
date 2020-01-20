@@ -67,7 +67,6 @@
                 //不顯示自己的資料
                 if($arr[$i]['aId']==$arrGetInfo['aId']){
                     continue;
-                    echo "no";
                 }else{
                 ?>
                 <tr>
@@ -86,19 +85,23 @@
                             if($ifOnline->invert === 0){
                                 echo "線上";
                             }else{
+                                
                                 $timeDiff = $logout->diff(new DateTime());
+                                
                                 if($ifOnline->d > 0){
-                                    echo $timeDiff->d." 天前";
+                                    echo $timeDiff->days." 天前";
                                 }else if($timeDiff->h >0){
                                     echo $timeDiff->h." 小時前";
-                                }else if($timeDiff->m > 0){
-                                    echo $timeDiff->h." 分鐘前";
+                                }else if($timeDiff->i > 0){
+                                    echo $timeDiff->i." 分鐘前";
                                 }else{
                                     echo $timeDiff->s." 秒前";
                                 }
                             }
-                        }else if($arr[$i]['aLogoutTime'] === null && $arr[$i]['aLoginTime'] === null){
+                        }else if($arr[$i]['aActive'] === 'inactive'){
                             echo "帳號尚未啟用";
+                        }else if($arr[$i]['aActive'] !== 'inactive' && $arr[$i]['aLoginTime'] == null && $arr[$i]['aLogoutTime'] == null){
+                            echo "未登入過";
                         }else{
                             echo "線上";
                         }
@@ -175,7 +178,7 @@
                             <i></i> 會員 </label>
                         </div>
                         <div class="i-checks">
-                            <label> <input type="checkbox" value="commetns" name="staffPrm[]" id="orders"> 
+                            <label> <input type="checkbox" value="comments" name="staffPrm[]" id="orders"> 
                             <i></i> 評價 </label>
                         </div>
                         <div class="i-checks">
@@ -191,7 +194,7 @@
                     <textarea name="notes" cols="30" rows="10" id="noteText"></textarea>
                 </div>
             </div>
-            <input type="hidden" value="" name="vaId" id="id">
+            <input type="hidden" value="" name="aId" id="id">
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">Save changes</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

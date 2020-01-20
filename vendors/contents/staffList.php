@@ -89,17 +89,19 @@
                             }else{
                                 $timeDiff = $logout->diff(new DateTime());
                                 if($ifOnline->d > 0){
-                                    echo $timeDiff->d." 天前";
+                                    echo $timeDiff->days." 天前";
                                 }else if($timeDiff->h >0){
                                     echo $timeDiff->h." 小時前";
-                                }else if($timeDiff->m > 0){
-                                    echo $timeDiff->h." 分鐘前";
+                                }else if($timeDiff->i > 0){
+                                    echo $timeDiff->i." 分鐘前";
                                 }else{
                                     echo $timeDiff->s." 秒前";
                                 }
                             }
-                        }else if($arr[$i]['vaLogoutTime'] === null && $arr[$i]['vaLoginTime'] === null){
+                        }else if($arr[$i]['vaActive']==='inactive'){
                             echo "帳號尚未啟用";
+                        }elseif($arr[$i]['vaActive']!=='inactive' && $arr[$i]['vaLogoutTime'] === null && $arr[$i]['vaLoginTime'] === null){
+                            echo "未登入過";
                         }else{
                             echo "線上";
                         }
@@ -113,8 +115,8 @@
                         </div>
                     </td>
                     <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
-                    <td><?php echo $arr[$i]['vaNotes'] ?></td>
-                    <td><?php echo $arr[$i]['vaId'] ?></td>
+                    <td><?php echo $arr[$i]['aNotes'] ?></td>
+                    <td><?php echo $arr[$i]['aId'] ?></td>
                 </tr>
                 <?php
                 }

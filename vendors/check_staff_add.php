@@ -1,13 +1,13 @@
 <?php
 require_once('./checkSession.php');
-require_once('../../db.inc.php');
+require_once('../db.inc.php');
 require_once('./getInfo.php');
 require_once('./checkActive.php');
 require_once('./checkVerify.php');
 $pagePrm = 'prmV00';
 require_once('./checkPrm.php');
 
-require_once('../../tpl/generatePwd.php');
+require_once('../tpl/generatePwd.php');
 // echo "<pre>";
 // print_r($_SESSION);
 // print_r($arrGetInfo);
@@ -38,7 +38,7 @@ try{
     }
     if(!$flag){
         echo "該用戶已經有帳號，請重新輸入";
-        header("Refresh: 3 ; url = ../staff_add.php");
+        header("Refresh: 3 ; url = ./staff_add.php");
         exit();
     }
     
@@ -96,7 +96,7 @@ try{
         if($stmt2->rowCount()>0){
             sendMail($email, $_POST['Fname'], $arrGetInfo['vName'], $hash, $pwd);
             echo "success!";
-            header("Refresh: 3 ; url = ../staff.php");
+            header("Refresh: 3 ; url = ./staff.php");
             $pdo->commit();
         }else{
             echo "fail";
@@ -119,7 +119,7 @@ use PHPMailer\PHPMailer\Exception;
 function sendMail($email, $recepient, $vName, $hash, $pwd){
 
     // Load Composer's autoloader
-    require '../../vendor/autoload.php';
+    require '../vendor/autoload.php';
 
     // Instantiation and passing `true` enables exceptions
     $mail = new PHPMailer(true);
@@ -158,7 +158,7 @@ function sendMail($email, $recepient, $vName, $hash, $pwd){
 
         $mail->send();
         echo 'Message has been sent';
-        header("Refresh: 3 ; url = ../staff_add.php");
+        header("Refresh: 3 ; url = ./staff_add.php");
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }

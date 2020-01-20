@@ -1,8 +1,8 @@
 <?php
-    require_once('./check/checkSession.php');
+    require_once('./checkSession.php');
     require_once('../db.inc.php');
-    require_once('./check/getInfo.php');
-    require_once('./check/checkActive.php');
+    require_once('./getInfo.php');
+    require_once('./checkActive.php');
     $pagePrm = 'prmV00';
 ?>
 
@@ -61,8 +61,8 @@
                             <h5>All form elements <small>With custom checbox and radion elements.</small></h5>
                     </div>
                     <div class="ibox-content">
-                        <?php require_once('./check/checkPrm.php'); ?>
-                        <form method="post" action="./check/check_staff_add.php">
+                        <?php require_once('./checkPrm.php'); ?>
+                        <form method="post" action="./check_staff_add.php">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">
                                     基本資訊 <br>

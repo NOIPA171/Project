@@ -1,7 +1,7 @@
 <?php
 
 require_once('./checkSession.php');
-require_once('../../db.inc.php');
+require_once('../db.inc.php');
 require_once('./getInfo.php');
 require_once('./checkActive.php');
 require_once('./checkVerify.php');
@@ -19,7 +19,7 @@ try{
     $sql2 = "DELETE FROM `rel_vendor_permissions` WHERE `vaId` = '{$_GET['deleteId']}'";
     $pdo->query($sql2);
     $pdo->commit();
-    header("Refresh: 0 ; url = ../staff.php");
+    header("Refresh: 0 ; url = ./staff.php");
 }catch(Exception $err){
     $pdo->rollback();
     echo "failed: ".$err->getMessage();

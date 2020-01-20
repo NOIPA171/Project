@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../../db.inc.php');
+require_once('../db.inc.php');
 
 //若沒有輸入欄位，exit()
 if($_POST['name']==='' || $_POST['email']==='' || $_POST['password']===''){
@@ -23,7 +23,7 @@ try{
     $check = $pdo->query($checksql);
     if($check->rowCount()>0){
         echo "該帳號已經註冊過";
-        header("Refresh: 3 ; url = ../register.php");
+        header("Refresh: 3 ; url = ./register.php");
         exit();
     }
 
@@ -94,7 +94,7 @@ try{
 
                     sendMail($email, $_POST['name'], $hash);
                     echo "all complete! will refresh in 5 seconds";
-                    header("Refresh: 5 ; url = ../admin.php");
+                    header("Refresh: 5 ; url = ./admin.php");
                 }
             }
         }
@@ -116,7 +116,7 @@ use PHPMailer\PHPMailer\Exception;
 function sendMail($email, $vName, $hash){
 
     // Load Composer's autoloader
-    require '../../vendor/autoload.php';
+    require '../vendor/autoload.php';
 
     // Instantiation and passing `true` enables exceptions
     $mail = new PHPMailer(true);
@@ -151,7 +151,7 @@ function sendMail($email, $vName, $hash){
 
         $mail->send();
         echo 'Message has been sent';
-        header("Refresh: 3 ; url = ../staff_add.php");
+        header("Refresh: 3 ; url = ./staff_add.php");
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
