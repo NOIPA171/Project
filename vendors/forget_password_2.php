@@ -26,11 +26,12 @@
 
             </div>
             <h3>Register to IN+</h3>
-            <p>忘記密碼</p>
+            <p>忘記密碼ptII</p>
             <form class="m-t" role="form" action="./check_forget_password.php" method="post">
                 <div class="form-group">
-                    <input type="email" name="email" class="form-control" placeholder="Email" required="">
+                    <input type="text" name="vaId" class="form-control" placeholder="ID號碼" required="">
                 </div>
+                <input type="hidden" value="<?php $_GET['email'] ?>">
                 <button type="submit" class="btn btn-primary block full-width m-b">送出</button>
             </form>
             <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>

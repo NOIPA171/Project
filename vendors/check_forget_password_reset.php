@@ -9,12 +9,12 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
         $email = $_POST['email'];
         $hash = $_POST['hash'];
         $token = $_POST['token'];
-        $pwd = $_POST['password1'];
+        $pwd = sha1($_POST['password1']);
 
         $pdo->beginTransaction();
 
         //確認驗證跟hash有在reset password的表單裡
-        $sql = "SELECT `vaId`, `vaEmail` 
+        $sql = "SELECT `vaId`, `vaEmail`, `vaExpireDate`
         FROM `vendorResetPass`
         WHERE `vaEmail` = '$email'
         AND `vaHash` = '$hash'
@@ -25,6 +25,27 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
         //確認
         if($stmt->rowCount()>0){
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            //確認驗證是否已經expired
+            $expire = new DateTime($arr[0]['vaExpireDate']);
+            $isExpired = $expire->diff(new DateTime());
+
+            if($isExpired->i>=10){
+                
+                $delsql = "DELETE FROM `vendorResetPass` WHERE `vaId`= ? AND `vaToken` = ?";
+                $stmtdel = $pdo->prepare($delsql);
+                $delParam = [
+                    $arr[0]['vaId'],
+                    $token
+                ];
+                $stmtdel->execute($delParam);
+                if($stmtdel->rowCount()>0){
+                    $pdo->commit();
+                    echo "驗證碼已過期，請重新申請。";
+                    header("Refresh: 3 ; url = ./login.php");
+                    exit();
+                }
+            }
 
             //刪除這個id所有重新設定密碼的資料
             $del = "DELETE FROM `vendorResetPass` WHERE `vaId`= ?";

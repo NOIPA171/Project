@@ -47,7 +47,6 @@ $stmt->execute($arrParam);
 if($stmt->rowCount()>0){
     echo "success!";
     sendMail($email, $hash, $token);
-    header("Refresh: 3 ; url = ./login.php");
     exit();
 }
 
@@ -91,6 +90,7 @@ function sendMail($email, $hash, $token){
         $mail->Body    = "
             您好， <br>
             請點擊連結重新設置您的密碼： <a href='http://localhost:8080/Project/vendors/forget_password_reset.php?hash=$hash&email={$email}&action=reset' target='_blank'>http://localhost:8080/Project/vendors/forget_password_reset.php</a> <br>
+            請於十分鐘內驗證完畢<br>
             驗證碼：$token<br>
             此信為自動發出，請勿回覆";
         $mail->AltBody = " 您好，您於 onepeace 申請了  廠商帳號，請點擊連結以驗證您的帳號：http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$email}";
