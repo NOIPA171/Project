@@ -50,8 +50,8 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                         $st = $pdo->prepare($s);
                         $ap = [
                             date("Y-m-d H:i:s"),
-                            $arr['vaId'],
-                            $arr['vaEmail']
+                            $_SESSION['userId'],
+                            $_SESSION['email']
                         ];
                         $st->execute($ap);
                         if($st->rowCount()>0){
