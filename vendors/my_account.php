@@ -3,6 +3,7 @@
     require_once('../db.inc.php');
     require_once('./getInfo.php');
     require_once('./checkActive.php');
+    $pagePrm = "all";
 ?>
 <!DOCTYPE html>
 <html>
@@ -51,10 +52,7 @@
                         <div class="ibox ">
                             <div class="ibox-content">
                                 <?php
-                                    //是否有驗證過，沒有則加上提醒
-                                    if($arrGetInfo['vaVerify']!=='verified'){
-                                        echo "請驗證您的信箱";
-                                    }
+                                    require_once('./checkPrm.php');
                                     require_once('./checkVerify.php');
                                     require_once('./contents/sessionInfo.php');
                                 ?>

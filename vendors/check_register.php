@@ -141,7 +141,7 @@ function sendMail($email, $vName, $hash){
 
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = '您被邀請加入'.$vName.'的網站，請前往設定您的帳號';
+        $mail->Subject = 'onepeace通知訊息';
         $mail->Body    = "
             $vName 您好， <br>
             您於 onepeace 申請了 $vName 廠商帳號 <br>

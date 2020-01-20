@@ -94,7 +94,7 @@ try{
 
         }
         if($stmt2->rowCount()>0){
-            sendMail($email, $_POST['Fname'], $arrGetInfo['vName'], $hash, $pwd, $newStaff);
+            sendMail($email, $_POST['Fname'], $arrGetInfo['vName'], $hash, $pwd);
             echo "success!";
             header("Refresh: 3 ; url = ./staff.php");
             $pdo->commit();
@@ -116,7 +116,7 @@ use PHPMailer\PHPMailer\Exception;
 
 
 
-function sendMail($email, $recepient, $vName, $hash, $pwd, $staffId){
+function sendMail($email, $recepient, $vName, $hash, $pwd){
 
     // Load Composer's autoloader
     require '../vendor/autoload.php';
@@ -149,7 +149,6 @@ function sendMail($email, $recepient, $vName, $hash, $pwd, $staffId){
             $vName 邀請您一起管理商店。<br>
             請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>http://localhost:8080/Project/vendors/staff_add_setup.php</a> <br>
             您的驗證碼：$pwd <br>
-            您的使用者ID：$staffId <br>
             $vName <br>
             此信為自動發出，請勿回覆";
         $mail->AltBody = "$recepient 您好，
