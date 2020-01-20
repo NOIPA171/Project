@@ -38,14 +38,12 @@ try{
     }
     if(!$flag){
         echo "該用戶已經有帳號，請重新輸入";
-        header("Refresh: 3 ; url = ./staff_add.php");
         exit();
     }
     
     //先加入vendor admins -> permissions
     $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`, `vaVerify`, `vId`, `vaNotes`)
     VALUES(?,?,?,?,?,'inactive',?,?,?)";
-
 
     $stmt = $pdo->prepare($sql);
     $arrParam = [
@@ -87,17 +85,14 @@ try{
                     $newStaff,
                     $arrPrms['vendorPrmId']
                 ];
-
                 $stmt2->execute($arrParam2);
-
             }
-
         }
         if($stmt2->rowCount()>0){
             sendMail($email, $_POST['Fname'], $arrGetInfo['vName'], $hash, $pwd);
-            echo "success!";
-            header("Refresh: 3 ; url = ./staff.php");
             $pdo->commit();
+            echo "success";
+            exit();
         }else{
             echo "fail";
             $pdo->rollback();
@@ -157,7 +152,7 @@ function sendMail($email, $recepient, $vName, $hash, $pwd){
             此信為自動發出，請勿回覆";
 
         $mail->send();
-        echo 'Message has been sent';
+        // echo 'Message has been sent';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         exit();

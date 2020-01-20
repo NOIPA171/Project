@@ -57,14 +57,14 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 
         }else{
             //登入失敗
-            echo "帳號/密碼錯誤";
+            echo "密碼錯誤";
             session_unset();
             session_destroy();
             exit();
         }
     }else{
         //沒有該帳號
-        echo "沒有該使用者，請重新登入";
+        echo "沒有該使用者";
         exit();
     }
    
