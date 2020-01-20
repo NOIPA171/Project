@@ -33,9 +33,10 @@
         .footable-row-detail-inner{
             width: 100%;
         }
-        /* .footable-row-detail-inner th, .footable-row-detail-inner td{
-            color: red;
-        } */
+        tr.footable-odd + tr.footable-row-detail{
+            background-color: #f7f7f7;
+        }
+        
     </style>
 </head>
 
@@ -134,58 +135,13 @@
             $('.footable2').footable();
         });
 
-        $("a[data-func='delete']").click(function(){
-            return confirm("確定要刪除該使用者？");
-        })
+        $("a[data-func='ban']").click(function(){
+            return confirm("確定要將此廠商停用？");
+        });
+        $("a[data-func='activate']").click(function(){
+            return confirm("確定要將此廠商啟用？");
+        });
 
-        //自己加的
-        //modal for edit
-        var modal = $('#editor-modal');
-        var table = $('#edit-table');
-        
-        // var edit = $("a[data-func='edit']");
-        $("a[data-func='edit']").click(function(){
-            var $tds = $(this).closest('td').siblings();
-            // var name = $tds.eq(0).text();
-            // var email = $tds.eq(1).text();
-            var title = $tds.eq(2).text();
-            var active = $tds.eq(3).text();
-            var permissions = $tds.eq(5).text();
-            var notes = $tds.eq(6).text();
-            var id = $tds.eq(7).text();
-
-            // var Fname = name.split(' ')[0];
-            // var Lname = name.split(' ')[1];
-            // modal.find('#firstName').val(Fname);
-            // modal.find('#lastName').val(Lname);
-            
-            //先移除再加上去
-            modal.find("#active option").removeAttr('selected');
-            modal.find("#active option[value="+active+"]").attr('selected','selected');
-
-            var permissionsArr = permissions.split(', ');
-            var allPrmInputs = modal.find('#permissions').find('input');
-            var allPrms = [];
-            for(let i = 0 ; i < allPrmInputs.length ; i++){
-                allPrms.push(modal.find('#permissions').find('input')[i]['value']);
-            }
-            
-            for(let i = 0 ; i < allPrms.length ; i++){
-                var flag = false;
-                for(let j = 0 ; j < permissionsArr.length ; j++){
-                    if(allPrms[i].indexOf(permissionsArr[j])>=0){
-                        flag = true;
-                    }
-                }
-                if(flag){
-                    modal.find("#permissions").find('input').eq(i).attr("checked","");
-                }else{
-                    modal.find("#permissions").find('input').eq(i).removeAttr("checked");
-                }
-            }
-            modal.find("#noteText").text(notes);
-            modal.find("#id").val(id);
-        })
 
     </script>
 
