@@ -1,8 +1,8 @@
 <?php
-    require_once('./check/checkSession.php');
+    require_once('./checkSession.php');
     require_once('../db.inc.php');
-    require_once('./check/getInfo.php');
-    require_once('./check/checkActive.php');
+    require_once('./getInfo.php');
+    require_once('./checkActive.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -55,7 +55,7 @@
                                     if($arrGetInfo['vaVerify']!=='verified'){
                                         echo "請驗證您的信箱";
                                     }
-                                    require_once('./check/checkVerify.php');
+                                    require_once('./checkVerify.php');
                                     require_once('./contents/sessionInfo.php');
                                 ?>
                             </div>

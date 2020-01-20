@@ -37,7 +37,7 @@
             </div>
             <h3>設定您的帳號</h3>
             <p>請輸入密碼，以供日後登錄使用</p>
-            <form class="m-t" role="form" action="./check/check_staff_add_setup.php" method="post">
+            <form class="m-t" role="form" action="./check_staff_add_setup.php" method="post">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="驗證碼" required="" name="verify">
                 </div>

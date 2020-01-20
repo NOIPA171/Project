@@ -1,8 +1,8 @@
 <?php
 
-    require_once('./check/checkSession.php');
+    require_once('./checkSession.php');
     require_once('../db.inc.php');
-    require_once('./check/getInfo.php');
+    require_once('./getInfo.php');
 ?>
 
 <!DOCTYPE html>

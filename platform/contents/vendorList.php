@@ -39,11 +39,11 @@
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <?php
                                 if($arr[$i]['vActive']=='active'){
-                                    echo "<a data-func='ban' href='./check/check_vendors_ban.php?vId={$arr[$i]['vId']}&action=ban' class='text-muted'>";
+                                    echo "<a data-func='ban' href='./check_vendors_ban.php?vId={$arr[$i]['vId']}&action=ban' class='text-muted'>";
                                     echo '<i class="fa fa-ban"></i>';
                                     echo "</a>";
                                 }else{
-                                    echo "<a data-func='activate' href='./check/check_vendors_ban.php?vId={$arr[$i]['vId']}&action=activate' class='text-muted'>";
+                                    echo "<a data-func='activate' href='./check_vendors_ban.php?vId={$arr[$i]['vId']}&action=activate' class='text-muted'>";
                                     echo '<i class="fa fa-check-circle"></i>';
                                     echo "</a>";
                                 }
