@@ -20,13 +20,31 @@ try{
     $pdo->beginTransaction();
 
     $email = $_SESSION['email'];
-    // $email = 'radu000rider@gmail.com';
     $hash = md5( rand(0,1000) );
     $pwd = generatePwd(8);
 
+    //先確認該廠商沒有註冊過這個信箱
+    $checksql = "SELECT `vaEmail`
+                FROM `vendorAdmins`
+                INNER JOIN `vendors`
+                ON `vendorAdmins`.`vId` = `vendors`.`vId`
+                WHERE `vendorAdmins`.`vId` = '{$arrGetInfo['vId']}'";
+    $check = $pdo->query($checksql)->fetchAll(PDO::FETCH_ASSOC);
+    $flag = true;
+    for($i = 0 ; $i < count($check) ; $i++){
+        if($check[$i]['vaEmail'] == $_POST['email']){
+            $flag = false;
+        }
+    }
+    if(!$flag){
+        echo "該用戶已經有帳號，請重新輸入";
+        header("Refresh: 3 ; url = ../staff_add.php");
+        exit();
+    }
+    
     //先加入vendor admins -> permissions
-    $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`, `vaVerify`, `vId`)
-    VALUES(?,?,?,?,?,'inactive',?,?)";
+    $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`, `vaVerify`, `vId`, `vaNotes`)
+    VALUES(?,?,?,?,?,'inactive',?,?,?)";
 
 
     $stmt = $pdo->prepare($sql);
@@ -37,7 +55,8 @@ try{
         sha1($pwd),
         $hash,
         date("Y-m-d H:i:s"),
-        $arrGetInfo['vId']
+        $arrGetInfo['vId'],
+        $_POST['notes']
     ];
     $stmt->execute($arrParam);
     if($stmt->rowCount()>0){

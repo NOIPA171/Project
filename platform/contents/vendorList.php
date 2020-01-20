@@ -6,118 +6,81 @@
 <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-filter=#filter id="edit-table">
     <thead>
         <tr>
-            <th>名稱</th>
+            <th>ID</th>
+            <th>廠商</th>
             <th>Email</th>
-            <th data-hide="phone">身份</th>
-            <th data-hide="phone, tablet">帳號</th>
-            <th data-hide="phone">狀態</th>
+            <th>狀態</th>
             <th data-sortable="false"></th>
-            <th data-hide="all">擁有權限</th>
-            <th data-hide="all">備註</th>
-            <th data-hide="all">ID</th>
+            <th data-hide="all">訊息</th>
+            <th data-hide="all">工作人員</th>
         </tr>
     </thead>
     <tbody>
     <?php
         // get admin count for vendor
-        $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`,
-        `vId`, `vaLoginTime`, `vaLogoutTime`
-                FROM `vendorAdmins`
-                WHERE `vId` = ?";
+        $sql = "SELECT `vId`, `vName`, `vEmail`, `vActive`, `vInfo`
+                FROM `vendors`";
 
-        $stmt = $pdo->prepare($sql);
-        $arrParam = [ $arrGetInfo['vId'] ];
-        $stmt->execute($arrParam);
+        $stmt = $pdo->query($sql);
+
         if($stmt->rowCount()>0){
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            //取得個別人的資訊
-            $sqlPermissions = "SELECT `vendorPermissions`.`vendorPrmName`
-                                FROM `rel_vendor_permissions`
-                                INNER JOIN `vendorPermissions`
-                                ON `rel_vendor_permissions`.`vaPermissionId` = `vendorPermissions`.`vendorPrmId`
-                                WHERE `vaId` = ?";
-            $stmtPermissions = $pdo->prepare($sqlPermissions);
-            //每一個人執行一次尋找其permission
-            for($i = 0 ; $i<count($arr); $i++){
-                //先初始化permissions
-                $prmList = [];
-                $arrParamPermissions = [ $arr[$i]['vaId'] ];
-                $stmtPermissions->execute($arrParamPermissions);
-                
-                if($stmtPermissions->rowCount()>0){
-                    //撈出所有permission，並用兩層foreach去除多餘的上一層
-                    $arrPermissions = $stmtPermissions->fetchAll(PDO::FETCH_ASSOC);
-                    foreach($arrPermissions as $key => $value){
-                        foreach($value as $k => $v){
-                            $prmList[] = $v;
-                        }
-                    }
-                    //把permission輸入到admin裡
-                    $arr[$i]['permissions'] = $prmList;
-                    
-                    if(in_array('admin', $prmList)){
-                        $arr[$i]['identity'] = "Owner";
-                    }else{
-                        $arr[$i]['identity'] = "Staff";
-                    }
-                }
+            //取得每個廠商的工作人員
+            $sqladmins = "SELECT `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaNotes`
+                                FROM `vendorAdmins`
+                                WHERE `vId` = ?";
+            $stmtadmins = $pdo->prepare($sqladmins);
+            for($i = 0 ; $i < count($arr) ; $i++){
+                $arradmins = [ $arr[$i]['vId'] ];
+                $stmtadmins->execute($arradmins);
+            }
+            if($stmtadmins->rowCount()>0){
+                $arradmins = $stmtadmins->fetchAll(PDO::FETCH_ASSOC);
             }
             
             for($i = 0 ; $i<count($arr); $i++){
-                //不顯示自己的資料
-                if($arr[$i]['vaId']==$arrGetInfo['vaId']){
-                    continue;
-                    echo "no";
-                }else{
                 ?>
                 <tr>
-                    <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
-                    <td><?php echo $arr[$i]['vaEmail'] ?></td>
-                    <td><?php echo $arr[$i]['identity'] ?></td>
-                    <td><?php echo $arr[$i]['vaActive'] ?></td>
-                    <td>
-                        <?php 
-                        if($arr[$i]['vaLogoutTime'] !== null){
-                            $login = new DateTime($arr[$i]['vaLoginTime']);
-                            $logout = new DateTime($arr[$i]['vaLogoutTime']);
-                            
-                            $ifOnline = $logout->diff($login);
-
-                            if($ifOnline->invert === 0){
-                                echo "線上";
-                            }else{
-                                $timeDiff = $logout->diff(new DateTime());
-                                if($ifOnline->d > 0){
-                                    echo $timeDiff->d." 天前";
-                                }else if($timeDiff->h >0){
-                                    echo $timeDiff->h." 小時前";
-                                }else if($timeDiff->m > 0){
-                                    echo $timeDiff->h." 分鐘前";
-                                }else{
-                                    echo $timeDiff->s." 秒前";
-                                }
-                            }
-                        }else if($arr[$i]['vaLogoutTime'] === null && $arr[$i]['vaLoginTime'] === null){
-                            echo "帳號尚未啟用";
-                        }else{
-                            echo "線上";
-                        }
-                        
-                        ?>
-                    </td>
+                    <td><?php echo $arr[$i]['vId'] ?></td>
+                    <td><?php echo $arr[$i]['vName'] ?></td>
+                    <td><?php echo $arr[$i]['vEmail'] ?></td>
+                    <td><?php echo $arr[$i]['vActive'] ?></td>
                     <td>
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
-                            <a data-func="delete" href="./check/check_staff_delete.php?deleteId=<?php echo $arr[$i]['vaId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
+                            <a data-func="delete" href="./check/check_staff_delete.php?deleteId=<?php echo $arr[$i]['vId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
                         </div>
                     </td>
-                    <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
-                    <td><?php echo $arr[$i]['vaNotes'] ?></td>
-                    <td><?php echo $arr[$i]['vaId'] ?></td>
+                    <td><?php echo $arr[$i]['vInfo'] ?></td>
+                    <td>
+                        <table class="table table-stripped" data-page-size="8" data-filter=#filter>
+                            <thead>
+                                <tr>
+                                    <th>名稱</th>
+                                    <th>Email</th>
+                                    <th>狀態</th>
+                                    <th data-hide="all">備註</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                for($j = 0 ; $j < count($arradmins) ; $j++){
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $arradmins[$j]['vaLName'].' '.$arradmins[$j]['vaFName'] ?></td>
+                                        <td><?php echo $arradmins[$j]['vaEmail'] ?></td>
+                                        <td><?php echo $arradmins[$j]['vaActive'] ?></td>
+                                        <td><?php echo $arradmins[$j]['vaNotes'] ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
                 <?php
-                }
             }
         }
 

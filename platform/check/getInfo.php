@@ -1,12 +1,9 @@
 <?php
 //get basic info
-$sqlGetInfo = "SELECT `a`.`aFName`,`a`.`aLName`,`a`.`aEmail`,`a`.`aActive`,`a`.`aVerify`,
-`rel_platform_permissions`.`aPermissionId`
-                FROM `platformAdmins` AS `a`
-                INNER JOIN `rel_platform_permissions`
-                ON `a`.`aId` = `rel_platform_permissions`.`aId`
-                WHERE `a`.`aId` = ?
-                AND `a`.`aEmail`=?";
+$sqlGetInfo = "SELECT `aId`, `aFName`,`aLName`,`aEmail`,`aActive`,`aVerify`
+                FROM `platformAdmins` 
+                WHERE `aId` = ?
+                AND `aEmail`=?";
 
 $stmtGetInfo = $pdo->prepare($sqlGetInfo);
 $arrParamGetInfo = [ $_SESSION['userId'], $_SESSION['email'] ];

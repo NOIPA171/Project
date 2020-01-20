@@ -62,13 +62,14 @@ if(isset($_POST['email']) && isset($_POST['password'])){
             header('Refresh: 5 ;url = ../admin.php');
         }else{
             //登入失敗
-            // header('Refresh: 5 ; url = ../login.php');
+            header('Refresh: 5 ; url = ../login.php');
             echo "帳號/密碼錯誤，請重新登入";
+            session_unset();
             session_destroy();
         }
     }else{
         //沒有該帳號
-        echo "該信箱尚未註冊，請重新登入";
+        echo "沒有該使用者，請重新登入";
     }
    
 }else{

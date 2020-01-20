@@ -14,7 +14,18 @@ try{
 
     $hash = md5( rand(0,1000) );
     $email = $_POST['email'];
-    // $email = 'radu000rider@gmail.com';
+
+
+    //先查看是否已經註冊過該信箱
+    $checksql = "SELECT `vEmail`
+    FROM `vendors`
+    WHERE `vEmail` = '{$_POST['email']}'";
+    $check = $pdo->query($checksql);
+    if($check->rowCount()>0){
+        echo "該帳號已經註冊過";
+        header("Refresh: 3 ; url = ../register.php");
+        exit();
+    }
 
 
     //------先輸入admin帳號------
@@ -29,6 +40,7 @@ try{
     ];
     $stmtAdmin = $pdo->prepare($sqlAdmin);
     $stmtAdmin->execute($arrParamAdmin);
+    
     if($stmtAdmin->rowCount() > 0){
         //取得剛剛輸入的ID
         $currentAdmin = $pdo->lastInsertId();

@@ -36,16 +36,16 @@
             <?php require_once('./template/topnav.php') ?>
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Basic Form</h2>
+                    <h2>新增人員</h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">Home</a>
+                            <a href="./admin.php">首頁</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a>Forms</a>
+                            <a>設定</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <strong>Basic Form</strong>
+                            <strong>新增人員</strong>
                         </li>
                     </ol>
                 </div>
@@ -70,9 +70,10 @@
                                 </label>
                                 <div class="col-sm-10">
                                     <div class="row">
-                                        <div class="col-sm-6 m-b"><input type="text" name="Lname" placeholder="姓" class="form-control" required></div>
-                                        <div class="col-sm-6 m-b"><input type="text" name="Fname" placeholder="名" class="form-control" required></div>
-                                        <div class="col-md-12 m-b"><input type="email" name ="email" placeholder="Email" class="form-control" required></div>                                         
+                                        <div class="col-sm-6 m-b"><input type="text" name="Lname" placeholder="姓 *" class="form-control" required></div>
+                                        <div class="col-sm-6 m-b"><input type="text" name="Fname" placeholder="名 *" class="form-control" required></div>
+                                        <div class="col-md-12 m-b"><input type="email" name ="email" placeholder="Email *" class="form-control" required></div>
+                                        <div class="col-md-12 m-b"><input type="text" name ="notes" placeholder="備註" class="form-control"></div>  
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-sm-6">
@@ -130,9 +131,10 @@
                 </div>
             </div>
 
-        <?php require_once('./template/footer.php'); ?>
 
         </div>
+        <?php require_once('./template/footer.php'); ?>
+
         </div>
 
 

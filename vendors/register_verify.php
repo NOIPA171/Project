@@ -16,9 +16,11 @@ WHERE `vaEmail` = '{$_GET['email']}' AND  `vaHash` = '{$_GET['hash']}'";
 $arrCheck = $pdo->query($sqlCheck)->fetchAll(PDO::FETCH_ASSOC);
 
 if(count($arrCheck)>0){
-    echo "您已經驗證過了";
-    header("Refresh: 3 ; url=./login.php");
-    exit();
+    if($arrCheck[0]['vaVerify']==='active'){
+        echo "您已經驗證過了";
+        header("Refresh: 3 ; url=./login.php");
+        exit();
+    }
 }
 
 try{

@@ -70,9 +70,10 @@
                             echo " href='".$menuArr[$i]['link']."'";
                         }else if(isset($submenu) && in_array($menuArr[$i]['permission'], $arrGetInfo['permissions'])){
                             echo " href='#'";
-                        }else{
-                            echo " style='pointer-events:none;'";
                         }
+                        // else{
+                        //     echo " style='pointer-events:none;'";
+                        // }
                         echo ">";
                         echo "<i class='fa ".$menuArr[$i]['icon']."'></i>";
                         echo "<span class='nav-label'>";
@@ -96,9 +97,10 @@
                                 echo "<a";
                                 if(in_array($submenu[$j]['permission'], $arrGetInfo['permissions']) || $submenu[$j]['permission'] === "all"){
                                     echo " href='".$submenu[$j]['link']."'";
-                                }else{
-                                    echo " style='pointer-events:none;'";
                                 }
+                                // else{
+                                //     echo " style='pointer-events:none;'";
+                                // }
                                 echo ">";
                                 echo "<i class='fa ".$submenu[$j]['icon']."'></i>";
                                 echo "<span class='nav-label'>";
