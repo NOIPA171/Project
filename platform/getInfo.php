@@ -1,6 +1,6 @@
 <?php
 //get basic info
-$sqlGetInfo = "SELECT `aId`, `aFName`,`aLName`,`aEmail`,`aActive`,`aVerify`
+$sqlGetInfo = "SELECT `aId`, `aFName`,`aLName`,`aEmail`,`aActive`,`aVerify`, `aLoginTime`, `aLogoutTime`
                 FROM `platformAdmins` 
                 WHERE `aId` = ?
                 AND `aEmail`=?";
