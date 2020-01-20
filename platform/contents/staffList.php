@@ -19,30 +19,29 @@
     </thead>
     <tbody>
     <?php
-        // get admin count for vendor
-        $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`,
-        `vId`, `vaLoginTime`, `vaLogoutTime`
-                FROM `vendorAdmins`
-                WHERE `vId` = ?";
+        // get admin count
+        $sql = "SELECT `aId`, `aFName`, `aLName`, `aEmail`, `aActive`, `aVerify`, `aNotes`, `aLoginTime`, `aLogoutTime`
+                FROM `platformAdmins`";
 
-        $stmt = $pdo->prepare($sql);
-        $arrParam = [ $arrGetInfo['vId'] ];
-        $stmt->execute($arrParam);
+        $stmt = $pdo->query($sql);
+        
         if($stmt->rowCount()>0){
             $arr = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            //取得個別人的資訊
-            $sqlPermissions = "SELECT `vendorPermissions`.`vendorPrmName`
-                                FROM `rel_vendor_permissions`
-                                INNER JOIN `vendorPermissions`
-                                ON `rel_vendor_permissions`.`vaPermissionId` = `vendorPermissions`.`vendorPrmId`
-                                WHERE `vaId` = ?";
+            //取得個別人的權限
+            $sqlPermissions = "SELECT `platformPermissions`.`adminPrmName`
+                                FROM `rel_platform_permissions`
+                                INNER JOIN `platformPermissions`
+                                ON `rel_platform_permissions`.`aPermissionId` = `platformPermissions`.`adminPrmId`
+                                WHERE `aId` = ?";
             $stmtPermissions = $pdo->prepare($sqlPermissions);
+
             //每一個人執行一次尋找其permission
             for($i = 0 ; $i<count($arr); $i++){
+
                 //先初始化permissions
                 $prmList = [];
-                $arrParamPermissions = [ $arr[$i]['vaId'] ];
+                $arrParamPermissions = [ $arr[$i]['aId'] ];
                 $stmtPermissions->execute($arrParamPermissions);
                 
                 if($stmtPermissions->rowCount()>0){
@@ -66,21 +65,21 @@
             
             for($i = 0 ; $i<count($arr); $i++){
                 //不顯示自己的資料
-                if($arr[$i]['vaId']==$arrGetInfo['vaId']){
+                if($arr[$i]['aId']==$arrGetInfo['aId']){
                     continue;
                     echo "no";
                 }else{
                 ?>
                 <tr>
-                    <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
-                    <td><?php echo $arr[$i]['vaEmail'] ?></td>
+                    <td><?php echo $arr[$i]['aFName'].' '.$arr[$i]['aLName'] ?></td>
+                    <td><?php echo $arr[$i]['aEmail'] ?></td>
                     <td><?php echo $arr[$i]['identity'] ?></td>
-                    <td><?php echo $arr[$i]['vaActive'] ?></td>
+                    <td><?php echo $arr[$i]['aActive'] ?></td>
                     <td>
                         <?php 
-                        if($arr[$i]['vaLogoutTime'] !== null){
-                            $login = new DateTime($arr[$i]['vaLoginTime']);
-                            $logout = new DateTime($arr[$i]['vaLogoutTime']);
+                        if($arr[$i]['aLogoutTime'] !== null){
+                            $login = new DateTime($arr[$i]['aLoginTime']);
+                            $logout = new DateTime($arr[$i]['aLogoutTime']);
                             
                             $ifOnline = $logout->diff($login);
 
@@ -98,7 +97,7 @@
                                     echo $timeDiff->s." 秒前";
                                 }
                             }
-                        }else if($arr[$i]['vaLogoutTime'] === null && $arr[$i]['vaLoginTime'] === null){
+                        }else if($arr[$i]['aLogoutTime'] === null && $arr[$i]['aLoginTime'] === null){
                             echo "帳號尚未啟用";
                         }else{
                             echo "線上";
@@ -109,12 +108,12 @@
                     <td>
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
-                            <a data-func="delete" href="./check/check_staff_delete.php?deleteId=<?php echo $arr[$i]['vaId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
+                            <a data-func="delete" href="./check/check_staff_delete.php?deleteId=<?php echo $arr[$i]['aId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
                         </div>
                     </td>
                     <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
-                    <td><?php echo $arr[$i]['vaNotes'] ?></td>
-                    <td><?php echo $arr[$i]['vaId'] ?></td>
+                    <td><?php echo $arr[$i]['aNotes'] ?></td>
+                    <td><?php echo $arr[$i]['aId'] ?></td>
                 </tr>
                 <?php
                 }
