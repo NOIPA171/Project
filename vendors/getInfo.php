@@ -41,6 +41,12 @@ try{
             $arrGetInfo['permissions'] = $getPrmList;
             $pdo->commit();
         }
+    }else{
+        echo "你的帳號不存在";
+        session_unset();
+        session_destroy();
+        header("Refresh: 3 ; url = ./index.php");
+        exit();
     }
 }catch(Exception $err){
     $pdo->rollback();
