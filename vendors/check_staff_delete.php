@@ -12,15 +12,17 @@ require_once('./checkPrm.php');
 try{
     $pdo->beginTransaction();
     //先刪除vendor admins
-    $sql= "DELETE FROM `vendorAdmins` WHERE `vaId` = '{$_GET['deleteId']}'";
+    $id = $_POST['id'];
+
+    $sql= "DELETE FROM `vendorAdmins` WHERE `vaId` = '$id'";
     $pdo->query($sql);
 
     //再刪除他的權限
-    $sql2 = "DELETE FROM `rel_vendor_permissions` WHERE `vaId` = '{$_GET['deleteId']}'";
+    $sql2 = "DELETE FROM `rel_vendor_permissions` WHERE `vaId` = '$id'";
     $pdo->query($sql2);
     $pdo->commit();
     echo "success";
-    header("Refresh: 0 ; url = ./staff.php");
+    
 }catch(Exception $err){
     $pdo->rollback();
     echo "failed: ".$err->getMessage();

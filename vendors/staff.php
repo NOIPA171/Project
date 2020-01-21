@@ -111,9 +111,39 @@
             $('.footable2').footable();
         });
 
-        $("a[data-func='delete']").click(function(){
-            return confirm("確定要刪除該使用者？");
-        })
+        $("a[data-func='delete']").on('click', $(this), function(event){
+            event.preventDefault();
+            var el = $(this).parents('tr');
+            var id = $(this).attr("data-id");
+            
+            var answer = confirm("確定要刪除該使用者？");
+            if(answer == true){
+                data = $(this).attr("data-id");
+                $.ajax({
+                    url: "./check_staff_delete.php",
+                    type: "post",
+                    data: "id="+id
+                })
+                .done(function(response, textStatus, jqXHR){
+                    if(response == 'success'){
+                        el.remove();
+                        $('#edit-table tr[class="footable-even"]').attr('class','footable-odd');
+                        $('#edit-table tr[class="footable-odd"]').attr('class','footable-even');
+                        
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown){
+                    console.error(
+                        "The following error occurred: "+
+                        textStatus, errorThrown
+                    );
+                });
+            }else{
+                console.log("no");
+            }
+        });
 
         //自己加的
         //modal for edit

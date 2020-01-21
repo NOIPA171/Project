@@ -111,7 +111,7 @@
                     <td>
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
-                            <a data-func="delete" href="./check_staff_delete.php?deleteId=<?php echo $arr[$i]['aId']; ?>" data-id="<?php echo $arr[$i]['aId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
+                            <a data-func="delete" href="#" data-id="<?php echo $arr[$i]['aId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
                         </div>
                     </td>
                     <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>

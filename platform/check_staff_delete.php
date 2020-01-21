@@ -22,7 +22,7 @@ try{
     $pdo->query($sql2);
     $pdo->commit();
     echo "success";
-    // header("Refresh: 0 ; url = ./staff.php");
+    
 }catch(Exception $err){
     $pdo->rollback();
     echo "failed: ".$err->getMessage();

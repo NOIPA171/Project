@@ -118,8 +118,8 @@
             var el = $(this).parents('tr');
             var id = $(this).attr("data-id");
             
-            confirm("確定要刪除該使用者？");
-            if(confirm){
+            var answer = confirm("確定要刪除該使用者？");
+            if(answer == true){
                 data = $(this).attr("data-id");
                 $.ajax({
                     url: "./check_staff_delete.php",
