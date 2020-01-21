@@ -41,7 +41,7 @@
                 "permission" : "prmV00",
                 "icon" : ""
             },{
-                "name" : "我的帳號",
+                "name" : "帳號",
                 "link" : "./my_account.php",
                 "permission" : "all",
                 "icon" : ""

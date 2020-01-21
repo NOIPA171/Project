@@ -19,10 +19,24 @@ try{
     //先查看是否已經註冊過該信箱
     $checksql = "SELECT `vEmail`
     FROM `vendors`
-    WHERE `vEmail` = '{$_POST['email']}'";
+    WHERE `vEmail` = '$email'";
     $check = $pdo->query($checksql);
     if($check->rowCount()>0){
         echo "該帳號已經註冊過";
+        exit();
+    }
+
+    //配對看看是否有同樣email + pwd的帳號存在
+
+    $checksql = "SELECT `vaId` FROM `vendorAdmins` WHERE `vaPassword` = ? AND `vaEmail` = ?";
+    $stmtc = $pdo->prepare($checksql);
+    $checkparam = [
+        sha1($_POST['password']),
+        $email
+    ];
+    $stmtc->execute($checkparam);
+    if($stmtc->rowCount() > 0){
+        echo "有相同的帳號存在，請重新輸入";
         exit();
     }
 
@@ -32,7 +46,7 @@ try{
                 VALUES (?,?,?,'active',?, ?)";
     $arrParamAdmin = [
         $_POST['name'],
-        $_POST['email'],
+        $email,
         sha1($_POST['password']),
         date("Y-m-d H:i:s"),
         $hash
@@ -50,7 +64,7 @@ try{
         $arrParamVendor = [ 
             $_POST['name'], 
             date('Y-m-d H:i:s'),
-            $_POST['email']
+            $email
         ];
         $stmtVendor->execute($arrParamVendor);
 
@@ -85,7 +99,7 @@ try{
                     $pdo->commit();
 
                     $_SESSION['userId'] = $currentAdmin;
-                    $_SESSION['email'] = $_POST['email'];
+                    $_SESSION['email'] = $email;
                     $_SESSION['vendor'] = $currentVendor;            
 
                     echo "success";
@@ -130,7 +144,7 @@ function sendMail($email, $vName, $hash){
         
         //Recipients
         $mail->setFrom($email, $vName, 0);
-        $mail->addAddress($_POST['email'], $_POST['name'], 0);     // Add a recipient
+        $mail->addAddress($email, $_POST['name'], 0);     // Add a recipient
 
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
@@ -138,10 +152,10 @@ function sendMail($email, $vName, $hash){
         $mail->Body    = "
             $vName 您好， <br>
             您於 onepeace 申請了 $vName 廠商帳號 <br>
-            請點擊連結設以驗證您的帳號： <a href='http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}'>http://localhost:8080/Project/vendors/register_verify.php</a> <br>
+            請點擊連結設以驗證您的帳號： <a href='http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$email}'>http://localhost:8080/Project/vendors/register_verify.php</a> <br>
             $vName <br>
             此信為自動發出，請勿回覆";
-        $mail->AltBody = "$vName 您好，您於 onepeace 申請了 $vName 廠商帳號，請點擊連結以驗證您的帳號：http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$_POST['email']}";
+        $mail->AltBody = "$vName 您好，您於 onepeace 申請了 $vName 廠商帳號，請點擊連結以驗證您的帳號：http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$email}";
 
         $mail->send();
         // echo 'Message has been sent';

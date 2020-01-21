@@ -56,7 +56,9 @@
                     //把permission輸入到admin裡
                     $arr[$i]['permissions'] = $prmList;
                     
-                    if(in_array('admin', $prmList)){
+                    if($arr[$i]['vaLName']==null && $arr[$i]['vaFName']==$arrGetInfo['vName']){
+                        $arr[$i]['identity'] = "Company";
+                    }else if(in_array('admin', $prmList)){
                         $arr[$i]['identity'] = "Owner";
                     }else{
                         $arr[$i]['identity'] = "Staff";
@@ -68,7 +70,6 @@
                 //不顯示自己的資料
                 if($arr[$i]['vaId']==$arrGetInfo['vaId']){
                     continue;
-                    echo "no";
                 }else{
                 ?>
                 <tr>
@@ -78,7 +79,9 @@
                     <td><?php echo $arr[$i]['vaActive'] ?></td>
                     <td>
                         <?php 
-                        if($arr[$i]['vaLogoutTime'] !== null){
+                        if($arr[$i]['vaLName']==null && $arr[$i]['vaFName']==$arrGetInfo['vName']){
+                            echo "";
+                        }else if($arr[$i]['vaLogoutTime'] !== null){
                             $login = new DateTime($arr[$i]['vaLoginTime']);
                             $logout = new DateTime($arr[$i]['vaLogoutTime']);
                             
@@ -109,10 +112,18 @@
                         ?>
                     </td>
                     <td>
+                    <?php 
+                    if($arr[$i]['vaLName']==null && $arr[$i]['vaFName']==$arrGetInfo['vName']){
+                        continue;
+                    }else{
+                    ?>
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
                             <a data-func="delete" href="./check_staff_delete.php?deleteId=<?php echo $arr[$i]['vaId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
                         </div>
+                    <?php
+                    }
+                    ?>
                     </td>
                     <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
                     <td><?php echo $arr[$i]['vaNotes'] ?></td>
