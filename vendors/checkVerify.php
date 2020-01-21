@@ -22,5 +22,4 @@ if($arrGetInfo['vaVerify']!=='verified'){
         echo "請驗證您的信箱以繼續操作";
         exit();
     }
-    exit();
 }

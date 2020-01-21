@@ -19,6 +19,7 @@ try{
     $sql2 = "DELETE FROM `rel_vendor_permissions` WHERE `vaId` = '{$_GET['deleteId']}'";
     $pdo->query($sql2);
     $pdo->commit();
+    echo "success";
     header("Refresh: 0 ; url = ./staff.php");
 }catch(Exception $err){
     $pdo->rollback();

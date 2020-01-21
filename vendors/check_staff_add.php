@@ -2,19 +2,8 @@
 require_once('./checkSession.php');
 require_once('../db.inc.php');
 require_once('./getInfo.php');
-require_once('./checkActive.php');
-require_once('./checkVerify.php');
-$pagePrm = 'prmV00';
-require_once('./checkPrm.php');
 
 require_once('../tpl/generatePwd.php');
-// echo "<pre>";
-// print_r($_SESSION);
-// print_r($arrGetInfo);
-// print_r($_POST);
-// echo "</pre>";
-// exit();
-
 
 try{
     $pdo->beginTransaction();
