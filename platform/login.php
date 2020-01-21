@@ -47,7 +47,7 @@
                 <div class="mt-2">
                     <small id="message" class="text-warning"></small>
                 </div>
-                <a href="#"><small>Forgot password?</small></a>
+                <a href="./forget_password.php"><small>Forgot password?</small></a>
             </form>
             <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
         </div>

@@ -52,8 +52,3 @@ try{
     $pdo->rollback();
     echo "failure: ".$err->getMessage();
 }
-
-
-// echo "<pre>";
-// print_r($arrGetInfo);
-// echo "</pre>";

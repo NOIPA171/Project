@@ -20,10 +20,11 @@
 
 
     <div class="middle-box text-center animated fadeInDown">
-        <h3 class="font-bold">更改成功！</h3>
+        <h3 class="font-bold">驗證碼已傳送至您的信箱</h3>
 
         <div class="error-desc">
-            <!-- 3秒後將回到登錄頁面<br/> -->
+            請於十分鐘內至信箱點擊提供的連結，並輸入驗證碼<br/>
+            逾時則驗證碼將失去效用<br>
             <a href="./login.php" class="btn btn-primary m-t">回到登錄頁面</a>
         </div>
     </div>

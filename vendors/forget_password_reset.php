@@ -126,7 +126,7 @@ $('body').on('submit', '#resetpwd', function(event){
             $form.attr("action", "./check_forget_password_reset2.php");
             
         }else if(response === 'success'){
-            window.location = './forget_password_notify.php';
+            window.location = './forget_password_success.php';
         }else{
             $("#message").text(response);
         }

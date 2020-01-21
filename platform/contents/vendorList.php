@@ -76,6 +76,9 @@
                                     $arradmins = $stmtadmins->fetchAll(PDO::FETCH_ASSOC);
                                     
                                         for($j = 0 ; $j < count($arradmins) ; $j++){
+                                            if($arradmins[$j]['vaLName'] == null && $arradmins[$j]['vaFName']===$arr[$i]['vName']){
+                                                continue;
+                                            }else{
                                             ?>
                                             <tr>
                                                 <td><?php echo $arradmins[$j]['vaLName'].' '.$arradmins[$j]['vaFName'] ?></td>
@@ -84,6 +87,7 @@
                                                 <td><?php echo $arradmins[$j]['vaNotes'] ?></td>
                                             </tr>
                                             <?php
+                                            }
                                         }
                                     }
                                 ?>

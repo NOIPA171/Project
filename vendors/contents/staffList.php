@@ -119,7 +119,7 @@
                     ?>
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
-                            <a data-func="delete" href="./check_staff_delete.php?deleteId=<?php echo $arr[$i]['vaId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
+                            <a data-func="delete" href="#" data-id="<?php echo $arr[$i]['vaId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
                         </div>
                     <?php
                     }
@@ -154,16 +154,6 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
-                <!-- <div class="form-row">
-                    <div class="form-group required col-sm-6">
-                        <label for="lastName" class="control-label">姓</label>
-                        <input type="text" class="form-control" id="firstName" name="FName" placeholder="First Name" required>
-                    </div>
-                    <div class="form-group required col-sm-6">
-                        <label for="firstName" class="control-label">名</label>
-                        <input type="text" class="form-control" id="lastName" name="LName" placeholder="Last Name" required>
-                    </div>
-                </div> -->
                 <div class="form-group">
 					<label for="startedOn" class="col-sm-3 control-label">帳號狀態</label>
 					<div class="col-sm-12">
