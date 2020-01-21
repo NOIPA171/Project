@@ -80,7 +80,7 @@ try{
 
         }
         if($stmt2->rowCount()>0){
-            sendMail($email, $_POST['Fname'], $arrGetInfo['aName'], $hash, $pwd);
+            sendMail($email, $_POST['Fname'], $arrGetInfo['aFName'], $hash, $pwd);
             echo "success!";
             header("Refresh: 3 ; url = ./staff.php");
             $pdo->commit();

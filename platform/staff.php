@@ -68,24 +68,6 @@
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h5>FooTable with row toggler, sorting and pagination</h5>
-
-                            <!-- <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">Config option 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">Config option 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div> -->
                         </div>
                         <div class="ibox-content">
 
@@ -129,9 +111,41 @@
             $('.footable2').footable();
         });
 
-        $("a[data-func='delete']").click(function(){
-            return confirm("確定要刪除該使用者？");
-        })
+
+
+        $("a[data-func='delete']").on('click', $(this), function(event){
+            event.preventDefault();
+            var el = $(this).parents('tr');
+            var id = $(this).attr("data-id");
+            
+            confirm("確定要刪除該使用者？");
+            if(confirm){
+                data = $(this).attr("data-id");
+                $.ajax({
+                    url: "./check_staff_delete.php",
+                    type: "post",
+                    data: "id="+id
+                })
+                .done(function(response, textStatus, jqXHR){
+                    if(response == 'success'){
+                        el.remove();
+                        $('#edit-table tr[class="footable-even"]').attr('class','footable-odd');
+                        $('#edit-table tr[class="footable-odd"]').attr('class','footable-even');
+                        
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown){
+                    console.error(
+                        "The following error occurred: "+
+                        textStatus, errorThrown
+                    );
+                });
+            }else{
+                console.log("no");
+            }
+        });
 
         //自己加的
         //modal for edit
@@ -139,6 +153,7 @@
         var table = $('#edit-table');
         
         // var edit = $("a[data-func='edit']");
+
         $("a[data-func='edit']").click(function(){
             var $tds = $(this).closest('td').siblings();
             // var name = $tds.eq(0).text();
@@ -184,6 +199,8 @@
             modal.find("#noteText").text(notes);
             modal.find("#id").val(id);
         })
+
+        $()
 
     </script>
 
