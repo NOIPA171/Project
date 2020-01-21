@@ -32,20 +32,36 @@ try{
     $stmt2->execute($arrParam2);
 
         
-    //再輸入
-    $sql3 = "INSERT INTO `rel_vendor_permissions`(`vaId`, `vaPermissionId`) VALUES(?,?)";
+    $sql3 = "INSERT INTO `rel_vendor_permissions`(`vaId`, `vaPermissionId`)
+    VALUES(?,?)";
     $stmt3 = $pdo->prepare($sql3);
-    
-    for($i = 0 ; $i < count($_POST['staffPrm']) ; $i++){
-        
-        $prmId = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
 
-        $arrParam3 = [
-            $_POST['vaId'],
-            $prmId['vendorPrmId']
-        ];
-        $stmt3->execute($arrParam3);      
+    //若身份為manager
+    if($title == 2){
+        $allPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions`")->fetchAll(PDO::FETCH_ASSOC);
+        //每一個permission都要輸入一次
+        for($i=0 ; $i<count($allPrms) ; $i++){
+            $arrParam3 = [
+                $_POST['vaId'],
+                $allPrms[$i]['vendorPrmId']
+            ];
+            $stmt3->execute($arrParam3);
+        }
+    }else if($title == 3){
+        //若身份為staff
+        for($i = 0 ; $i < count($_POST['staffPrm']) ; $i++){
+
+            $arrPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
+
+            $arrParam3 = [
+                $_POST['vaId'],
+                $arrPrms['vendorPrmId']
+            ];
+
+            $stmt3->execute($arrParam3);
+        }
     }
+    
     if($stmt3->rowCount()>0){
         $pdo->commit();
         

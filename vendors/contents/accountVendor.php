@@ -4,28 +4,28 @@ $vendorInfo = $pdo->query("SELECT `vEmail`, `vInfo`, `vImg`, `vName` FROM `vendo
 
 ?>
 
-<form method="post" action="./check_my_account.php" enctype='multipart/form-data'>
+<form method="post" action="./check_my_accountV.php" enctype='multipart/form-data'>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            廠商Logo <br>
+            公司Logo <br>
         </label>
         <div class="col-sm-10">
             <div class="row">
                 <div class="col-sm-6 m-b">
-                    <img src="./images/<?php $vendorInfo['vImg'] ?>" alt="">
-                    <input type="file">
+                    <img src="./images/<?php echo $vendorInfo['vImg'] ?>" alt="" class="logoUpdate">
+                    <input type="file" name="vImg">
                 </div> 
             </div>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            廠商名稱 <br>
+            公司名稱 <br>
         </label>
         <div class="col-sm-10">
             <div class="row">
                 <div class="col-sm-6 m-b">
-                    <input type="text" name="Lname" placeholder="姓 *" class="form-control" required value="<?php echo $vendorInfo['vName'] ?>">
+                    <input type="text" name="vName" placeholder="姓 *" class="form-control" required value="<?php echo $vendorInfo['vName'] ?>">
                 </div> 
             </div>
         </div>
@@ -37,14 +37,14 @@ $vendorInfo = $pdo->query("SELECT `vEmail`, `vInfo`, `vImg`, `vName` FROM `vendo
         <div class="col-sm-10">
             <div class="row">
                 <div class="col-sm-6 m-b">
-                    <input type="email" name ="email" placeholder="Email *" class="form-control" required value="<?php echo $vendorInfo['vEmail'] ?>">
+                    <input type="email" name ="vEmail" placeholder="Email *" class="form-control" required value="<?php echo $vendorInfo['vEmail'] ?>">
                 </div> 
             </div>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">
-            廠商資訊 <br>
+            公司資訊 <br>
         </label>
         <div class="col-sm-10">
             <div class="row">

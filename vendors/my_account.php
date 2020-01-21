@@ -23,6 +23,7 @@
     <link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="../css/animate.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/myStyle.css" rel="stylesheet">
 
     <link href="../css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
 
@@ -120,21 +121,29 @@
 
                     var $inputs = $form.find("input, button");
 
-                    var serializedData = $form.serialize();
+                    var formData = new FormData(this);
 
                     $inputs.prop("disabled", true);
 
                     request = $.ajax({
                         url: "./check_my_accountV.php",
                         type: "post",
-                        data: serializedData
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        dataType: "json"
                     });
 
                     request.done(function (response, textStatus, jqXHR){
+                        console.log(response);
+
                         if(response == 'success'){
                             $("#message").text('更新成功!');
-                        }else{
-                            $("#message").text(response);
+                        }else if(response.length==2){
+                            $("form img").attr("src", response[0]);
+                            $("img.navIcon").attr("src", response[0]);
+                            $("#message").text('更新成功');
                         };
                     });
 

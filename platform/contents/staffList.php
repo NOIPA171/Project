@@ -174,26 +174,46 @@
 				</div>
                 <div class="form-group">
                     <div class="col-sm-12" id="permissions">
-                        <label class="col-form-label mb-2">編輯權限</label>
-                        <div class="i-checks">
-                            <label> <input type="checkbox" value="vendors" name="staffPrm[]" id="products"> 
-                            <i></i> 廠商 </label>
+                        <div class="row" id="title">
+                            <div class="col-sm-6">
+                                <div class="i-checks mt-2">
+                                    <label id="staff"> 
+                                        <input type="radio" value="3" name="title" checked> 
+                                        <i></i> 賦予工作人員權限 
+                                        <small class="text-muted"></small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="i-checks mt-2">
+                                    <label id="manager"> 
+                                        <input type="radio" value="2" name="title"> 
+                                        <i></i> 賦予管理員權限 <br>
+                                        <small class="text-muted" style="margin-left: 1.6rem;">管理所有頁面（包含帳號管理）</small>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="i-checks">
-                            <label> <input type="checkbox" value="charts" name="staffPrm[]" id="charts"> 
-                            <i></i> 報表 </label>
-                        </div>
-                        <div class="i-checks">
-                            <label> <input type="checkbox" value="users" name="staffPrm[]" id="marketing"> 
-                            <i></i> 會員 </label>
-                        </div>
-                        <div class="i-checks">
-                            <label> <input type="checkbox" value="comments" name="staffPrm[]" id="orders"> 
-                            <i></i> 評價 </label>
-                        </div>
-                        <div class="i-checks">
-                            <label> <input type="checkbox" value="admin" name="staffPrm[]" id="admin"> 
-                            <i></i> 工作人員  <small class="text-warning">此為後台管理員權限</small> </label>
+                        
+                        <hr>
+                        <div id="edit_permissions">
+                            <label class="col-form-label mb-2">編輯權限</label>
+                            <div class="i-checks">
+                                <label> <input type="checkbox" value="vendors" checked="" name="staffPrm[]"> 
+                                <i></i> 廠商 </label>
+                            </div>
+                            <div class="i-checks">
+                                <label> <input type="checkbox" value="charts" checked="" name="staffPrm[]"> 
+                                <i></i> 報表 </label>
+                            </div>
+                            <div class="i-checks">
+                                <label> <input type="checkbox" value="users" checked="" name="staffPrm[]"> 
+                                <i></i> 會員 </label>
+                            </div>
+                            <div class="i-checks">
+                                <label> <input type="checkbox" value="comments" checked="" name="staffPrm[]"> 
+                                <i></i> 評論 </label>
+                            </div>
                         </div>
                     </div>
 				</div>

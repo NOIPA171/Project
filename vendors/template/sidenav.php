@@ -3,7 +3,15 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element">
-                    <img alt="image" class="rounded-circle" src="img/profile_small.jpg"/>
+                    <img alt="image" class="rounded-circle navIcon" src="
+                    <?php
+                        $sql = "SELECT `vImg` FROM `vendors` WHERE `vId` = {$arrGetInfo['vId']}";
+                        $img = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+                        if(count($img)>0){
+                            echo "./images/".$img['vImg'];
+                        }
+                    ?>
+                    "/>
                     <a href="./admin.php">
                         <span class="block m-t-xs font-bold"><?php echo $arrGetInfo['vaFName'].' '.$arrGetInfo['vaLName'] ?></span>
                         <span class="text-muted text-xs block">
@@ -20,7 +28,15 @@
                     </a>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    <img alt="image" class="navIcon navIcon-s" src="
+                    <?php
+                        $sql = "SELECT `vImg` FROM `vendors` WHERE `vId` = {$arrGetInfo['vId']}";
+                        $img = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+                        if(count($img)>0){
+                            echo "./images/".$img['vImg'];
+                        }
+                    ?>
+                    "/>
                 </div>
             </li>
             <!-- --------menu starts here-------- -->

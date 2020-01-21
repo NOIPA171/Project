@@ -153,9 +153,8 @@
         var modal = $('#editor-modal');
         var table = $('#edit-table');
         
-        // var edit = $("a[data-func='edit']");
 
-        $("a[data-func='edit']").click(function(){
+        $("a[data-func='edit']").on('click', $(this), function(){
             var $tds = $(this).closest('td').siblings();
             // var name = $tds.eq(0).text();
             // var email = $tds.eq(1).text();
@@ -164,26 +163,35 @@
             var permissions = $tds.eq(5).text();
             var notes = $tds.eq(6).text();
             var id = $tds.eq(7).text();
-
-            // var Fname = name.split(' ')[0];
-            // var Lname = name.split(' ')[1];
-            // modal.find('#firstName').val(Fname);
-            // modal.find('#lastName').val(Lname);
             
             //先移除再加上去
             modal.find("#active option").removeAttr('selected');
             modal.find("#active option[value="+active+"]").attr('selected','selected');
 
-            //此人擁有的permissions
             var permissionsArr = permissions.split(', ');
-            //需要改動的modal欄位
-            var allPrmInputs = modal.find('#permissions').find('input');
-            
-            var allPrms = [];  //所有的permission
+            var allTitles = modal.find('#title').find('input');
+            var allPrmInputs = modal.find('#edit_permissions').find('input');
+            var allPrms = [];
             for(let i = 0 ; i < allPrmInputs.length ; i++){
-                allPrms.push(modal.find('#permissions').find('input')[i]['value']);
+                allPrms.push(modal.find('#edit_permissions').find('input')[i]['value']);
             }
             
+            var titleval, showedit;
+            if(title == 'Manager'){
+                titleval = 2;
+                showedit = false;
+            }else if (title = 'Staff'){
+                titleval = 3;
+                showedit = true;
+            }
+
+            modal.find("#title").find('input').removeAttr("checked");
+            modal.find("#title").find('input[value="'+titleval+'"]').attr("checked","");
+            modal.find('#edit_permissions').hide();
+            if(showedit){
+                modal.find('#edit_permissions').show();
+            }
+
             for(let i = 0 ; i < allPrms.length ; i++){
                 var flag = false;
                 for(let j = 0 ; j < permissionsArr.length ; j++){
@@ -192,17 +200,23 @@
                     }
                 }
                 if(flag){
-                    modal.find("#permissions").find('input').eq(i).attr("checked","");
+                    modal.find("#edit_permissions").find('input').eq(i).attr("checked","");
                 }else{
-                    modal.find("#permissions").find('input').eq(i).removeAttr("checked");
+                    modal.find("#edit_permissions").find('input').eq(i).removeAttr("checked");
                 }
             }
             modal.find("#noteText").text(notes);
             modal.find("#id").val(id);
+
+                    //modal options
+            modal.find("#manager").mouseup(function(){
+                modal.find('#edit_permissions').hide(200);
+            })
+
+            modal.find("#staff").mouseup(function(){
+                modal.find('#edit_permissions').show(200);
+            })
         })
-
-        $()
-
     </script>
 
 </body>
