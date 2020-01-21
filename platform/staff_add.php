@@ -14,7 +14,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | Basic Form</title>
+    <title>新增工作人員</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -58,7 +58,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>All form elements <small>With custom checbox and radion elements.</small></h5>
+                            <h5>邀請新人員一起管理您的後台</h5>
                     </div>
                     <div class="ibox-content">
                         <?php 
@@ -69,7 +69,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">
                                     基本資訊 <br>
-                                    <small class="text-muted">寄信邀請新人員一起管理您的後台。</small>
+                                    <!-- <small class="text-muted">寄信邀請新人員一起管理您的後台。</small> -->
                                 </label>
                                 <div class="col-sm-10">
                                     <div class="row">

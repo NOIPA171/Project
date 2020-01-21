@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | Search Page</title>
+    <title>首頁</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -35,8 +35,8 @@
             <!-- 標題 -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-9">
-                    <h2>新增廣告</h2>
-                    <ol class="breadcrumb">
+                    <h2>首頁</h2>
+                    <!-- <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="index.html">Home</a>
                         </li>
@@ -46,7 +46,7 @@
                         <li class="breadcrumb-item active">
                             <strong> Search Page</strong>
                         </li>
-                    </ol>
+                    </ol> -->
                 </div>
             </div>
             <!-- 內文 -->

@@ -13,7 +13,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | FooTable</title>
+    <title>工作人員一覽</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -44,16 +44,16 @@
         <?php require_once('./template/topnav.php') ?>
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>FooTable</h2>
+                    <h2>工作人員一覽</h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">Home</a>
+                            <a href="./admin.php">首頁</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a>Tables</a>
+                            <a>設定</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <strong>FooTable</strong>
+                            <strong>工作人員一覽</strong>
                         </li>
                     </ol>
                 </div>
@@ -67,7 +67,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>FooTable with row toggler, sorting and pagination</h5>
+                            <h5>工作人員資訊</h5>
                         </div>
                         <div class="ibox-content">
 

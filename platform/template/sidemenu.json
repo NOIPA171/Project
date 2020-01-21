@@ -25,7 +25,7 @@
         "permission" : "prmA04",
         "icon" : ""
     },{
-        "name" : "設定",
+        "name" : "平台設定",
         "link" : "#",
         "permission" : "all",
         "icon" : "",
@@ -39,6 +39,11 @@
                 "name" : "新增",
                 "link" : "./staff_add.php",
                 "permission" : "prmA00",
+                "icon" : ""
+            },{
+                "name" : "我的帳號",
+                "link" : "./my_account.php",
+                "permission" : "all",
                 "icon" : ""
             }
         ]
