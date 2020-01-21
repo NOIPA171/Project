@@ -2,6 +2,8 @@
 require_once('./checkSession.php');
 require_once('../db.inc.php');
 require_once('./getInfo.php');
+require_once('./checkActive.php');
+require_once('./checkVerify.php');
 
 require_once('../tpl/generatePwd.php');
 
@@ -31,9 +33,14 @@ try{
     }
     
     //先加入vendor admins -> permissions
-    $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`, `vaVerify`, `vId`, `vaNotes`)
-    VALUES(?,?,?,?,?,'inactive',?,?,?)";
+    $sql = "INSERT INTO `vendorAdmins`(`vaFName`,`vaLName`,`vaEmail`, `vaPassword`, `vaHash`, `vaActive`, `vaVerify`, `vId`, `vaNotes`, `vaRoleId`)
+    VALUES(?,?,?,?,?,'inactive',?,?,?,?)";
 
+    if($_POST['title'] === 'owner'){
+        $role = 2;
+    }else{
+        $role = 3;
+    }
     $stmt = $pdo->prepare($sql);
     $arrParam = [
         $_POST['Fname'],
@@ -43,7 +50,8 @@ try{
         $hash,
         date("Y-m-d H:i:s"),
         $arrGetInfo['vId'],
-        $_POST['notes']
+        $_POST['notes'],
+        $role
     ];
     $stmt->execute($arrParam);
     if($stmt->rowCount()>0){

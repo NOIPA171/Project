@@ -20,7 +20,7 @@
     <tbody>
     <?php
         // get admin count for vendor
-        $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`,
+        $sql = "SELECT `vendorAdmins`.`vaId`, `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaVerify`, `vaNotes`, `vaRoleId`
         `vId`, `vaLoginTime`, `vaLogoutTime`
                 FROM `vendorAdmins`
                 WHERE `vId` = ?";
@@ -79,7 +79,7 @@
                     <td><?php echo $arr[$i]['vaActive'] ?></td>
                     <td>
                         <?php 
-                        if($arr[$i]['vaLName']==null && $arr[$i]['vaFName']==$arrGetInfo['vName']){
+                        if($arr[$i]['vaRoleId']== 1){
                             echo "";
                         }else if($arr[$i]['vaLogoutTime'] !== null){
                             $login = new DateTime($arr[$i]['vaLoginTime']);
@@ -113,7 +113,7 @@
                     </td>
                     <td>
                     <?php 
-                    if($arr[$i]['vaLName']==null && $arr[$i]['vaFName']==$arrGetInfo['vName']){
+                    if($arr[$i]['vaRoleId']==1){
                         continue;
                     }else{
                     ?>

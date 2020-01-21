@@ -3,7 +3,8 @@
 require_once('./checkSession.php');
 require_once('../db.inc.php');
 require_once('./getInfo.php');
-
+require_once('./checkActive.php');
+require_once('./checkVerify.php');
 
 //UNFINISHED
 

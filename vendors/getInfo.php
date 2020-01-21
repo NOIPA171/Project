@@ -4,15 +4,18 @@
 try{
     $pdo->beginTransaction();
     $sqlGetInfo = "SELECT `va`.`vaId`,`va`.`vaFName`,`va`.`vaLName`,`va`.`vaEmail`,`va`.`vaActive`,`va`.`vaVerify`, `va`.`vId`, `va`.`vaLoginTime`, `va`.`vaLogoutTime`,
-`vendors`.`vId`, `vendors`.`vActive`, `vendors`.`vVerify`, `vendors`.`vName`
+`vendors`.`vId`, `vendors`.`vActive`, `vendors`.`vVerify`, `vendors`.`vName`,`vendorRoles`.`vaRoleId`, `vendorRoles`.`vaRoleName`
                 FROM `vendorAdmins` AS `va`
                 INNER JOIN `vendors`
                 ON `va`.`vId` = `vendors`.`vId`
+                INNER JOIN `vendorRoles`
+                ON `va`.`vaRoleId` = `vendorRoles`.`vaRoleId`
                 WHERE `va`.`vaId` = ?
                 AND `va`.`vaEmail`=?";
 
     $stmtGetInfo = $pdo->prepare($sqlGetInfo);
     $arrParamGetInfo = [ $_SESSION['userId'], $_SESSION['email'] ];
+
     $stmtGetInfo->execute($arrParamGetInfo);
     
     if($stmtGetInfo->rowCount()>0){

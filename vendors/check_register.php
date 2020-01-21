@@ -42,14 +42,15 @@ try{
 
 
     //------先輸入admin帳號------
-    $sqlAdmin = "INSERT INTO `vendorAdmins`(`vaFName`,`vaEmail`,`vaPassword`,`vaActive`,`vaLoginTime`, `vaHash`)
-                VALUES (?,?,?,'active',?, ?)";
+    $sqlAdmin = "INSERT INTO `vendorAdmins`(`vaFName`,`vaEmail`,`vaPassword`,`vaActive`,`vaLoginTime`, `vaHash`, `vaRoleId`)
+                VALUES (?,?,?,'active',?,?,?)";
     $arrParamAdmin = [
         $_POST['name'],
         $email,
         sha1($_POST['password']),
         date("Y-m-d H:i:s"),
-        $hash
+        $hash,
+        '1'
     ];
     $stmtAdmin = $pdo->prepare($sqlAdmin);
     $stmtAdmin->execute($arrParamAdmin);

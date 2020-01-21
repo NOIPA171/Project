@@ -65,6 +65,7 @@
                     <div class="ibox-content">
                         <?php 
                         require_once('./checkVerify.php');
+                        require_once('./checkVerifyEcho.php');
                         require_once('./checkPrm.php'); 
                         if($arrGetInfo['vaLName']==null && $arrGetInfo['vaFName']==$arrGetInfo['vName']){
                             require_once('./contents/accountVendor.php');
