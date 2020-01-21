@@ -70,20 +70,6 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 exit();
             }
 
-            //確認是此人，配對password看看是否有同樣email + pwd的帳號存在
-
-            $checksql = "SELECT `vaId` FROM`vendorAdmins` WHERE `vaPassword` = ? AND `vaEmail` = ?";
-            $stmtc = $pdo->prepare($checksql);
-            $checkparam = [
-                $pwd,
-                $email
-            ];
-            $stmtc->execute($checkparam);
-            if($stmtc->rowCount() > 0){
-                echo "您有相同的帳號存在，請重新輸入密碼";
-                exit();
-            }
-
 
             //刪除這個id所有重新設定密碼的資料
             $del = "DELETE FROM `vendorResetPass` WHERE `vaEmail`= ?";

@@ -45,6 +45,28 @@ if(isset($_POST['password1']) && isset($_POST['password2']) && isset($_POST['ven
                 }
             }
 
+            //確認是此人，配對password看看是否有同樣email + pwd的帳號存在
+
+            $checksql = "SELECT `vId` FROM `vendorAdmins` WHERE `vaPassword` = ? AND `vaEmail` = ?";
+            $stmtc = $pdo->prepare($checksql);
+            $checkparam = [
+                $pwd,
+                $email
+            ];
+            $stmtc->execute($checkparam);
+            if($stmtc->rowCount() > 0){
+                $ven = $stmtc->fetchAll(PDO::FETCH_ASSOC);
+
+                //有可能是同一個廠商的 -> 允許overwrite
+                //非同一組資料則不允許執行
+                for($i = 0 ; $i<count($ven) ; $i++){
+                    if($ven[$i]['vId'] != $vendorId){
+                        echo "您有相同的帳號存在，請重新輸入密碼";
+                        exit();
+                    }      
+                }  
+            }
+            
             //刪除這個id所有重新設定密碼的資料
             $del = "DELETE FROM `vendorResetPass` WHERE `vaEmail`= ?";
             $stmtd = $pdo->prepare($del);
@@ -60,6 +82,7 @@ if(isset($_POST['password1']) && isset($_POST['password2']) && isset($_POST['ven
                     $email,
                     $vendorId
                 ];
+                
                 $stmtu->execute($updateParam);
                 if($stmtu->rowCount()>0){
                     $pdo->commit();
@@ -69,7 +92,7 @@ if(isset($_POST['password1']) && isset($_POST['password2']) && isset($_POST['ven
                 }
             }
         }else{
-            echo "發生錯誤，請使用 email 提供的連結和驗證碼";
+            echo "請使用 email 提供的連結和驗證碼";
         }
     }else{
         echo "密碼欄位不一致，請重新輸入";

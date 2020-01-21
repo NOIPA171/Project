@@ -61,7 +61,7 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <small id="message"></small>
+                                <small id="message" class="text-warning"></small>
                             </div>
                             <input type="hidden" name="email" value="<?php echo $email ?>">
                             <input type="hidden" name="hash" value="<?php echo $hash ?>">
