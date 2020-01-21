@@ -2,7 +2,7 @@
 session_start();
 require_once('../db.inc.php');
 
-if(isset($_POST['password1']) && isset($_POST['password2'])){
+if(isset($_POST['password1']) && isset($_POST['password2']) && isset($_POST['vendor'])){
     //先看兩欄密碼是否正確
     if($_POST['password1'] === $_POST['password2']){
 
@@ -10,6 +10,7 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
         $hash = $_POST['hash'];
         $token = $_POST['token'];
         $pwd = sha1($_POST['password1']);
+        $vendorId = $_POST['vendor'];
 
         $pdo->beginTransaction();
 
@@ -40,34 +41,8 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 if($stmtdel->rowCount()>0){
                     $pdo->commit();
                     echo "驗證碼已過期，請重新申請。";
-                    // header("Refresh: 3 ; url = ./login.php");
                     exit();
                 }
-            }
-
-            //檢查使用者有幾組帳號
-
-            $accounts = "SELECT `vId` FROM `vendorAdmins` WHERE `vaEmail` = ?";
-            $stmta = $pdo->prepare($accounts);
-            $accountsAr = [ $email ];
-            $stmta->execute($accountsAr);
-
-            //若有多組，用ajax再接一次check_forge
-            if($stmta->rowCount()>1){
-                $arra = $stmta->fetchAll(PDO::FETCH_ASSOC);
-
-                for($i = 0 ; $i < count($arra) ; $i++){
-                    $vId = $arra[$i]['vId'];
-                    $all = "SELECT `vName`,`vId` FROM `vendors` WHERE `vId` = '$vId'";
-                    $arrall[] = $pdo->query($all)->fetch(PDO::FETCH_ASSOC);
-                    
-                    echo "<option value='";
-                    echo $arrall[$i]['vId'];
-                    echo "'>";
-                    echo $arrall[$i]['vName'];
-                    echo "</option>";
-                }
-                exit();
             }
 
             //刪除這個id所有重新設定密碼的資料
@@ -78,11 +53,12 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
             if($stmtd->rowCount()>0){
 
                 //再更改這個人的密碼
-                $update = "UPDATE `vendorAdmins` SET `vaPassword` = ? WHERE `vaEmail` = ?";
+                $update = "UPDATE `vendorAdmins` SET `vaPassword` = ? WHERE `vaEmail` = ? AND `vId` = ?";
                 $stmtu = $pdo->prepare($update);
                 $updateParam = [
                     $pwd,
-                    $email
+                    $email,
+                    $vendorId
                 ];
                 $stmtu->execute($updateParam);
                 if($stmtu->rowCount()>0){
@@ -100,6 +76,6 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
         exit();
     }
 }else{
-    echo "請輸入密碼";
+    echo "請輸入所有欄位";
     exit();
 }

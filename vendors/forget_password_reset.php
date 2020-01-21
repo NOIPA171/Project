@@ -44,7 +44,7 @@
                     <div class="row">
 
                         <div class="col-lg-12">
-                        <form class="m-t" role="form" action="./check_forget_password_reset.php" method="post">
+                        <form class="m-t" role="form" action="./check_forget_password_reset.php" method="post" id="resetpwd">
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="驗證碼" required="" name="token">
                             </div>
@@ -57,7 +57,7 @@
                             <div class="form-group mt-4" id="selectVendor">
                                 <label for="selectVendor">選擇帳號</label>
                                 <small class="d-block">我們偵測到您有多組帳號，請選擇您要修改密碼的帳號屬於哪一間廠商</small>
-                                <select id="vendorList" class="form-control" name="vendorList">
+                                <select id="vendorList" class="form-control" name="vendor">
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -65,7 +65,7 @@
                             </div>
                             <input type="hidden" name="email" value="<?php echo $email ?>">
                             <input type="hidden" name="hash" value="<?php echo $hash ?>">
-                            <button type="submit" class="btn btn-primary block full-width m-b">成立帳號</button>
+                            <button type="submit" class="btn btn-primary block full-width m-b">確定</button>
                         </form>
 
                         </div>
@@ -88,60 +88,105 @@
 <script src="../js/popper.min.js"></script>
 <script src="../js/bootstrap.js"></script>
 <script>
-$(document).ready(function(){
-    $("#selectVendor").hide();
 
-    var request;
-    $('form').submit(function(event){
-        event.preventDefault();
+var request;
 
-        if(request){
-            request.abort();
+$("#selectVendor").hide();
+
+
+$('body').on('submit', '#resetpwd', function(event){
+
+    event.preventDefault();
+
+    if(request){
+        request.abort();
+    }
+
+    var $form = $("#resetpwd");
+
+    var $inputs = $form.find('input, button');
+
+    var serializedData = $form.serialize();
+
+    $inputs.prop("disabled", true);
+
+    request = $.ajax({
+        url : "./check_forget_password_reset.php",
+        type: "post",
+        data: serializedData
+    });
+
+    request.done(function(response, textStatus, jqXHR){
+        if(response.startsWith('<option')){
+            $("#selectVendor").show(200);
+            $('#vendorList').html(response);
+            $("#vendorList").attr("required","");
+
+            $form.attr('id','resetpwd2');
+            $form.attr("action", "./check_forget_password_reset2.php");
+            
+        }else if(response === 'success'){
+            window.location = './forget_password_notify.php';
+        }else{
+            $("#message").text(response);
         }
+    });
 
-        var $form = $(this);
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        // Log the error to the console
+        console.error(
+            "The following error occurred: "+
+            textStatus, errorThrown
+        );
+    });
+    request.always(function () {
+        // Reenable the inputs
+        $inputs.prop("disabled", false);
+    });
 
-        var $inputs = $form.find('input, button');
+})
 
-        var serializedData = $form.serialize();
-        $inputs.prop("disabled", true);
 
-        request = $.ajax({
-            url : "./check_forget_password_reset.php",
-            type: "post",
-            data: serializedData
-        });
+$('body').on('submit', '#resetpwd2', function(event){
+    
+    event.preventDefault();
 
-        request.done(function(response, textStatus, jqXHR){
-            if(response.startsWith('<option')){
-                $("#selectVendor").show(200);
-                $('#vendorList').html(response);
-                response.ajax({
-                    url : "./check_forget_password_reset2.php",
-                    type: "post",
-                    data: serializedData
-                });
-                
-            }else if(response === 'success'){
-                console.log("success!");
-                // window.location = './forget_password_notify.php';
-            }else{
-                $("#message").text(response);
-            }
-        });
+    if(request){
+        request.abort();
+    }
 
-        request.fail(function (jqXHR, textStatus, errorThrown){
-            // Log the error to the console
-            console.error(
-                "The following error occurred: "+
-                textStatus, errorThrown
-            );
-        });
+    var $form = $("#resetpwd2");
 
-        request.always(function () {
-            // Reenable the inputs
-            $inputs.prop("disabled", false);
-        });
+    var $inputs = $form.find('input, button');
+
+    var serializedData = $form.serialize();
+
+    request = $.ajax({
+        url : "./check_forget_password_reset2.php",
+        type: "post",
+        data: serializedData
+    });
+
+    request.done(function(response, textStatus, jqXHR){
+        if(response == 'success'){
+            window.location = './login.php';
+        }else{
+            $("#message").text(response);
+        }
+    });
+
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        // Log the error to the console
+        console.error(
+            "The following error occurred: "+
+            textStatus, errorThrown
+        );
+    });
+
+    request.always(function () {
+        // Reenable the inputs
+        $inputs.prop("disabled", false);
+        $button.prop("disabled", false);
     });
 })
 </script>
