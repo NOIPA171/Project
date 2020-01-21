@@ -14,7 +14,7 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
         $pdo->beginTransaction();
 
         //確認驗證跟hash有在reset password的表單裡
-        $sql = "SELECT `vaId`, `vaEmail`, `vaExpireDate`
+        $sql = "SELECT `vaEmail`, `vaExpireDate`
         FROM `vendorResetPass`
         WHERE `vaEmail` = '$email'
         AND `vaHash` = '$hash'
@@ -32,40 +32,64 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
 
             if($isExpired->i>=10){
                 
-                $delsql = "DELETE FROM `vendorResetPass` WHERE `vaId`= ? AND `vaToken` = ?";
+                $delsql = "DELETE FROM `vendorResetPass` WHERE `vaToken` = ?";
                 $stmtdel = $pdo->prepare($delsql);
-                $delParam = [
-                    $arr[0]['vaId'],
-                    $token
-                ];
+                $delParam = [ $token ];
                 $stmtdel->execute($delParam);
+
                 if($stmtdel->rowCount()>0){
                     $pdo->commit();
                     echo "驗證碼已過期，請重新申請。";
-                    header("Refresh: 3 ; url = ./login.php");
+                    // header("Refresh: 3 ; url = ./login.php");
                     exit();
                 }
             }
 
+            //檢查使用者有幾組帳號
+
+            $accounts = "SELECT `vId` FROM `vendorAdmins` WHERE `vaEmail` = ?";
+            $stmta = $pdo->prepare($accounts);
+            $accountsAr = [ $email ];
+            $stmta->execute($accountsAr);
+
+            //若有多組，用ajax再接一次check_forge
+            if($stmta->rowCount()>1){
+                $arra = $stmta->fetchAll(PDO::FETCH_ASSOC);
+
+                for($i = 0 ; $i < count($arra) ; $i++){
+                    $vId = $arra[$i]['vId'];
+                    $all = "SELECT `vName`,`vId` FROM `vendors` WHERE `vId` = '$vId'";
+                    $arrall[] = $pdo->query($all)->fetch(PDO::FETCH_ASSOC);
+                    
+                    echo "<option value='";
+                    echo $arrall[$i]['vId'];
+                    echo "'>";
+                    echo $arrall[$i]['vName'];
+                    echo "</option>";
+                }
+                exit();
+            }
+
             //刪除這個id所有重新設定密碼的資料
-            $del = "DELETE FROM `vendorResetPass` WHERE `vaId`= ?";
+            $del = "DELETE FROM `vendorResetPass` WHERE `vaEmail`= ?";
             $stmtd = $pdo->prepare($del);
-            $delParam = [ $arr[0]['vaId'] ];
+            $delParam = [ $email ];
             $stmtd->execute($delParam);
             if($stmtd->rowCount()>0){
-                echo "yes";
+
                 //再更改這個人的密碼
-                $update = "UPDATE `vendorAdmins` SET `vaPassword` = ? WHERE `vaId` = ?";
+                $update = "UPDATE `vendorAdmins` SET `vaPassword` = ? WHERE `vaEmail` = ?";
                 $stmtu = $pdo->prepare($update);
                 $updateParam = [
                     $pwd,
-                    $arr[0]['vaId']
+                    $email
                 ];
                 $stmtu->execute($updateParam);
                 if($stmtu->rowCount()>0){
                     $pdo->commit();
-                    echo "成功更改密碼，請重新登入";
-                    header("Refresh: 3 ; url = ./login.php");
+                    //需要重新登入
+                    echo "success";
+                    // header("Refresh: 3 ; url = ./login.php");
                     exit();
                 }
             }

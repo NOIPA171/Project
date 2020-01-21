@@ -4,7 +4,7 @@ require_once('../db.inc.php');
 require_once('../tpl/generatePwd.php');
 if(!isset($_POST['email'])){
     echo "請輸入信箱";
-    header("Refresh: 3 ; url = ./forget_password.php");
+    // header("Refresh: 3 ; url = ./forget_password.php");
     exit();
 }
 
@@ -20,16 +20,13 @@ if($st->rowCount()<=0){
 
 //總之寄信就對了
 
-$arr = $st->fetchAll(PDO::FETCH_ASSOC)[0];
-
 $hash = md5( rand(0,1000) );
 $token = generatePwd(8);
-$sql = "INSERT INTO `vendorResetPass`(`vaId`, `vaEmail`, `vaToken`, `vaHash`, `vaExpireDate`)
-        VALUES(?,?,?,?,?)";
+$sql = "INSERT INTO `vendorResetPass`(`vaEmail`, `vaToken`, `vaHash`, `vaExpireDate`)
+        VALUES(?,?,?,?)";
 $stmt = $pdo->prepare($sql);
 
 $arrParam = [
-    $arr['vaId'],
     $email,
     $token,
     $hash,
@@ -38,8 +35,8 @@ $arrParam = [
 
 $stmt->execute($arrParam);
 if($stmt->rowCount()>0){
-    echo "success!";
     sendMail($email, $hash, $token);
+    echo "success";
     exit();
 }
 
@@ -68,14 +65,14 @@ function sendMail($email, $hash, $token){
         $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
         $mail->Username   = 'radu000rider@gmail.com';                     // SMTP username
-        $mail->Password   = 'ey3ty27e2/4';                               // SMTP password
+        $mail->Password   = 'lvknxoyjwwlyyjnb';                               // SMTP password
         $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
         $mail->Port       = 587;                                    // TCP port to connect to
         $mail->CharSet="UTF-8"; //for Chinese
         $mail->SMTPDebug = 0; //stops sending debug info & allows header refresh
         
         //Recipients
-        $mail->setFrom($email);
+        $mail->setFrom($email, 'oncePeace', 0);
         $mail->addAddress($email);
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
@@ -89,8 +86,9 @@ function sendMail($email, $hash, $token){
         $mail->AltBody = " 您好，您於 onepeace 申請了  廠商帳號，請點擊連結以驗證您的帳號：http://localhost:8080/Project/vendors/register_verify.php?hash=$hash&email={$email}";
 
         $mail->send();
-        echo 'Message has been sent';
+        // echo 'Message has been sent';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        exit();
     }
 }

@@ -54,12 +54,18 @@
                             <div class="form-group">
                                 <input type="password" class="form-control" placeholder="確認密碼" required="" name="password2">
                             </div>
+                            <div class="form-group mt-4" id="selectVendor">
+                                <label for="selectVendor">選擇帳號</label>
+                                <small class="d-block">我們偵測到您有多組帳號，請選擇您要修改密碼的帳號屬於哪一間廠商</small>
+                                <select id="vendorList" class="form-control" name="vendorList">
+                                </select>
+                            </div>
                             <div class="mb-3">
                                 <small id="message"></small>
                             </div>
                             <input type="hidden" name="email" value="<?php echo $email ?>">
                             <input type="hidden" name="hash" value="<?php echo $hash ?>">
-                            <button type="submit" class="btn btn-primary block full-width m-b" disabled>成立帳號</button>
+                            <button type="submit" class="btn btn-primary block full-width m-b">成立帳號</button>
                         </form>
 
                         </div>
@@ -82,24 +88,62 @@
 <script src="../js/popper.min.js"></script>
 <script src="../js/bootstrap.js"></script>
 <script>
-    var pwd1 = $('input[name="password1"]');
-    var pwd2 = $('input[name="password2"]');
-    $('input[type="password"]').keyup(function(){
-        if(pwd1.val()!=="" && pwd2.val()!==""){
-            if(pwd1.val() !== pwd2.val()){
-                $("#message").attr('class','text-warning');
-                $("#message").text("密碼不一致");
-                $('button[type="submit"]').attr("disabled",'');
-            }else{
-                $("#message").attr('class','text-navy');
-                $("#message").text("ok!");
-                $('button[type="submit"]').removeAttr("disabled");
-            }
-        }else{
-            $("#message").text("");
-            $('button[type="submit"]').attr("disabled",'');
+$(document).ready(function(){
+    $("#selectVendor").hide();
+
+    var request;
+    $('form').submit(function(event){
+        event.preventDefault();
+
+        if(request){
+            request.abort();
         }
-    })
+
+        var $form = $(this);
+
+        var $inputs = $form.find('input, button');
+
+        var serializedData = $form.serialize();
+        $inputs.prop("disabled", true);
+
+        request = $.ajax({
+            url : "./check_forget_password_reset.php",
+            type: "post",
+            data: serializedData
+        });
+
+        request.done(function(response, textStatus, jqXHR){
+            if(response.startsWith('<option')){
+                $("#selectVendor").show(200);
+                $('#vendorList').html(response);
+                response.ajax({
+                    url : "./check_forget_password_reset2.php",
+                    type: "post",
+                    data: serializedData
+                });
+                
+            }else if(response === 'success'){
+                console.log("success!");
+                // window.location = './forget_password_notify.php';
+            }else{
+                $("#message").text(response);
+            }
+        });
+
+        request.fail(function (jqXHR, textStatus, errorThrown){
+            // Log the error to the console
+            console.error(
+                "The following error occurred: "+
+                textStatus, errorThrown
+            );
+        });
+
+        request.always(function () {
+            // Reenable the inputs
+            $inputs.prop("disabled", false);
+        });
+    });
+})
 </script>
 </body>
 

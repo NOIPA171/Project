@@ -122,7 +122,7 @@ function sendMail($email, $vName, $hash){
         $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
         $mail->Username   = 'radu000rider@gmail.com';                     // SMTP username
-        $mail->Password   = 'ey3ty27e2/4';                               // SMTP password
+        $mail->Password   = 'lvknxoyjwwlyyjnb';                               // SMTP password
         $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
         $mail->Port       = 587;                                    // TCP port to connect to
         $mail->CharSet="UTF-8"; //for Chinese

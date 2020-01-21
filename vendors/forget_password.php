@@ -39,7 +39,9 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary block full-width m-b">送出</button>
-
+                                <div class="mt-2">
+                                    <small id="message" class="text-warning"></small>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -56,6 +58,10 @@
             </div>
         </div>
     </div>
+    
+<script src="../js/jquery-3.1.1.min.js"></script>
+<script src="../js/popper.min.js"></script>
+<script src="../js/bootstrap.js"></script>
 <script>
 $(document).ready(function(){
     var request;
@@ -74,16 +80,14 @@ $(document).ready(function(){
         $inputs.prop("disabled", true);
 
         request = $.ajax({
-            url : "./check_register.php",
+            url : "./check_forget_password.php",
             type: "post",
             data: serializedData
         });
 
         request.done(function(response, textStatus, jqXHR){
-            if(response == '2'){
-                
-            }else if(response = '1'){
-                window.location = "./admin.php";
+            if(response == 'success'){
+                window.location = './forget_password_notify.php';
             }else{
                 $("#message").html(response);
             };

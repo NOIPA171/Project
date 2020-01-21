@@ -37,7 +37,7 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 ];
                 $stmtc->execute($checkparam);
                 if($stmtc->rowCount() > 0){
-                    echo "已有相同帳號存在，請重新輸入密碼";
+                    echo "您有相同的帳號存在，請重新輸入密碼";
                     exit();
                 }
 
