@@ -6,15 +6,16 @@
                     <img alt="image" class="rounded-circle" src="img/profile_small.jpg"/>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="block m-t-xs font-bold"><?php echo $arrGetInfo['aFName'].' '.$arrGetInfo['aLName'] ?></span>
-                        <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                        <span class="text-muted text-xs block">
+                            <?php
+                            if(in_array('prmA00', $arrGetInfo['permissions'])){
+                                echo "Owner";
+                            }else{
+                                echo "Staff";
+                            } 
+                            ?>
+                         </span>
                     </a>
-                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                        <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
-                        <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="login.html">Logout</a></li>
-                    </ul>
                 </div>
                 <div class="logo-element">
                     IN+
@@ -75,16 +76,6 @@
                         //加入子選單
                         if(isset($submenu)){
                             echo "<ul class='nav nav-second-level";
-                            //好像會自動處理這段
-                            // $flag = false;
-                            // for($j = 0 ; $j < count($submenu) ; $j++){
-                            //     if($submenu[$j]['link'] === $currentLink || in_array($currentLink, $submenu[$j])){
-                            //         $flag = true;
-                            //     }
-                            // }
-                            // if($flag){
-                            //     echo " collapse in' aria-expaned='true";
-                            // }
                             echo "'>";
                             for($j = 0 ; $j < count($submenu) ; $j++){
                                 echo "<li";
@@ -94,10 +85,8 @@
                                 }
                                 echo ">";
                                 echo "<a";
-                                if(in_array($submenu[$j]['permission'], $arrGetInfo['permissions'])){
+                                if(in_array($submenu[$j]['permission'], $arrGetInfo['permissions']) || $submenu[$j]['permission'] === "all"){
                                     echo " href='".$submenu[$j]['link']."'";
-                                }else if($submenu[$j]['permission'] === "all"){
-                                    echo " href='#'";
                                 }
                                 echo ">";
                                 echo "<i class='fa ".$submenu[$j]['icon']."'></i>";

@@ -3,7 +3,7 @@
     require_once('../db.inc.php');
     require_once('./getInfo.php');
     require_once('./checkActive.php');
-    $pagePrm = 'prmA00';
+    $pagePrm = 'prmA01';
 ?>
 <!DOCTYPE html>
 <html>
