@@ -14,3 +14,11 @@ img.navIcon.navIcon-s{
 img.logoUpdate{
     width: 80%;
 }
+
+.vlistLogo{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    overflow: hidden;
+}

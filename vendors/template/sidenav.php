@@ -3,15 +3,18 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element">
-                    <img alt="image" class="rounded-circle navIcon" src="
+                <img 
                     <?php
                         $sql = "SELECT `vImg` FROM `vendors` WHERE `vId` = {$arrGetInfo['vId']}";
                         $img = $pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
-                        if(count($img)>0){
+                        if(count($img)>0 && $img['vImg'] !== null){
+                            echo 'alt="image" class="rounded-circle navIcon" src="';
                             echo "./images/".$img['vImg'];
+                            // echo '"/>';
+                            echo '"';
                         }
                     ?>
-                    "/>
+                    />
                     <a href="./admin.php">
                         <span class="block m-t-xs font-bold"><?php echo $arrGetInfo['vaFName'].' '.$arrGetInfo['vaLName'] ?></span>
                         <span class="text-muted text-xs block">

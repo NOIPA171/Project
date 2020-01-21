@@ -9,6 +9,7 @@
             <th>ID</th>
             <th>廠商</th>
             <th>Email</th>
+            <th>Logo</th>
             <th>狀態</th>
             <th data-sortable="false"></th>
             <th data-hide="all">廠商資訊</th>
@@ -18,7 +19,7 @@
     <tbody>
     <?php
         // get admin count for vendor
-        $sql = "SELECT `vId`, `vName`, `vEmail`, `vActive`, `vInfo`
+        $sql = "SELECT `vId`, `vName`, `vEmail`, `vActive`, `vInfo`, `vImg`
                 FROM `vendors`";
 
         $stmt = $pdo->query($sql);
@@ -34,6 +35,15 @@
                     <td><?php echo $arr[$i]['vId'] ?></td>
                     <td><?php echo $arr[$i]['vName'] ?></td>
                     <td><?php echo $arr[$i]['vEmail'] ?></td>
+                    <td>
+                        <?php
+                            if($arr[$i]['vImg']!==null){
+                                echo "<img src='../vendors/images/".$arr[$i]['vImg']."' class='vlistLogo'>";
+                            }else{
+                                echo "";
+                            }
+                        ?>
+                    </td>
                     <td><?php echo $arr[$i]['vActive'] ?></td>
                     <td>
                         <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">

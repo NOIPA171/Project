@@ -142,7 +142,9 @@
                             $("#message").text('更新成功!');
                         }else if(response.length==2){
                             $("form img").attr("src", response[0]);
-                            $("img.navIcon").attr("src", response[0]);
+                            $("#side-menu img").attr("src", response[0]);
+                            $("#side-menu img").attr("class", "rounded-circle navIcon");
+                            $("#side-menu img").att("alt","image");
                             $("#message").text('更新成功');
                         };
                     });
