@@ -2,7 +2,7 @@
 //get basic info
 try{
     $pdo->beginTransaction();
-    $sqlGetInfo = "SELECT `aId`, `aFName`,`aLName`,`aEmail`,`aActive`,`aVerify`, `aLoginTime`, `aLogoutTime`
+    $sqlGetInfo = "SELECT `aId`, `aFName`,`aLName`,`aEmail`,`aActive`,`aVerify`, `aLoginTime`, `aLogoutTime`, `aNotes`
                     FROM `platformAdmins` 
                     WHERE `aId` = ?
                     AND `aEmail`=?";

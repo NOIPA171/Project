@@ -16,7 +16,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>新增工作人員</title>
+    <title>我的帳號</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -67,7 +67,7 @@
                         require_once('./checkVerify.php');
                         require_once('./checkPrm.php'); 
                         ?>
-                        <form method="post" action="./check_staff_add.php">
+                        <form method="post" action="./check_my_account.php">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">
                                     基本資訊 <br>
@@ -75,60 +75,43 @@
                                 </label>
                                 <div class="col-sm-10">
                                     <div class="row">
-                                        <div class="col-sm-6 m-b"><input type="text" name="Lname" placeholder="姓 *" class="form-control" required></div>
-                                        <div class="col-sm-6 m-b"><input type="text" name="Fname" placeholder="名 *" class="form-control" required></div>
-                                        <div class="col-md-12 m-b"><input type="email" name ="email" placeholder="Email *" class="form-control" required></div>
-                                        <div class="col-md-12 m-b"><input type="text" name ="notes" placeholder="備註" class="form-control"></div>  
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="i-checks mt-2">
-                                                        <label id="staff"> 
-                                                            <input type="radio" value="staff" name="title" checked> 
-                                                            <i></i> 賦予工作人員權限 
-                                                            <small class="text-muted"></small>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="i-checks mt-2">
-                                                        <label id="owner"> 
-                                                            <input type="radio" value="owner" name="title"> 
-                                                            <i></i> 賦予管理員權限 <br>
-                                                            <small class="text-muted" style="margin-left: 1.6rem;">管理所有頁面（包含工作人員管理）</small>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <hr>
-                                            <div class="edit_permissions">
-                                                <label class="col-form-label mb-2">編輯權限</label>
-                                                <div class="i-checks">
-                                                    <label> <input type="checkbox" value="vendors" checked="" name="staffPrm[]"> 
-                                                    <i></i> 廠商 </label>
-                                                </div>
-                                                <div class="i-checks">
-                                                    <label> <input type="checkbox" value="charts" checked="" name="staffPrm[]"> 
-                                                    <i></i> 報表 </label>
-                                                </div>
-                                                <div class="i-checks">
-                                                    <label> <input type="checkbox" value="users" checked="" name="staffPrm[]"> 
-                                                    <i></i> 會員 </label>
-                                                </div>
-                                                <div class="i-checks">
-                                                    <label> <input type="checkbox" value="comments" checked="" name="staffPrm[]"> 
-                                                    <i></i> 評論 </label>
-                                                </div>
-                                            </div>
+                                        <div class="col-sm-6 m-b">
+                                            <input type="text" name="Lname" placeholder="姓 *" class="form-control" required value="<?php echo $arrGetInfo['aLName'] ?>">
                                         </div>
+                                        <div class="col-sm-6 m-b">
+                                            <input type="text" name="Fname" placeholder="名 *" class="form-control" required value="<?php echo $arrGetInfo['aFName'] ?>">
+                                        </div>
+                                        <div class="col-md-12 m-b">
+                                            <input type="email" name ="email" placeholder="Email *" class="form-control" required value="<?php echo $arrGetInfo['aEmail'] ?>">
+                                        </div>
+                                        <div class="col-md-12 m-b">
+                                            <input type="text" name ="notes" placeholder="備註" class="form-control" value="<?php echo $arrGetInfo['aNotes'] ?>">
+                                        </div>  
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">
+                                    安全資訊 <br>
+                                </label>
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-md-4 m-b">
+                                            <a href="./my_account_password.php">
+                                                <button id="changepwd" class="btn btn-w-m btn-default" type="button">更改密碼</button>
+                                            </a>
+                                        </div>  
                                     </div>
                                 </div>
                             </div>
                                 <div class="form-group row">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" type="submit">寄送邀請</button>
+                                        <button class="btn btn-primary btn-sm" type="submit">更改</button>
                                     </div>
+                                </div>
+                                <div class="col-sm-6 mt-2">
+                                    <small id="message" class="text-navy"></small>
                                 </div>
                             </form>
                         </div>
@@ -163,23 +146,90 @@
                     radioClass: 'iradio_square-green',
                 });
 
-                //自己加的
-                $('.edit_permissions').hide();
+                var request;
+                $('form').submit(function(event){
+                    event.preventDefault();
 
-                if($(".iradio_square-green:last-child").hasClass('checked')){
-                    $('.edit_permissions').hide();
-                }else{
-                    $('.edit_permissions').show();
-                }
-            
-                $("#staff, #staff ins").click(function(){
-                    $('.edit_permissions').show(300);
+                    if (request) {
+                        request.abort();
+                    }
+                    var $form = $(this);
+
+                    var $inputs = $form.find("input, button");
+
+                    var serializedData = $form.serialize();
+
+                    $inputs.prop("disabled", true);
+
+                    request = $.ajax({
+                        url: "./check_my_account.php",
+                        type: "post",
+                        data: serializedData
+                    });
+
+                    request.done(function (response, textStatus, jqXHR){
+                        if(response == 'success'){
+                            $("#message").text('更新成功!');
+                        }else{
+                            $("#message").text(response);
+                        };
+                    });
+
+                    request.fail(function (jqXHR, textStatus, errorThrown){
+                        console.error(
+                            "The following error occurred: "+
+                            textStatus, errorThrown
+                        );
+                    });
+
+                    request.always(function () {
+                        $inputs.prop("disabled", false);
+                    });
                 });
-                $("#owner, #owner ins").click(function(){
-                    $('.edit_permissions').hide(300);
-                })
-                
+
             });
+
+            //好麻煩，先註解掉
+            
+            // $('#changepwd').click(function(){
+            //     var $parent = $(this).parent('div');
+            //     var inputHtml = "<input type='text' name='checkpwd' class='form-control' placeholder='請輸入目前的密碼確認' id='checkpwd'>";
+            //     var buttonHtml = "<button class='btn btn-w-m btn-default' id='confirmpwd'>確認</button>";
+            //     var msgHtml = "<div class='mt-2'><small id='message' class='text-warning'></small></div>";
+
+            //     var $submit = $('button[type="submit"]')
+
+            //     $parent.html(inputHtml+"<br>"+buttonHtml+"<br>"+msgHtml);
+
+            //     $submit.prop("disabled", true);
+
+            //     $('form').attr('action','./check_my_account_password.php');
+
+            // })
+
+            // $("#confirmpwd").on("submit", $(this), function(events){
+            //     events.preventDefault();
+            //     var data = $("#checkpwd").val();
+
+            //     $.ajax({
+            //         url: "./check_my_account_password.php",
+            //         type: "post",
+            //         data: "pwd="+data
+            //     })
+            //     .done(function (response, textStatus, jqXHR){
+            //         if(response == 'success'){
+            //             console.log("yes");
+            //         }else{
+            //             $("#message").text(response);
+            //         };
+            //     })
+            //     .fail(function (jqXHR, textStatus, errorThrown){
+            //         console.error(
+            //             "The following error occurred: "+
+            //             textStatus, errorThrown
+            //         );
+            //     })
+            // })
     </script>
 </body>
 
