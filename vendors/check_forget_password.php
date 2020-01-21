@@ -11,23 +11,16 @@ if(!isset($_POST['email'])){
 $email = $_POST['email'];
 
 //是否有該使用者
-$s = "SELECT `vaId` FROM `vendorAdmins` WHERE `vaEmail` = '$email'";
+$s = "SELECT `vaId`, `vId` FROM `vendorAdmins` WHERE `vaEmail` = '$email'";
 $st = $pdo->query($s);
 if($st->rowCount()<=0){
     echo "沒有該使用者";
-    header("Refresh: 3 ; url = ./forget_password.php");
-    exit();
-}else if ($st->rowCount()>1){
-    //若有多重帳號
-    echo "請輸入您的使用者ID";
-    header("Refresh: 3 ; url = ./forget_password_2.php?email={$_POST['email']}");
     exit();
 }
 
-//只有這一個email
+//總之寄信就對了
 
-//先取得他的使用者id
-$id = $pdo->query("SELECT `vaId` FROM `vendorAdmins` WHERE `vaEmail` = '$email'")->fetchAll(PDO::FETCH_ASSOC)[0]['vaId'];
+$arr = $st->fetchAll(PDO::FETCH_ASSOC)[0];
 
 $hash = md5( rand(0,1000) );
 $token = generatePwd(8);
@@ -36,7 +29,7 @@ $sql = "INSERT INTO `vendorResetPass`(`vaId`, `vaEmail`, `vaToken`, `vaHash`, `v
 $stmt = $pdo->prepare($sql);
 
 $arrParam = [
-    $id,
+    $arr['vaId'],
     $email,
     $token,
     $hash,

@@ -56,7 +56,54 @@
             </div>
         </div>
     </div>
+<script>
+$(document).ready(function(){
+    var request;
+    $('form').submit(function(event){
+        event.preventDefault();
 
+        if(request){
+            request.abort();
+        }
+
+        var $form = $(this);
+
+        var $inputs = $form.find('input, button');
+
+        var serializedData = $form.serialize();
+        $inputs.prop("disabled", true);
+
+        request = $.ajax({
+            url : "./check_register.php",
+            type: "post",
+            data: serializedData
+        });
+
+        request.done(function(response, textStatus, jqXHR){
+            if(response == '2'){
+                
+            }else if(response = '1'){
+                window.location = "./admin.php";
+            }else{
+                $("#message").html(response);
+            };
+        });
+
+        request.fail(function (jqXHR, textStatus, errorThrown){
+            // Log the error to the console
+            console.error(
+                "The following error occurred: "+
+                textStatus, errorThrown
+            );
+        });
+
+        request.always(function () {
+            // Reenable the inputs
+            $inputs.prop("disabled", false);
+        });
+    });
+})
+</script>
 </body>
 
 </html>

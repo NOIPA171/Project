@@ -70,8 +70,13 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 }
             }
         }else{
-            echo "發生錯誤，請從信件重新點擊連結";
-            header("Refresh: 3 ; url = ./login.php");
+            echo "發生錯誤，請使用 email 提供的連結和驗證碼";
         }
+    }else{
+        echo "密碼欄位不一致，請重新輸入";
+        exit();
     }
+}else{
+    echo "請輸入密碼";
+    exit();
 }

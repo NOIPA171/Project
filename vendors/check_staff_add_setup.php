@@ -69,9 +69,9 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                             $_SESSION['email']
                         ];
                         $st->execute($ap);
-                        if($st->rowCount()>0){
-                            echo "已幫前一位用戶登出";
-                        }
+                        // if($st->rowCount()>0){
+                        //     echo "已幫前一位用戶登出";
+                        // }
                     }
 
                     //submit changes
@@ -85,12 +85,12 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                     $_SESSION['vendor'] = $arr['vId'];
 
                     //轉頁重新登入
-                    header("Refresh: 3 ; url = ./admin.php");
-                    echo "Validated! 3秒後轉頁";
+                    echo "success";
+                    exit();
                 }
             }else{
                 //非本人
-                echo "請透過 Email 提供的連結來建立您的帳號";
+                echo "請透過 Email 提供的連結和驗證碼來建立您的帳號";
             }
         }catch(Exception $err){
             $pdo->rollback();
