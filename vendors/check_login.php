@@ -10,7 +10,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
     $arrParamEmail = [ $_POST['email'] ];
     $stmtEmail = $pdo->prepare($sqlEmail);
     $stmtEmail->execute($arrParamEmail);
-    //若有該帳號，在檢查email與password是否對得上
+    //若有該帳號，再檢查email與password是否對得上
     if($stmtEmail->rowCount()>0){
         $sql = "SELECT `vaId`, `vaEmail`, `vId`, `vaActive`
                 FROM `vendorAdmins`
