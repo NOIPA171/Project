@@ -3,7 +3,7 @@
 //get basic info
 try{
     $pdo->beginTransaction();
-    $sqlGetInfo = "SELECT `va`.`vaId`,`va`.`vaFName`,`va`.`vaLName`,`va`.`vaEmail`,`va`.`vaActive`,`va`.`vaVerify`, `va`.`vId`, `va`.`vaLoginTime`, `va`.`vaLogoutTime`,
+    $sqlGetInfo = "SELECT `va`.`vaId`,`va`.`vaFName`,`va`.`vaLName`,`va`.`vaEmail`,`va`.`vaActive`,`va`.`vaVerify`, `va`.`vId`, `va`.`vaLoginTime`, `va`.`vaLogoutTime`, `va`.`vaNotes`,
 `vendors`.`vId`, `vendors`.`vActive`, `vendors`.`vVerify`, `vendors`.`vName`,`vendorRoles`.`vaRoleId`, `vendorRoles`.`vaRoleName`
                 FROM `vendorAdmins` AS `va`
                 INNER JOIN `vendors`

@@ -38,7 +38,7 @@
             <?php require_once('./template/topnav.php') ?>
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>新增人員</h2>
+                    <h2>修改密碼</h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="./admin.php">首頁</a>
@@ -47,7 +47,7 @@
                             <a>設定</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <strong>新增人員</strong>
+                            <strong>帳號</strong>
                         </li>
                     </ol>
                 </div>
@@ -65,7 +65,6 @@
                     <div class="ibox-content">
                         <?php 
                         require_once('./checkVerify.php');
-                        require_once('./checkVerifyEcho.php');
                         require_once('./checkPrm.php'); 
                         ?>
                         <form method="post" action="./check_my_account_password.php">

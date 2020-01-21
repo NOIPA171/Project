@@ -20,7 +20,7 @@
     <tbody>
     <?php
         // get admin count
-        $sql = "SELECT `aId`, `aFName`, `aLName`, `aEmail`, `aActive`, `aVerify`, `aNotes`, `aLoginTime`, `aLogoutTime`
+        $sql = "SELECT `aId`, `aFName`, `aLName`, `aEmail`, `aActive`, `aVerify`, `aNotes`, `aLoginTime`, `aLogoutTime`, `aRoleId`
                 FROM `platformAdmins`";
 
         $stmt = $pdo->query($sql);
@@ -55,9 +55,11 @@
                     //把permission輸入到admin裡
                     $arr[$i]['permissions'] = $prmList;
                     
-                    if(in_array('admin', $prmList)){
+                    if($arr[$i]['aRoleId']==1){
                         $arr[$i]['identity'] = "Owner";
-                    }else{
+                    }else if($arr[$i]['aRoleId']==2){
+                        $arr[$i]['identity'] = "Manager";
+                    }else if($arr[$i]['aRoleId']==3){
                         $arr[$i]['identity'] = "Staff";
                     }
                 }
@@ -109,10 +111,18 @@
                         ?>
                     </td>
                     <td>
-                        <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
+                    <?php
+                    if($arr[$i]['aRoleId']==1){
+                        echo "";
+                    }else{
+                        ?>
+                            <div class="float-right mr-2 mr-md-0"  style="font-size: 1.2rem">
                             <a data-toggle="modal" data-target="#editor-modal" data-func="edit"><i class="fa fa-edit text-navy mr-2 mr-md-0"></i></a>
                             <a data-func="delete" href="#" data-id="<?php echo $arr[$i]['aId']; ?>"><i class="fa fa-trash text-navy mr-2 mr-md-0"></i></a>
                         </div>
+                        <?php
+                    }
+                        ?>
                     </td>
                     <td><?php echo implode(', ', $arr[$i]['permissions']) ?></td>
                     <td><?php echo $arr[$i]['aNotes'] ?></td>

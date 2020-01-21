@@ -7,16 +7,16 @@
         <div class="col-sm-10">
             <div class="row">
                 <div class="col-sm-6 m-b">
-                    <input type="text" name="Lname" placeholder="姓 *" class="form-control" required value="<?php echo $arrGetInfo['aLName'] ?>">
+                    <input type="text" name="Lname" placeholder="姓 *" class="form-control" required value="<?php echo $arrGetInfo['vaLName'] ?>">
                 </div>
                 <div class="col-sm-6 m-b">
-                    <input type="text" name="Fname" placeholder="名 *" class="form-control" required value="<?php echo $arrGetInfo['aFName'] ?>">
+                    <input type="text" name="Fname" placeholder="名 *" class="form-control" required value="<?php echo $arrGetInfo['vaFName'] ?>">
                 </div>
                 <div class="col-md-12 m-b">
-                    <input type="email" name ="email" placeholder="Email *" class="form-control" required value="<?php echo $arrGetInfo['aEmail'] ?>">
+                    <input type="email" name ="email" placeholder="Email *" class="form-control" required value="<?php echo $arrGetInfo['vaEmail'] ?>">
                 </div>
                 <div class="col-md-12 m-b">
-                    <input type="text" name ="notes" placeholder="備註" class="form-control" value="<?php echo $arrGetInfo['aNotes'] ?>">
+                    <input type="text" name ="notes" placeholder="備註" class="form-control" value="<?php echo $arrGetInfo['vaNotes'] ?>">
                 </div>  
             </div>
         </div>

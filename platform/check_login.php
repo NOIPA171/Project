@@ -57,7 +57,7 @@ if(isset($_POST['email']) && isset($_POST['password'])){
 
         }else{
             //登入失敗
-            echo "密碼錯誤";
+            echo "帳號密碼錯誤";
             session_unset();
             session_destroy();
             exit();

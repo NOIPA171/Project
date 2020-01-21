@@ -8,10 +8,10 @@
                         <span class="block m-t-xs font-bold"><?php echo $arrGetInfo['vaFName'].' '.$arrGetInfo['vaLName'] ?></span>
                         <span class="text-muted text-xs block">
                             <?php 
-                            if($arrGetInfo['vaLName']==null && $arrGetInfo['vaFName']==$arrGetInfo['vName']){
-                                echo "Company";
-                            }else if(in_array('prmV00', $arrGetInfo['permissions'])){
+                            if($arrGetInfo['vaRoleId']==1){
                                 echo "Owner";
+                            }else if($arrGetInfo['vaRoleId']==2){
+                                echo "Manager";
                             }else{
                                 echo "Staff";
                             }

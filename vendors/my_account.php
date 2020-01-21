@@ -67,7 +67,7 @@
                         require_once('./checkVerify.php');
                         require_once('./checkVerifyEcho.php');
                         require_once('./checkPrm.php'); 
-                        if($arrGetInfo['vaLName']==null && $arrGetInfo['vaFName']==$arrGetInfo['vName']){
+                        if($arrGetInfo['vaRoleId']==1 || $arrGetInfo['vaRoleId'] == 2){
                             require_once('./contents/accountVendor.php');
                         }else{
                             require_once('./contents/accountStaff.php');
@@ -99,6 +99,9 @@
 
     <!-- iCheck -->
     <script src="../js/plugins/iCheck/icheck.min.js"></script>
+    <?php
+    if($arrGetInfo['vaRoleId']==1 || $arrGetInfo['vaRoleId']==2){
+    ?>
         <script>
             $(document).ready(function () {
                 $('.i-checks').iCheck({
@@ -122,7 +125,7 @@
                     $inputs.prop("disabled", true);
 
                     request = $.ajax({
-                        url: "./check_my_account.php",
+                        url: "./check_my_accountV.php",
                         type: "post",
                         data: serializedData
                     });
@@ -149,6 +152,61 @@
 
             });
     </script>
+    <?php
+    }else{?>
+            <script>
+            $(document).ready(function () {
+                $('.i-checks').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green',
+                });
+
+                var request;
+                $('form').submit(function(event){
+                    event.preventDefault();
+
+                    if (request) {
+                        request.abort();
+                    }
+                    var $form = $(this);
+
+                    var $inputs = $form.find("input, button");
+
+                    var serializedData = $form.serialize();
+
+                    $inputs.prop("disabled", true);
+
+                    request = $.ajax({
+                        url: "./check_my_accountS.php",
+                        type: "post",
+                        data: serializedData
+                    });
+
+                    request.done(function (response, textStatus, jqXHR){
+                        if(response == 'success'){
+                            $("#message").text('更新成功!');
+                        }else{
+                            $("#message").text(response);
+                        };
+                    });
+
+                    request.fail(function (jqXHR, textStatus, errorThrown){
+                        console.error(
+                            "The following error occurred: "+
+                            textStatus, errorThrown
+                        );
+                    });
+
+                    request.always(function () {
+                        $inputs.prop("disabled", false);
+                    });
+                });
+
+            });
+    </script>
+    <?php
+    }
+    ?>
 </body>
 
 </html>

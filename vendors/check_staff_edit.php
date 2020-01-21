@@ -10,12 +10,15 @@ require_once('./checkPrm.php');
 
 try{
     $pdo->beginTransaction();
-    $sql = "UPDATE `vendorAdmins` SET `vaActive` = ?, `vaNotes` = ? WHERE `vaId` = ?";
+    $sql = "UPDATE `vendorAdmins` SET `vaActive` = ?, `vaNotes` = ? ,`vaRoleId` = ? WHERE `vaId` = ?";
+
+    $title = $_POST['title'];
 
     $stmt = $pdo->prepare($sql);
     $arrParam = [
         $_POST['active'],
         $_POST['notes'],
+        $title,
         $_POST['vaId']
     ];
 

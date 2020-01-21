@@ -16,6 +16,12 @@ try{
     $hash = md5( rand(0,1000) );
     $pwd = generatePwd(8);
 
+    if($_POST['title']=='manager'){
+        $title = 2;
+    }else if ($_POST['title']=='staff'){
+        $title = 3;
+    }
+
     //先確認該email沒有註冊過
     $checksql = "SELECT `aEmail`
                 FROM `platformAdmins`
@@ -24,13 +30,12 @@ try{
 
     if($check->rowCount()>0){
         echo "該用戶已經有帳號，請重新輸入";
-        header("Refresh: 3 ; url = ./staff_add.php");
         exit();
     }
     
     //先加入vendor admins -> permissions
-    $sql = "INSERT INTO `platformAdmins`(`aFName`,`aLName`,`aEmail`, `aPassword`, `aHash`, `aActive`, `aVerify`, `aNotes`)
-    VALUES(?,?,?,?,?,'inactive',?,?)";
+    $sql = "INSERT INTO `platformAdmins`(`aFName`,`aLName`,`aEmail`, `aPassword`, `aHash`, `aActive`, `aVerify`, `aNotes`,`aRoleId`)
+    VALUES(?,?,?,?,?,'inactive',?,?,?)";
 
 
     $stmt = $pdo->prepare($sql);
@@ -41,7 +46,8 @@ try{
         sha1($pwd),
         $hash,
         date("Y-m-d H:i:s"),
-        $_POST['notes']
+        $_POST['notes'],
+        $title
     ];
 
     $stmt->execute($arrParam);
@@ -52,8 +58,8 @@ try{
         //新工作人員
         $newStaff = $pdo->lastInsertId();
     
-        //若身份為owner
-        if($_POST['title'] === 'owner'){
+        //若身份為manager
+        if($title == 2){
             $allPrms = $pdo->query("SELECT `adminPrmId` FROM `platformPermissions`")->fetchAll(PDO::FETCH_ASSOC);
             //每一個permission都要輸入一次
             for($i=0 ; $i<count($allPrms) ; $i++){
@@ -80,10 +86,10 @@ try{
 
         }
         if($stmt2->rowCount()>0){
-            sendMail($email, $_POST['Fname'], $arrGetInfo['aFName'], $hash, $pwd);
-            echo "success!";
-            header("Refresh: 3 ; url = ./staff.php");
+            sendMail($email, $_POST['Fname'], 'onepeace', $hash, $pwd);
+            echo "success";
             $pdo->commit();
+            exit();
         }else{
             echo "fail";
             $pdo->rollback();
@@ -104,7 +110,7 @@ use PHPMailer\PHPMailer\Exception;
 
 
 
-function sendMail($email, $recepient, $vName, $hash, $pwd){
+function sendMail($email, $recepient, $sendor, $hash, $pwd){
 
     // Load Composer's autoloader
     require '../vendor/autoload.php';
@@ -126,26 +132,26 @@ function sendMail($email, $recepient, $vName, $hash, $pwd){
         $mail->SMTPDebug = 0; //stops sending debug info & allows header refresh
         
         //Recipients
-        $mail->setFrom($email, $vName, 0);
+        $mail->setFrom($email, $sendor, 0);
         $mail->addAddress($_POST['email'], $_POST['Fname'].' '.$_POST['Lname'], 0);     // Add a recipient
 
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = '您被邀請加入'.$vName.'的網站，請前往設定您的帳號';
+        $mail->Subject = '邀請您加入'.$sendor.'，請前往設定您的帳號';
         $mail->Body    = "
             $recepient 您好， <br>
-            $vName 邀請您一起管理商店。<br>
-            請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>http://localhost:8080/Project/vendors/staff_add_setup.php</a> <br>
+            $sendor 邀請您一起管理我們的平台。<br>
+            請點擊連結設定您的帳號密碼： <a href='http://localhost:8080/Project/platform/staff_add_setup.php?hash=$hash&email={$_POST['email']}'>http://localhost:8080/Project/platform/staff_add_setup.php</a> <br>
             您的驗證碼：$pwd <br>
-            $vName <br>
+            $sendor <br>
             此信為自動發出，請勿回覆";
         $mail->AltBody = "$recepient 您好，
-            $vName 邀請您一起管理商店，請點擊連結設定您的帳號密碼：http://localhost:8080/Project/vendors/staff_add_setup.php?hash=$hash&email={$_POST['email']}。
+            $sendor 邀請您一起管理我們的平台，請點擊連結設定您的帳號密碼：http://localhost:8080/Project/platform/staff_add_setup.php?hash=$hash&email={$_POST['email']}。
             您的驗證碼：$pwd 。
             此信為自動發出，請勿回覆";
 
         $mail->send();
-        echo 'Message has been sent';
+        // echo 'Message has been sent';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         exit();

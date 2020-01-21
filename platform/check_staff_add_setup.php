@@ -11,11 +11,11 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
             $pdo->beginTransaction();
 
             //看看是否對得上這個人
-            $sql = "SELECT `vaId`,`vaEmail`, `vId`
-            FROM `vendorAdmins`
-            WHERE `vaPassword`=?
-            AND `vaHash`=?
-            AND `vaEmail` = ?";
+            $sql = "SELECT `aId`,`aEmail`
+            FROM `platformAdmins`
+            WHERE `aPassword`=?
+            AND `aHash`=?
+            AND `aEmail` = ?";
             $stmt = $pdo->prepare($sql);
             $arrParam = [
                 sha1($_POST['verify']),
@@ -29,7 +29,7 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
 
                 //確認是此人，配對password看看是否有同樣email + pwd的帳號存在
 
-                $checksql = "SELECT `vaId` FROM`vendorAdmins` WHERE `vaPassword` = ? AND `vaEmail` = ?";
+                $checksql = "SELECT `aId` FROM `platformAdmins` WHERE `aPassword` = ? AND `aEmail` = ?";
                 $stmtc = $pdo->prepare($checksql);
                 $checkparam = [
                     sha1($_POST['password1']),
@@ -42,48 +42,48 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                 }
 
                 //確認是此人，則更新他的密碼，更新狀態，以及加入上線時間
-                $sqlUpdate = "UPDATE `vendorAdmins`
-                            SET `vaPassword` =? , `vaActive` = 'active', `vaLoginTime`=?, `vaVerify` = 'verified'
-                            WHERE `vaEmail`=?
-                            AND `vaId` = ?";
+                $sqlUpdate = "UPDATE `platformAdmins`
+                            SET `aPassword` =? , `aActive` = 'active', `aLoginTime`=?, `aVerify` = 'verified'
+                            WHERE `aEmail`=?
+                            AND `aId` = ?";
                 $stmtUpdate = $pdo->prepare($sqlUpdate);
                 $arrParamUpdate = [
                     sha1($_POST['password1']),
                     date("Y-m-d H:i:s"),
-                    $arr['vaEmail'],
-                    $arr['vaId']
+                    $arr['aEmail'],
+                    $arr['aId']
                 ];
                 $stmtUpdate->execute($arrParamUpdate);
                 if($stmt->rowCount()>0){
 
                     //若有session（之前已登入某帳號），則幫前一個帳號加入登出時間，然後幫此用戶登入（加入session）
-                    if(isset($_SESSION['email']) && isset($_SESSION['userId']) && isset($_SESSION['vendor'])){
-                        $s = "UPDATE `vendorAdmins` 
-                            SET `vaLogoutTime` = ? 
-                            WHERE `vaId` = ?
-                            AND `vaEmail` = ?";
-                        $st = $pdo->prepare($s);
-                        $ap = [
-                            date("Y-m-d H:i:s"),
-                            $_SESSION['userId'],
-                            $_SESSION['email']
-                        ];
-                        $st->execute($ap);
-                        // if($st->rowCount()>0){
-                        //     echo "已幫前一位用戶登出";
-                        // }
-                    }else if(isset($_SESSION['email']) && isset($_SESSION['userId'])){
-                        $s = "UPDATE `platformAdmins` 
+                    if(isset($_SESSION['email']) && isset($_SESSION['userId'])){
+                        //看之前是登入哪一個帳號
+                        if(!isset($_SESSION['vendor'])){
+                            $s = "UPDATE `vendorAdmins` 
+                                SET `vaLogoutTime` = ? 
+                                WHERE `vaId` = ?
+                                AND `vaEmail` = ?";
+                            $st = $pdo->prepare($s);
+                            $ap = [
+                                date("Y-m-d H:i:s"),
+                                $_SESSION['userId'],
+                                $_SESSION['email']
+                            ];
+                            $st->execute($ap);
+                        }else{
+                            $s = "UPDATE `platformAdmins` 
                             SET `aLogoutTime` = ? 
                             WHERE `aId` = ?
                             AND `aEmail` = ?";
-                        $st = $pdo->prepare($s);
-                        $ap = [
-                            date("Y-m-d H:i:s"),
-                            $_SESSION['userId'],
-                            $_SESSION['email']
-                        ];
-                        $st->execute($ap);
+                            $st = $pdo->prepare($s);
+                            $ap = [
+                                date("Y-m-d H:i:s"),
+                                $_SESSION['userId'],
+                                $_SESSION['email']
+                            ];
+                            $st->execute($ap);
+                        }
                     }
 
                     //submit changes
@@ -92,9 +92,8 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
                     //以防萬一總之歸零 
                     session_unset();
                     // 加入session登入
-                    $_SESSION['email'] = $arr['vaEmail'];
-                    $_SESSION['userId'] = $arr['vaId'];
-                    $_SESSION['vendor'] = $arr['vId'];
+                    $_SESSION['email'] = $arr['aEmail'];
+                    $_SESSION['userId'] = $arr['aId'];
 
                     //轉頁重新登入
                     echo "success";

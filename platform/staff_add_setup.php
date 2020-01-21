@@ -59,7 +59,52 @@
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.js"></script>
+<script>
+$(document).ready(function(){
+    var request;
+    $('form').submit(function(event){
+        event.preventDefault();
 
+        if(request){
+            request.abort();
+        }
+
+        var $form = $(this);
+
+        var $inputs = $form.find('input, button');
+
+        var serializedData = $form.serialize();
+        $inputs.prop("disabled", true);
+
+        request = $.ajax({
+            url : "./check_staff_add_setup.php",
+            type: "post",
+            data: serializedData
+        });
+
+        request.done(function(response, textStatus, jqXHR){
+            if(response == 'success'){
+                window.location = "./admin.php";
+            }else{
+                $("#message").html(response);
+            };
+        });
+
+        request.fail(function (jqXHR, textStatus, errorThrown){
+            // Log the error to the console
+            console.error(
+                "The following error occurred: "+
+                textStatus, errorThrown
+            );
+        });
+
+        request.always(function () {
+            // Reenable the inputs
+            $inputs.prop("disabled", false);
+        });
+    })
+});
+</script>
 </body>
 
 </html>

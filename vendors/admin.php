@@ -52,6 +52,7 @@
                             <div class="ibox-content">
                                 <?php
                                     require_once('./checkVerify.php');
+                                    require_once('./checkVerifyEcho.php');
                                     require_once('./contents/sessionInfo.php');
                                 ?>
                             </div>

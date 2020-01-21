@@ -65,6 +65,7 @@
                     <div class="ibox-content">
                         <?php 
                         require_once('./checkVerify.php');
+                        require_once('./checkVerifyEcho.php');
                         require_once('./checkPrm.php'); 
                         ?>
                         <form method="post" action="./check_my_account.php">

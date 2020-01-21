@@ -64,7 +64,7 @@
                             <tbody>
                                 <?php
                                     //取得每個廠商的工  作人員
-                                    $sqladmins = "SELECT `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaNotes`
+                                    $sqladmins = "SELECT `vaFName`, `vaLName`, `vaEmail`, `vaActive`, `vaNotes`, `vaRoleId`
                                                 FROM `vendorAdmins`
                                                 WHERE `vId` = ?";
                                     $stmtadmins = $pdo->prepare($sqladmins);
@@ -76,7 +76,7 @@
                                     $arradmins = $stmtadmins->fetchAll(PDO::FETCH_ASSOC);
                                     
                                         for($j = 0 ; $j < count($arradmins) ; $j++){
-                                            if($arradmins[$j]['vaLName'] == null && $arradmins[$j]['vaFName']===$arr[$i]['vName']){
+                                            if($arradmins[$j]['vaRoleId'] == 1){
                                                 continue;
                                             }else{
                                             ?>
