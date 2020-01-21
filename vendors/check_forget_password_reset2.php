@@ -73,26 +73,33 @@ if(isset($_POST['password1']) && isset($_POST['password2']) && isset($_POST['ven
             $delParam = [ $email ];
             $stmtd->execute($delParam);
             if($stmtd->rowCount()>0){
-
+                
                 //再更改這個人的密碼
                 $update = "UPDATE `vendorAdmins` SET `vaPassword` = ? WHERE `vaEmail` = ? AND `vId` = ?";
                 $stmtu = $pdo->prepare($update);
                 $updateParam = [
                     $pwd,
                     $email,
-                    $vendorId
+                    (int)$vendorId
                 ];
                 
-                $stmtu->execute($updateParam);
-                if($stmtu->rowCount()>0){
-                    $pdo->commit();
-                    //需要重新登入
-                    echo "success";
+                if(!$stmtu){
+                    echo "<pre>";
+                    print_r($pdo->errorInfo());
+                    echo "</pre>";
                     exit();
                 }
+
+                $stmtu->execute($updateParam);
+
+                $pdo->commit();
+                //需要重新登入
+                echo "success";
+                exit();
+
             }
         }else{
-            echo "請使用 email 提供的連結和驗證碼";
+            echo "發生錯誤，請使用 email 提供的連結和驗證碼";
         }
     }else{
         echo "密碼欄位不一致，請重新輸入";
