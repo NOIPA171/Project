@@ -216,10 +216,10 @@
 
 var request;
 
-var $rows = $("#edit-table").find('tr');
+var $rows = $("#edit-table tbody").find('tr');
 var row = getId($rows);
 
-$("#edit-table").find('tr').eq(1).hide();
+// $("#edit-table tbody").find('tr').eq(1).hide();
 
 $("#mysqlFilter").on('keyup', $(this), function(event){
     event.preventDefault();
@@ -238,11 +238,10 @@ $("#mysqlFilter").on('keyup', $(this), function(event){
     request.done(function (response, textStatus, jqXHR){
 
         console.log(row);
-
-        if(response !== ''){
+        if($("#mysqlFilter").val()==''){
+            $("#edit-table tbody").find('tr').show();
+        }else if(response !== ''){
             var r = JSON.parse(response);
-            console.log(r);
-            console.log(row);
 
             //看看有沒有對上的id，有則show，無則hide
             var flag = false;
@@ -253,14 +252,13 @@ $("#mysqlFilter").on('keyup', $(this), function(event){
                     }
                 }
                 if(flag){
-                    $("#edit-table").find('tr').eq(i).show();
-                }else{
-                    $("#edit-table").find('tr').eq(i).hide();
+                    $("#edit-table tbody").find('tr').eq(i).show();
+                }else if(!flag){
+                    $("#edit-table tbody").find('tr').eq(i).hide();
                 }
             }       
-
         }else{
-            console.log(response);
+            $("#edit-table tbody").find('tr').hide();
         }
     });
 

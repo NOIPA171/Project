@@ -1,7 +1,7 @@
 
 <input type="text" class="form-control form-control-sm m-b-xs" id="mysqlFilter"> <br>
-<input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-    placeholder="Search in table">
+<!-- <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
+    placeholder="Search in table"> -->
 
 <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-filter=#filter id="edit-table">
     <thead>
