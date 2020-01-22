@@ -24,6 +24,7 @@ $selectArr = [
     "`va`.`vaEmail`",
     "`va`.`vaActive`",
     "`va`.`vaNotes`",
+    "`vendors`.`vId`",
     "`vendors`.`vName`",
     "`vendorPermissions`.`vendorPrmName`",
     "`vendorRoles`.`vaRoleName`"
@@ -48,7 +49,9 @@ INNER JOIN `vendorPermissions`
 ON `rel_vendor_permissions`.`vaPermissionId` = `vendorPermissions`.`vendorPrmId`
 INNER JOIN `vendorRoles`
 ON `va`.`vaRoleId` = `vendorRoles`.`vaRoleId`
-WHERE $selectWhere";
+WHERE `vendors`.`vId` = '{$arrGetInfo['vId']}'
+AND NOT (`vaRoleName`= 'Owner')
+AND ($selectWhere)";
 
 $stmt = $pdo->query($sql);
 if($stmt->rowCount()>0){
@@ -59,7 +62,8 @@ if($stmt->rowCount()>0){
     for($i = 0 ; $i < count($results) ; $i++){
         $getResults[] = $results[$i]['vaId'];
     }
-    print_r($getResults);
+    $getResults = array_values(array_unique($getResults));
+    echo json_encode($getResults);
 }else{
-    echo "no";
+    exit();
 }

@@ -216,6 +216,11 @@
 
 var request;
 
+var $rows = $("#edit-table").find('tr');
+var row = getId($rows);
+
+$("#edit-table").find('tr').eq(1).hide();
+
 $("#mysqlFilter").on('keyup', $(this), function(event){
     event.preventDefault();
 
@@ -231,11 +236,31 @@ $("#mysqlFilter").on('keyup', $(this), function(event){
     });
 
     request.done(function (response, textStatus, jqXHR){
-        $row = $("#edit-table").find('tr').attr("id");
-        if($row.inArray(response)){
-            $row.show();
+
+        console.log(row);
+
+        if(response !== ''){
+            var r = JSON.parse(response);
+            console.log(r);
+            console.log(row);
+
+            //看看有沒有對上的id，有則show，無則hide
+            var flag = false;
+            for(var i = 0 ; i < row.length ; i++){
+                for(var j = 0 ; j < r.length ; j++){
+                    if(row[i] == r[j]){
+                        flag = true;
+                    }
+                }
+                if(flag){
+                    $("#edit-table").find('tr').eq(i).show();
+                }else{
+                    $("#edit-table").find('tr').eq(i).hide();
+                }
+            }       
+
         }else{
-            $row.hide();
+            console.log(response);
         }
     });
 
@@ -253,6 +278,18 @@ $("#mysqlFilter").on('keyup', $(this), function(event){
         // Reenable the inputs
     });
 })
+
+
+function getId($el){
+    var results = [];
+    for(var i = 0 ; i < $el.length ; i++){
+        if($el.eq(i).attr('id') !== undefined){
+            var id = $el.eq(i).attr('id').replace('vaId','');
+            results.push(parseInt(id));
+        }
+    }
+    return results;
+}
     </script>
 
 </body>
