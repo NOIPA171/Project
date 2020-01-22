@@ -59,7 +59,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>All form elements <small>With custom checbox and radion elements.</small></h5>
+                            <h5>新增人員一起管理後台</small></h5>
                         </div>
                     <div class="ibox-content">
 

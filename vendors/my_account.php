@@ -48,7 +48,7 @@
                             <a>設定</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <strong>新增人員</strong>
+                            <strong>帳號</strong>
                         </li>
                     </ol>
                 </div>
@@ -61,7 +61,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>邀請新人員一起管理您的後台</h5>
+                            <h5>修改帳號資訊</h5>
                     </div>
                     <div class="ibox-content">
                         <?php 

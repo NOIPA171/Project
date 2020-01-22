@@ -48,13 +48,13 @@
                     <h2>FooTable</h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">Home</a>
+                            <a href="index.html">首頁</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a>Tables</a>
+                            <a>設定</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <strong>FooTable</strong>
+                            <strong>你的團隊</strong>
                         </li>
                     </ol>
                 </div>
@@ -68,7 +68,7 @@
                 <div class="col-lg-12">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>FooTable with row toggler, sorting and pagination</h5>
+                            <h5>瀏覽/修改團員資訊</h5>
                         </div>
                         <div class="ibox-content">
 
