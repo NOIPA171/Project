@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    OP
                 </div>
             </li>
             <!-- --------menu starts here-------- -->
