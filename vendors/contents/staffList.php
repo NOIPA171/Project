@@ -207,12 +207,12 @@
                             </div>
                         </div>
                     </div>
-				</div>
-            </div>
-            <div class="form-group">
-                <label for="startedOn" class="col-sm-3 control-label">備註</label>
-                <div class="col-sm-12">
-                    <textarea name="notes" cols="30" rows="10" id="noteText"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="startedOn" class="col-sm-3 control-label">備註</label>
+                    <div class="col-sm-12">
+                        <textarea name="notes" cols="30" rows="10" id="noteText"></textarea>
+                    </div>
                 </div>
             </div>
             <input type="hidden" value="" name="vaId" id="id">

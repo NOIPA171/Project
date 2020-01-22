@@ -152,16 +152,6 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
-                <!-- <div class="form-row">
-                    <div class="form-group required col-sm-6">
-                        <label for="lastName" class="control-label">姓</label>
-                        <input type="text" class="form-control" id="firstName" name="FName" placeholder="First Name" required>
-                    </div>
-                    <div class="form-group required col-sm-6">
-                        <label for="firstName" class="control-label">名</label>
-                        <input type="text" class="form-control" id="lastName" name="LName" placeholder="Last Name" required>
-                    </div>
-                </div> -->
                 <div class="form-group">
 					<label for="startedOn" class="col-sm-3 control-label">帳號狀態</label>
 					<div class="col-sm-12">
@@ -215,14 +205,15 @@
                             </div>
                         </div>
                     </div>
-				</div>
-            </div>
-            <div class="form-group">
-                <label for="startedOn" class="col-sm-3 control-label">備註</label>
-                <div class="col-sm-12">
-                    <textarea name="notes" cols="30" rows="10" id="noteText"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="startedOn" class="col-sm-3 control-label">備註</label>
+                    <div class="col-sm-12">
+                        <textarea name="notes" cols="30" rows="10" id="noteText"></textarea>
+                    </div>
                 </div>
             </div>
+            
             <input type="hidden" value="" name="aId" id="id">
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-primary">Save changes</button>
