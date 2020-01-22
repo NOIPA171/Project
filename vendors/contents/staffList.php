@@ -72,7 +72,7 @@
                     continue;
                 }else{
                 ?>
-                <tr>
+                <tr id="vaId<?php echo $arr[$i]['vaId'] ?>">
                     <td><?php echo $arr[$i]['vaFName'].' '.$arr[$i]['vaLName'] ?></td>
                     <td><?php echo $arr[$i]['vaEmail'] ?></td>
                     <td><?php echo $arr[$i]['identity'] ?></td>

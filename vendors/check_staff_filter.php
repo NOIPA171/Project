@@ -13,7 +13,6 @@ if(isset($_POST) && $_POST!==[]){
     foreach($_POST as $key=>$value){
         $input = $key;
     }
-    echo $key;
 }else{
     exit();
 }
@@ -35,7 +34,7 @@ $selectStr = implode(",", $selectArr);
 $selectWhere = "";
 
 foreach($selectArr as $key){
-    $selectWhere .= $key." LIKE "."'%".$input."'"." OR";
+    $selectWhere .= $key." LIKE "."'".$input."%'"." OR";
 }
 $selectWhere = substr($selectWhere, 0, -2);
 
@@ -51,13 +50,16 @@ INNER JOIN `vendorRoles`
 ON `va`.`vaRoleId` = `vendorRoles`.`vaRoleId`
 WHERE $selectWhere";
 
-echo $sql;
-
 $stmt = $pdo->query($sql);
 if($stmt->rowCount()>0){
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $pdo->commit();
-    print_r($result);
+
+    $getResults = [];
+    for($i = 0 ; $i < count($results) ; $i++){
+        $getResults[] = $results[$i]['vaId'];
+    }
+    print_r($getResults);
 }else{
     echo "no";
 }

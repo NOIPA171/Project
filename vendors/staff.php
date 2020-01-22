@@ -228,11 +228,15 @@ $("#mysqlFilter").on('keyup', $(this), function(event){
         url: "./check_staff_filter.php",
         type: "post",
         data: input
-        // dataType: 'text/plain'
     });
 
     request.done(function (response, textStatus, jqXHR){
-        console.log(response);
+        $row = $("#edit-table").find('tr').attr("id");
+        if($row.inArray(response)){
+            $row.show();
+        }else{
+            $row.hide();
+        }
     });
 
     request.fail(function (jqXHR, textStatus, errorThrown){
