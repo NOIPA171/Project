@@ -3,7 +3,6 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element">
-                    <img alt="image" class="rounded-circle" src="img/profile_small.jpg"/>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="block m-t-xs font-bold"><?php echo $arrGetInfo['aFName'].' '.$arrGetInfo['aLName'] ?></span>
                         <span class="text-muted text-xs block">
