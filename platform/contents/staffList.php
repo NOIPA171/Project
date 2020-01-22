@@ -1,5 +1,4 @@
 
-
 <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
     placeholder="Search in table">
 

@@ -214,7 +214,41 @@
             })
         })
 
+var request;
 
+$("#mysqlFilter").on('keyup', $(this), function(event){
+    event.preventDefault();
+
+    if (request) {
+        request.abort();
+    }
+    var input = $(this).val();
+
+    request = $.ajax({
+        url: "./check_staff_filter.php",
+        type: "post",
+        data: input
+        // dataType: 'text/plain'
+    });
+
+    request.done(function (response, textStatus, jqXHR){
+        console.log(response);
+    });
+
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        // Log the error to the console
+        console.error(
+            "The following error occurred: "+
+            textStatus, errorThrown
+        );
+    });
+
+    // Callback handler that will be called regardless
+    // if the request failed or succeeded
+    request.always(function () {
+        // Reenable the inputs
+    });
+})
     </script>
 
 </body>
