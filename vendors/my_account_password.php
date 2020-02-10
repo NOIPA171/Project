@@ -149,6 +149,7 @@
 
                 request.done(function (response, textStatus, jqXHR){
                     if(response == 'success'){
+                        alert("修改成功！");
                         window.location = "./my_account.php";
                     }else{
                         $("#message").text(response);
