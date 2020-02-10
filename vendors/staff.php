@@ -153,64 +153,24 @@
         var table = $('#edit-table');
         
         // var edit = $("a[data-func='edit']");
-        $("a[data-func='edit']").on('click', $(this), function(){
-            var $tds = $(this).closest('td').siblings();
-            // var name = $tds.eq(0).text();
-            // var email = $tds.eq(1).text();
-            var title = $tds.eq(2).text();
-            var active = $tds.eq(3).text();
-            var permissions = $tds.eq(5).text();
-            var notes = $tds.eq(6).text();
-            var id = $tds.eq(7).text();
-            
-            //先移除再加上去
-            modal.find("#active option").removeAttr('selected');
-            modal.find("#active option[value="+active+"]").attr('selected','selected');
-
-            var permissionsArr = permissions.split(', ');
-            var allTitles = modal.find('#title').find('input');
-            var allPrmInputs = modal.find('#edit_permissions').find('input');
-            var allPrms = [];
-            for(let i = 0 ; i < allPrmInputs.length ; i++){
-                allPrms.push(modal.find('#edit_permissions').find('input')[i]['value']);
-            }
-            
-            if(title == 'Manager'){
-
-                modal.find("#title").find('input[value="3"]').removeAttr("checked");
-                modal.find("#title").find('input[value="2"]').attr("checked","");
-                modal.find('#edit_permissions').hide();
-
-            }else if (title = 'Staff'){
-                
-                modal.find("#title").find('input[value="2"]').removeAttr("checked");
-                modal.find("#title").find('input[value="3"]').attr("checked","");
-                modal.find('#edit_permissions').show();
-            }
-
-            for(let i = 0 ; i < allPrms.length ; i++){
-                var flag = false;
-                for(let j = 0 ; j < permissionsArr.length ; j++){
-                    if(allPrms[i].indexOf(permissionsArr[j])>=0){
-                        flag = true;
-                    }
-                }
-                if(flag){
-                    modal.find("#edit_permissions").find('input').eq(i).attr("checked","");
-                }else{
-                    modal.find("#edit_permissions").find('input').eq(i).removeAttr("checked");
-                }
-            }
-            modal.find("#noteText").text(notes);
-            modal.find("#id").val(id);
-
-                    //modal options
-            modal.find("#manager").mouseup(function(){
-                modal.find('#edit_permissions').hide(200);
+        $("a[data-func='edit']").on('click', function(){
+            let vaId = $(this).data("id");
+            $.ajax({
+                url : "./check_staff_edit_current.php",
+                type: "post",
+                data: "vaId="+vaId
             })
-
-            modal.find("#staff").mouseup(function(){
-                modal.find('#edit_permissions').show(200);
+            .done(function(response){
+                response = JSON.parse(response);
+                console.log(response);
+                $("#editor-title span").text(response.vaFName+" "+response.vaLName);
+                $("#editor-modal #active").find(":select");
+            })
+            .fail(function(err){
+                console.log(JSON.stringify(err));
+            })
+            .always(function(){
+                console.log("ajax complete");
             })
         })
 
