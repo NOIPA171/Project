@@ -34,9 +34,13 @@ if($stmt->rowCount()>0){
     if($stmtc->rowCount() > 0){
         $arrc = $stmtc->fetchAll(PDO::FETCH_ASSOC)[0];
         //如果是之前的就沒關係
-        $s = "SELECT `vId` FROM `vendorAdmins` WHERE `vaId` = '{$arrc['vaId']}'";
+        $s = "SELECT `vId` FROM `vendorAdmins` WHERE `vaId` = ?";
+        $ap = [ $arrc['vaId'] ];
+
         
-        $st = $pdo->query($s)->fetchALL(PDO::FETCH_ASSOC);
+        $st = $pdo->prepare($s);
+        $st->execute($ap);
+        $ar = $st->fetchALL(PDO::FETCH_ASSOC);
         
         //有可能是同一個廠商的 -> 允許overwrite
         //非同一組資料則不允許執行
@@ -46,8 +50,14 @@ if($stmt->rowCount()>0){
         }  
     }
 
-    $update = "UPDATE `vendorAdmins` SET `vaPassword` = '$pwd' WHERE `vaId` = '$user'";
-    $stmtu = $pdo->query($update);
+    $update = "UPDATE `vendorAdmins` SET `vaPassword` = ? WHERE `vaId` = ?";
+    $arrparamu = [
+        $pwd,
+        $user
+    ];
+
+    $stmtu = $pdo->prepare($update);
+    $stmtu->execute($arrparamu);
     
     if(!$stmtu){
         echo "<pre>";

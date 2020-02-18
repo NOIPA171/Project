@@ -17,11 +17,16 @@ if(isset($_POST['password1']) && isset($_POST['password2']) && isset($_POST['ven
         //確認驗證跟hash有在reset password的表單裡
         $sql = "SELECT `vaEmail`, `vaExpireDate`
         FROM `vendorResetPass`
-        WHERE `vaEmail` = '$email'
-        AND `vaHash` = '$hash'
-        AND `vaToken` = '$token'";
+        WHERE `vaEmail` = ?
+        AND `vaHash` = ?
+        AND `vaToken` = ?";
 
-        $stmt = $pdo->query($sql);
+        $arrParam = [
+            $email, $hash, $token
+        ];
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($arrParam);
 
         //確認
         if($stmt->rowCount()>0){

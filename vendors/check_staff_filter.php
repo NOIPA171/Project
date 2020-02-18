@@ -49,11 +49,16 @@ INNER JOIN `vendorPermissions`
 ON `rel_vendor_permissions`.`vaPermissionId` = `vendorPermissions`.`vendorPrmId`
 INNER JOIN `vendorRoles`
 ON `va`.`vaRoleId` = `vendorRoles`.`vaRoleId`
-WHERE `vendors`.`vId` = '{$arrGetInfo['vId']}'
+WHERE `vendors`.`vId` = ?
 AND NOT (`vaRoleName`= 'Owner')
 AND ($selectWhere)";
 
-$stmt = $pdo->query($sql);
+$stmt = $pdo->prepare($sql);
+$arrparam = [
+    $arrGetInfo['vId']
+];
+$stmt->execute($arrparam);
+
 if($stmt->rowCount()>0){
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $pdo->commit();

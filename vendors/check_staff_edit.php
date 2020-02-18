@@ -50,8 +50,14 @@ try{
     }else if($title == 3){
         //若身份為staff
         for($i = 0 ; $i < count($_POST['staffPrm']) ; $i++){
-
-            $arrPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
+            $sqlprms = "SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = ?";
+            $arrprmsParam = [
+                $_POST['staffPrm'][$i]
+            ];
+            $stmt4 = $pdo->prepare($sqlprms);
+            $stmt4->execute($arrprmsParam);
+            
+            $arrPrms = $stmt4->fetchAll(PDO::FETCH_ASSOC)[0];
 
             $arrParam3 = [
                 $_POST['vaId'],

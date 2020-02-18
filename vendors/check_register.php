@@ -18,36 +18,39 @@ try{
 
 
     //先查看Vendors是否有已經註冊過的廠商信箱
-    $checksql = "SELECT `vEmail`, `vPassword`, `vId`
+    $checksql = "SELECT `vId`
     FROM `vendors`
-    WHERE `vEmail` = '$email'";
-    $check = $pdo->query($checksql);
-    if($check->rowCount()>0){
-        echo "該信箱已經註冊過";
+    WHERE `vEmail` = ?";
+
+    $arrparamCheck = [ $email ];
+    $stmtcheck = $pdo->prepare($checksql);
+    $stmtcheck->execute($arrparamCheck);
+
+    if($stmtcheck->rowCount()>0){
+        echo "該信箱已經註冊過"; //err1
         exit();
     }
 
-    //配對看看是否有同樣email + pwd的工作人員帳號存在
+    // $arrcheck = $stmtcheck->fecthAll(PDO::FETCH_ASSOC)[0];
 
-    $checksql = "SELECT `vaId` FROM `vendorAdmins` WHERE `vaPassword` = ? AND `vaEmail` = ?";
+    //配對看看是否有同樣 email 的工作人員帳號存在
+
+    $checksql = "SELECT `vaId` FROM `vendorAdmins` WHERE `vaEmail` = ?";
     $stmtc = $pdo->prepare($checksql);
-    $checkparam = [
-        sha1($_POST['password']),
-        $email
-    ];
+    $checkparam = [ $email ];
     $stmtc->execute($checkparam);
     if($stmtc->rowCount() > 0){
-        echo "有相同的帳號存在，請重新輸入";
+        echo "已有使用相同信箱的工作人員帳號，按繼續為您的帳號新增身份"; //返回 or 繼續--繼續：填該帳號的pwd
         exit();
     }
-
 
     //------輸入廠商資訊------
     $sqlVendor = "INSERT INTO `vendors`(`vName`,`vActive`, `vVerify`, `vEmail`, `vPassword`, `vHash`)
-                    VALUES(?,'active', ?, ?, ?, ?)";
+                    VALUES(?,?, ?, ?, ?, ?)";
     $stmtVendor = $pdo->prepare($sqlVendor);
     $arrParamVendor = [ 
         $_POST['name'], 
+        'active',
         date('Y-m-d H:i:s'),
         $email,
         $password,
@@ -57,17 +60,18 @@ try{
 
     if($stmtVendor->rowCount()>0){
 
+        //取得剛剛輸入的ID
+        $currentVendor = $pdo->lastInsertId();
         //寄mail
-        sendMail($email, $_POST['name'], $hash);
+        //sendMail($email, $_POST['name'], $hash);
 
         //加入 session
-        $pdo->commit();
 
-        $_SESSION['userId'] = $currentAdmin;
-        $_SESSION['email'] = $email;
-        $_SESSION['vendor'] = $currentVendor;            
+        $_SESSION['vEmail'] = $email;
+        $_SESSION['vId'] = $currentVendor;            
 
         echo "success";
+        $pdo->commit();
     }
 }catch(Exception $err){
     $pdo->rollback();
@@ -76,7 +80,7 @@ try{
 
 
 //send mail
-
+/*
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -124,3 +128,4 @@ function sendMail($email, $vName, $hash){
         exit();
     }
 }
+*/

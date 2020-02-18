@@ -19,8 +19,17 @@ try{
                 FROM `vendorAdmins`
                 INNER JOIN `vendors`
                 ON `vendorAdmins`.`vId` = `vendors`.`vId`
-                WHERE `vendorAdmins`.`vId` = '{$arrGetInfo['vId']}'";
-    $check = $pdo->query($checksql)->fetchAll(PDO::FETCH_ASSOC);
+                WHERE `vendorAdmins`.`vId` = ?";
+    $stmtc = $pdo->prepare($check);
+    $arrparamc = [
+        $arrGetInfo['vId']
+    ];
+    $stmtc->execute($arrparamc);
+
+    if($stmtc->rowCount() <= 0) exit();
+
+    $check = $stmtc->fetchAll(PDO::FETCH_ASSOC);
+
     $flag = true;
     for($i = 0 ; $i < count($check) ; $i++){
         if($check[$i]['vaEmail'] == $_POST['email']){
@@ -74,9 +83,15 @@ try{
             }
         }else{
             //若身份為staff
+            $sqlprms = "SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = ?";
+            $stmtprms = $pdo->prepare($sqlprms);
+
             for($i = 0 ; $i < count($_POST['staffPrm']) ; $i++){
-                
-                $arrPrms = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions` WHERE `vendorPrmName` = '{$_POST['staffPrm'][$i]}'")->fetchAll(PDO::FETCH_ASSOC)[0];
+
+                $arrparamprms = [ $_POST['staffPrm'][$i] ];
+                $stmtprms->execute($arrparamprms);
+
+                $arrPrms = $stmtprms->fetchAll(PDO::FETCH_ASSOC)[0];
 
                 $arrParam2 = [
                     $newStaff,

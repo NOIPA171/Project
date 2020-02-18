@@ -133,14 +133,12 @@ $('body').on('submit', '#resetpwd', function(event){
     });
 
     request.fail(function (jqXHR, textStatus, errorThrown){
-        // Log the error to the console
         console.error(
             "The following error occurred: "+
             textStatus, errorThrown
         );
     });
     request.always(function () {
-        // Reenable the inputs
         $inputs.prop("disabled", false);
     });
 

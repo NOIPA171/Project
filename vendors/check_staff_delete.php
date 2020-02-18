@@ -14,12 +14,17 @@ try{
     //先刪除vendor admins
     $id = $_POST['id'];
 
-    $sql= "DELETE FROM `vendorAdmins` WHERE `vaId` = '$id'";
-    $pdo->query($sql);
+    $sql= "DELETE FROM `vendorAdmins` WHERE `vaId` = ?";
+    $stmt = $pdo->prepare($sql);
+    $arrParam = [ $id ];
+    $stmt->execute($arrParam);
 
     //再刪除他的權限
-    $sql2 = "DELETE FROM `rel_vendor_permissions` WHERE `vaId` = '$id'";
-    $pdo->query($sql2);
+    $sql2 = "DELETE FROM `rel_vendor_permissions` WHERE `vaId` = ?";
+    $stmt2 = $pdo->prepare($sql2);
+    $arrParam2 = [ $id ];
+    $stmt2->execute($arrParam2);
+    
     $pdo->commit();
     echo "success";
     

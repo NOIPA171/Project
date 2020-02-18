@@ -12,7 +12,9 @@ $email = $_POST['email'];
 
 //是否有該使用者
 $s = "SELECT `vaId`, `vId` FROM `vendorAdmins` WHERE `vaEmail` = '$email'";
-$st = $pdo->query($s);
+$st = $pdo->prepare($s);
+$arp = [ $email ];
+$st->execute($arp);
 if($st->rowCount()<=0){
     echo "沒有該使用者";
     exit();

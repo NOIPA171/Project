@@ -16,11 +16,16 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
         //確認驗證跟hash有在reset password的表單裡
         $sql = "SELECT `vaEmail`, `vaExpireDate`
         FROM `vendorResetPass`
-        WHERE `vaEmail` = '$email'
-        AND `vaHash` = '$hash'
-        AND `vaToken` = '$token'";
+        WHERE `vaEmail` = ?
+        AND `vaHash` = ?
+        AND `vaToken` = ?";
 
-        $stmt = $pdo->query($sql);
+        $arrParam = [
+            $email, $hash, $token
+        ];
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($arrParam);
 
         //確認
         if($stmt->rowCount()>0){
@@ -58,8 +63,12 @@ if(isset($_POST['password1']) && isset($_POST['password2'])){
 
                 for($i = 0 ; $i < count($arra) ; $i++){
                     $vId = $arra[$i]['vId'];
-                    $all = "SELECT `vName`,`vId` FROM `vendors` WHERE `vId` = '$vId'";
-                    $arrall[] = $pdo->query($all)->fetch(PDO::FETCH_ASSOC);
+                    $all = "SELECT `vName`,`vId` FROM `vendors` WHERE `vId` = ?";
+                    $allparam = [ $vId ];
+                    $stmtall = $pdo->prepare($all);
+                    $stmtall->execute($allparam);
+
+                    $arrall[] = $stmtall->fetch(PDO::FETCH_ASSOC);
                     
                     echo "<option value='";
                     echo $arrall[$i]['vId'];
