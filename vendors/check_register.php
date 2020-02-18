@@ -14,19 +14,20 @@ try{
 
     $hash = md5( rand(0,1000) );
     $email = $_POST['email'];
+    $password = $_POST['password'];
 
 
-    //先查看是否已經註冊過該信箱
-    $checksql = "SELECT `vEmail`
+    //先查看Vendors是否有已經註冊過的廠商信箱
+    $checksql = "SELECT `vEmail`, `vPassword`, `vId`
     FROM `vendors`
     WHERE `vEmail` = '$email'";
     $check = $pdo->query($checksql);
     if($check->rowCount()>0){
-        echo "該帳號已經註冊過";
+        echo "該信箱已經註冊過";
         exit();
     }
 
-    //配對看看是否有同樣email + pwd的帳號存在
+    //配對看看是否有同樣email + pwd的工作人員帳號存在
 
     $checksql = "SELECT `vaId` FROM `vendorAdmins` WHERE `vaPassword` = ? AND `vaEmail` = ?";
     $stmtc = $pdo->prepare($checksql);
@@ -41,75 +42,33 @@ try{
     }
 
 
-    //------先輸入admin帳號------
-    $sqlAdmin = "INSERT INTO `vendorAdmins`(`vaFName`,`vaEmail`,`vaPassword`,`vaActive`,`vaLoginTime`, `vaHash`, `vaRoleId`)
-                VALUES (?,?,?,'active',?,?,?)";
-    $arrParamAdmin = [
-        $_POST['name'],
+    //------輸入廠商資訊------
+    $sqlVendor = "INSERT INTO `vendors`(`vName`,`vActive`, `vVerify`, `vEmail`, `vPassword`, `vHash`)
+                    VALUES(?,'active', ?, ?, ?, ?)";
+    $stmtVendor = $pdo->prepare($sqlVendor);
+    $arrParamVendor = [ 
+        $_POST['name'], 
+        date('Y-m-d H:i:s'),
         $email,
-        sha1($_POST['password']),
-        date("Y-m-d H:i:s"),
-        $hash,
-        '1'
+        $password,
+        $hash
     ];
-    $stmtAdmin = $pdo->prepare($sqlAdmin);
-    $stmtAdmin->execute($arrParamAdmin);
-    
-    if($stmtAdmin->rowCount() > 0){
-        //取得剛剛輸入的ID
-        $currentAdmin = $pdo->lastInsertId();
-        //------再輸入廠商資訊------
-        $sqlVendor = "INSERT INTO `vendors`(`vName`,`vActive`, `vVerify`, `vEmail`)
-                        VALUES(?,'active', ?,?)";
-        $stmtVendor = $pdo->prepare($sqlVendor);
-        $arrParamVendor = [ 
-            $_POST['name'], 
-            date('Y-m-d H:i:s'),
-            $email
-        ];
-        $stmtVendor->execute($arrParamVendor);
+    $stmtVendor->execute($arrParamVendor);
 
-        if($stmtVendor->rowCount()>0){
-            //取得剛剛輸入的ID
+    if($stmtVendor->rowCount()>0){
 
-            $currentVendor = $pdo->lastInsertId();
-            //------再將廠商輸入admin資料中------
-            $sqlRel = "UPDATE `vendorAdmins` SET `vId` = $currentVendor WHERE `vaId` = $currentAdmin";
-            $stmtRel = $pdo->query($sqlRel);
+        //寄mail
+        sendMail($email, $_POST['name'], $hash);
 
-            if($stmtRel->rowCount()>0){
-                //------再將所有的 Permissions 賦予該 Admin (Owner)------
-                $sqlPermission = "INSERT INTO `rel_vendor_permissions`(`vaId`, `vaPermissionId`)
-                                    VALUES (?,?)";
-                $stmtPermission = $pdo->prepare($sqlPermission);
-                $allPermissions = $pdo->query("SELECT `vendorPrmId` FROM `vendorPermissions`")->fetchAll(PDO::FETCH_ASSOC);
-                
-                //每一個permission都要輸入一次
-                for($i=0 ; $i<count($allPermissions) ; $i++){
-                    $arrParamAllPrm = [
-                        $currentAdmin,
-                        $allPermissions[$i]['vendorPrmId']
-                    ];
-                    $stmtPermission->execute($arrParamAllPrm);
-                }
+        //加入 session
+        $pdo->commit();
 
-                if($stmtPermission->rowCount()>0){
-                    sendMail($email, $_POST['name'], $hash);
+        $_SESSION['userId'] = $currentAdmin;
+        $_SESSION['email'] = $email;
+        $_SESSION['vendor'] = $currentVendor;            
 
-                    //加入 session
-                    $pdo->commit();
-
-                    $_SESSION['userId'] = $currentAdmin;
-                    $_SESSION['email'] = $email;
-                    $_SESSION['vendor'] = $currentVendor;            
-
-                    echo "success";
-                }
-            }
-        }
+        echo "success";
     }
-
-
 }catch(Exception $err){
     $pdo->rollback();
     echo "失敗： ".$err->getMessage();
